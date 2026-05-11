@@ -198,11 +198,14 @@ section + section { border-top: 1px solid var(--line); }
 /* ---------- Hero ---------- */
 
 .hero {
-  padding: 5rem 0 4rem;
+  padding: 6rem 0 5rem;
   background: linear-gradient(180deg, var(--bg) 0%, var(--bg-soft) 100%);
   border-bottom: 1px solid var(--line);
   position: relative;
   overflow: hidden;
+  min-height: 540px;
+  display: flex;
+  align-items: center;
 }
 .hero::before {
   content: '';
@@ -214,11 +217,53 @@ section + section { border-top: 1px solid var(--line); }
   background: radial-gradient(circle, rgba(196, 98, 58, 0.08) 0%, transparent 70%);
   border-radius: 50%;
   pointer-events: none;
+  z-index: 3;
+}
+
+/* Vidéo de fond */
+.hero-video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: 0;
+  opacity: 0;
+  transition: opacity 1.4s ease;
+}
+.hero-video.loaded { opacity: 1; }
+
+/* Overlay sombre/teinté pour lisibilité du texte */
+.hero-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background:
+    linear-gradient(180deg, rgba(26, 51, 40, 0.55) 0%, rgba(26, 51, 40, 0.35) 50%, rgba(26, 51, 40, 0.65) 100%);
+  pointer-events: none;
+}
+
+/* Quand le hero a une vidéo, on inverse les couleurs du texte */
+.hero.has-video {
+  background: var(--pine);
+  border-bottom: none;
+}
+.hero.has-video .section-eyebrow { color: rgba(251, 247, 241, 0.9); }
+.hero.has-video h1 { color: var(--bg); }
+.hero.has-video .lede { color: rgba(251, 247, 241, 0.92); }
+.hero.has-video .btn-ghost {
+  color: var(--bg);
+  border-color: rgba(251, 247, 241, 0.6);
+}
+.hero.has-video .btn-ghost:hover {
+  background: var(--bg);
+  color: var(--pine);
 }
 
 .hero-content {
   max-width: 720px;
   position: relative;
+  z-index: 2;
 }
 .hero h1 { margin-bottom: 1.2rem; }
 .hero .lede {
@@ -229,6 +274,10 @@ section + section { border-top: 1px solid var(--line); }
   line-height: 1.55;
 }
 .hero-actions { display: flex; gap: 1rem; flex-wrap: wrap; }
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-video { display: none; }
+}
 
 /* ---------- Cartes ---------- */
 

@@ -88,4 +88,17 @@
       a.addEventListener('click', () => navLinks.classList.remove('open'));
     });
   }
+
+  // ----- 4. Vidéo hero : fade-in une fois prête -----
+  const heroVideo = document.querySelector('.hero-video');
+  if (heroVideo) {
+    const showVideo = () => heroVideo.classList.add('loaded');
+    if (heroVideo.readyState >= 3) {
+      showVideo();
+    } else {
+      heroVideo.addEventListener('canplay', showVideo, { once: true });
+      // Filet de sécurité : on affiche après 2s même si l'event ne tombe pas
+      setTimeout(showVideo, 2000);
+    }
+  }
 })();
