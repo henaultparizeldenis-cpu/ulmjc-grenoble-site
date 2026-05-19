@@ -370,6 +370,7 @@ section + section { border-top: 1px solid var(--line); }
 .footer-grid a { color: rgba(251, 247, 241, 0.75); border: none; font-size: 0.95rem; }
 .footer-grid a:hover { color: var(--bg); border: none; }
 .footer-grid p { color: rgba(251, 247, 241, 0.75); font-size: 0.95rem; }
+.site-footer .muted { color: rgba(251, 247, 241, 0.55); }
 .footer-bottom {
   border-top: 1px solid rgba(251, 247, 241, 0.15);
   padding-top: 1.5rem;
@@ -404,6 +405,17 @@ section + section { border-top: 1px solid var(--line); }
 .prose h3 { margin-top: 2rem; }
 .prose ul { padding-left: 1.5rem; }
 .prose li { margin-bottom: 0.5rem; }
+
+.prose-callout {
+  background: var(--bg-soft);
+  border-left: 4px solid var(--terra);
+  border-radius: var(--radius-sm);
+  padding: 1.2rem 1.5rem;
+  margin: 1.5rem 0 2rem;
+}
+.prose-callout p { margin-bottom: 0.5rem; }
+.prose-callout p:last-child { margin-bottom: 0; }
+.prose-callout strong { color: var(--pine); }
 
 /* ---------- Galerie ---------- */
 
