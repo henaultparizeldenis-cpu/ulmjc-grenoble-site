@@ -101,4 +101,76 @@
       setTimeout(showVideo, 2000);
     }
   }
+
+  // ----- 5. Météo Grenoble (Open-Meteo) -----
+  // Applique une classe sur le hero photo pour adapter filtres + particules
+  // à la météo réelle. Cache localStorage 30 min, fail silencieux.
+  const heroTarget = document.querySelector('[data-weather-target]');
+  if (heroTarget) {
+    const CACHE_KEY = 'ulmjc-weather-v1';
+    const CACHE_TTL = 30 * 60 * 1000;
+    const GRENOBLE = { lat: 45.1885, lon: 5.7245 };
+
+    // Codes WMO → catégorie d'effet visuel + libellé court
+    function mapWeather(code) {
+      if (code === 0)               return { cls: 'weather-clear',  emoji: '☀️', label: 'Ciel clair' };
+      if (code <= 2)                return { cls: 'weather-clear',  emoji: '🌤️', label: 'Quelques nuages' };
+      if (code === 3)               return { cls: 'weather-cloud',  emoji: '☁️', label: 'Couvert' };
+      if (code === 45 || code === 48) return { cls: 'weather-fog',  emoji: '🌫️', label: 'Brouillard' };
+      if (code >= 51 && code <= 57) return { cls: 'weather-rain',   emoji: '🌦️', label: 'Bruine' };
+      if (code >= 61 && code <= 67) return { cls: 'weather-rain',   emoji: '🌧️', label: 'Pluie' };
+      if (code >= 71 && code <= 77) return { cls: 'weather-snow',   emoji: '❄️', label: 'Neige' };
+      if (code >= 80 && code <= 82) return { cls: 'weather-rain',   emoji: '🌧️', label: 'Averses' };
+      if (code >= 85 && code <= 86) return { cls: 'weather-snow',   emoji: '🌨️', label: 'Averses de neige' };
+      if (code >= 95)               return { cls: 'weather-thunder',emoji: '⛈️', label: 'Orage' };
+      return { cls: 'weather-clear', emoji: '🌤️', label: '' };
+    }
+
+    function applyWeather(code, isDay) {
+      const w = mapWeather(code);
+      heroTarget.classList.add(w.cls, isDay ? 'is-day' : 'is-night');
+
+      if (w.label) {
+        const badge = document.createElement('div');
+        badge.className = 'weather-badge';
+        badge.innerHTML =
+          '<span class="weather-emoji">' + w.emoji + '</span>' +
+          '<span>' + w.label + (isDay ? '' : ' · nuit') + ' à Grenoble</span>';
+        heroTarget.appendChild(badge);
+        // Petite latence pour déclencher la transition
+        requestAnimationFrame(() => requestAnimationFrame(() => badge.classList.add('shown')));
+      }
+    }
+
+    // Cache
+    try {
+      const cached = JSON.parse(localStorage.getItem(CACHE_KEY) || 'null');
+      if (cached && Date.now() - cached.ts < CACHE_TTL) {
+        applyWeather(cached.code, cached.isDay);
+        return;
+      }
+    } catch (e) { /* cache corrompu, on ignore */ }
+
+    // Fetch frais
+    const url = 'https://api.open-meteo.com/v1/forecast?latitude=' + GRENOBLE.lat +
+                '&longitude=' + GRENOBLE.lon +
+                '&current=weather_code,is_day&timezone=Europe%2FParis';
+    const ctrl = new AbortController();
+    const timeout = setTimeout(() => ctrl.abort(), 4000);
+
+    fetch(url, { signal: ctrl.signal })
+      .then((r) => r.ok ? r.json() : Promise.reject(r.status))
+      .then((data) => {
+        clearTimeout(timeout);
+        const code = data && data.current && data.current.weather_code;
+        const isDay = data && data.current && data.current.is_day === 1;
+        if (typeof code === 'number') {
+          try {
+            localStorage.setItem(CACHE_KEY, JSON.stringify({ code, isDay, ts: Date.now() }));
+          } catch (e) { /* localStorage plein ou bloqué */ }
+          applyWeather(code, isDay);
+        }
+      })
+      .catch(() => { /* fail silencieux : le hero garde son rendu par défaut */ });
+  }
 })();

@@ -1,0 +1,10 @@
+# Config locale Claude Code (launch preview, etc.)
+.claude/
+
+# OS / éditeur
+.DS_Store
+Thumbs.db
+*~
+*.swp
+.vscode/
+.idea/
