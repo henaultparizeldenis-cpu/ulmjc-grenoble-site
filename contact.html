@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="description" content="Contacter l'ULMJC Grenoble : adresse, email, formulaire et coordonnées du bureau de l'association.">
-<title>Contact — ULMJC Grenoble</title>
+<meta name="description" content="Contacter l'Union Locale des MJC de Grenoble : téléphones, email et formulaire pour réserver le chalet de l'Alpe du Grand Serre.">
+<title>Contact — UL MJC Grenoble</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
@@ -14,7 +14,7 @@
 
 <header class="site-header">
   <div class="container nav">
-    <a href="index.html" class="brand">ULMJC<span class="brand-sub">Grenoble</span></a>
+    <a href="index.html" class="brand">UL MJC<span class="brand-sub">Grenoble</span></a>
     <button class="nav-toggle" aria-label="Menu" onclick="document.getElementById('nav-links').classList.toggle('open')">☰</button>
     <ul class="nav-links" id="nav-links">
       <li><a href="index.html">Accueil</a></li>
@@ -32,7 +32,7 @@
   <div class="container">
     <span class="section-eyebrow">Contact</span>
     <h1>Nous écrire.</h1>
-    <p class="lede">Que ce soit pour adhérer, réserver le chalet, proposer une sortie ou simplement en savoir plus : on lit tous les messages.</p>
+    <p class="lede">Que ce soit pour réserver le chalet, proposer un projet, poser une question ou simplement en savoir plus sur l'association : on lit tous les messages.</p>
   </div>
 </div>
 
@@ -40,32 +40,44 @@
   <div class="container">
     <div class="split reveal">
       <div>
-        <h2>Coordonnées</h2>
+        <h2>Réserver le chalet</h2>
+        <p>Pour vérifier les disponibilités et réserver, le plus simple est de nous appeler ou de nous écrire&nbsp;:</p>
         <p>
-          <strong>ULMJC Grenoble</strong><br>
-          <span class="muted">Association loi 1901 — n° RNA W381… (à compléter)</span>
+          <strong>📞 Téléphone</strong><br>
+          <a href="tel:+33681719799">06 81 71 97 99</a><br>
+          <a href="tel:+33688903584">06 88 90 35 84</a>
         </p>
         <p>
-          <strong>Adresse postale</strong><br>
-          Maison de la montagne<br>
-          14 rue de la République<br>
-          38000 Grenoble
+          <strong>✉️ Email</strong><br>
+          <a href="mailto:ulmjc.gre@free.fr">ulmjc.gre@free.fr</a>
         </p>
-        <p>
-          <strong>Email</strong><br>
-          <a href="mailto:contact@ulmjcgrenoble.org">contact@ulmjcgrenoble.org</a>
-        </p>
-        <p>
-          <strong>Téléphone</strong><br>
-          <span class="muted">(à compléter — numéro du ou de la président·e)</span>
+        <p class="muted" style="font-size: 0.95rem;">
+          Adhésion 10&nbsp;€ par groupe — 289&nbsp;€ la nuitée jusqu'à 17 personnes.
+          Voir la page <a href="chalet.html">Le chalet</a> pour la grille tarifaire complète.
         </p>
 
-        <h3 style="margin-top: 2.5rem;">Pour les adhérents</h3>
-        <p>L'espace de gestion (réservations, planning, ménage) se trouve sur notre outil en ligne :</p>
+        <h3 style="margin-top: 2.5rem;">L'association</h3>
         <p>
-          <a href="https://app.ulmjcgrenoble.org/" class="btn btn-ghost" target="_blank" rel="noopener">
-            Accéder à l'espace membres ↗
-          </a>
+          <strong>Union Locale des MJC de Grenoble</strong><br>
+          Association loi 1901 d'éducation populaire<br>
+          <span class="muted">N° RNA à compléter</span>
+        </p>
+
+        <h3 style="margin-top: 2.5rem;">Le chalet</h3>
+        <p>
+          <strong>Adresse</strong><br>
+          1407 route du Désert<br>
+          38350 La Morte — Alpe du Grand Serre<br>
+          <span class="muted">À 45 min de Grenoble (Isère)</span>
+        </p>
+
+        <h3 style="margin-top: 2.5rem;">Traiteur partenaire</h3>
+        <p>
+          <strong>Verveine Citron</strong> — sur réservation 10 j avant l'arrivée<br>
+          📞 <a href="tel:+33614586823">06 14 58 68 23</a> · ✉️ <a href="mailto:verv.citron@gmail.com">verv.citron@gmail.com</a>
+        </p>
+        <p class="muted" style="font-size: 0.88rem;">
+          <em>Prestataire extérieur indépendant — l'association ne gère pas la prestation.</em>
         </p>
       </div>
 
@@ -82,11 +94,11 @@
           </div>
           <div>
             <label for="subject">Sujet</label>
-            <input type="text" id="subject" name="subject" placeholder="Adhésion, réservation, sortie…">
+            <input type="text" id="subject" name="subject" placeholder="Réservation, projet, question…">
           </div>
           <div>
             <label for="message">Message</label>
-            <textarea id="message" name="message" required></textarea>
+            <textarea id="message" name="message" required placeholder="Si c'est pour réserver : dates envisagées, type de groupe, nombre de personnes adultes / mineurs."></textarea>
           </div>
           <div>
             <button type="submit" class="btn btn-accent">Envoyer</button>
@@ -94,6 +106,14 @@
         </form>
         <p class="muted" style="font-size: 0.88rem; margin-top: 1rem;">
           <em>Le formulaire est pour l'instant inactif — il faut créer un compte gratuit sur Formspree.io et coller l'identifiant dans le code.</em>
+        </p>
+
+        <h3 style="margin-top: 2.5rem;">Espace membres</h3>
+        <p>L'outil de gestion (réservations, planning) est accessible aux personnes habilitées&nbsp;:</p>
+        <p>
+          <a href="https://app.ulmjcgrenoble.org/" class="btn btn-ghost" target="_blank" rel="noopener">
+            Accéder à l'espace membres ↗
+          </a>
         </p>
       </div>
     </div>
@@ -104,8 +124,12 @@
   <div class="container">
     <div class="footer-grid">
       <div>
-        <h4>ULMJC Grenoble</h4>
-        <p>Association loi 1901<br>Maison de la montagne<br>38000 Grenoble</p>
+        <h4>UL MJC Grenoble</h4>
+        <p>
+          Union Locale des MJC de Grenoble<br>
+          Association loi 1901 d'éducation populaire<br>
+          <span class="muted">Chalet : 1407 route du Désert, 38350 La Morte</span>
+        </p>
       </div>
       <div>
         <h4>Naviguer</h4>
@@ -129,12 +153,12 @@
         <ul>
           <li><a href="#">Facebook</a></li>
           <li><a href="#">Instagram</a></li>
-          <li><a href="mailto:contact@ulmjcgrenoble.org">Newsletter</a></li>
+          <li><a href="mailto:ulmjc.gre@free.fr">Newsletter</a></li>
         </ul>
       </div>
     </div>
     <div class="footer-bottom">
-      <span>© ULMJC Grenoble — depuis 1965</span>
+      <span>© UL MJC Grenoble — depuis 1963</span>
       <span><a href="#">Mentions légales</a> · <a href="#">Statuts</a></span>
     </div>
   </div>
