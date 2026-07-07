@@ -1,0 +1,7 @@
+User-agent: *
+Allow: /
+
+# On empêche l'indexation du back-office analytics
+Disallow: /matomo/
+
+Sitemap: https://site.ulmjcgrenoble.org/sitemap.xml

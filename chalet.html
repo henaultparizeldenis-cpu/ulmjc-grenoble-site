@@ -3,26 +3,44 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="description" content="Le chalet de l'UL MJC Grenoble, à l'Alpe du Grand Serre (1368 m) : 25 places en gestion libre, ouvert aux associations, collectivités, familles et groupes. Tarifs 2026/2027.">
-<title>Le chalet — UL MJC Grenoble</title>
+<meta name="description" content="Le chalet de l'ULMJC Grenoble, à l'Alpe du Grand Serre (1368 m) : 25 places en gestion libre, ouvert aux associations, collectivités, familles et groupes. Tarifs 2026/2027.">
+<title>Le chalet — ULMJC Grenoble</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="css/style.css">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Lora:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="canonical" href="https://site.ulmjcgrenoble.org/chalet.html">
+<link rel="stylesheet" href="css/style.css?v=20260524-14">
+<!-- Matomo Analytics - mode anonyme (sans cookies, IP anonymisee) -->
+<script>
+  var _paq = window._paq = window._paq || [];
+  _paq.push(['disableCookies']);
+  _paq.push(['setDoNotTrack', true]);
+  _paq.push(['trackPageView']);
+  _paq.push(['enableLinkTracking']);
+  (function() {
+    var u = "//site.ulmjcgrenoble.org/matomo/";
+    _paq.push(['setTrackerUrl', u + 'matomo.php']);
+    _paq.push(['setSiteId', '1']);
+    var d = document, g = d.createElement('script'), s = d.getElementsByTagName('script')[0];
+    g.async = true; g.src = u + 'matomo.js'; s.parentNode.insertBefore(g, s);
+  })();
+</script>
+<!-- End Matomo -->
 </head>
 <body>
 
 <header class="site-header">
   <div class="container nav">
-    <a href="index.html" class="brand">UL MJC<span class="brand-sub">Grenoble</span></a>
+    <a href="index.html" class="brand">ULMJC<span class="brand-sub">Grenoble</span></a>
     <button class="nav-toggle" aria-label="Menu" onclick="document.getElementById('nav-links').classList.toggle('open')">☰</button>
     <ul class="nav-links" id="nav-links">
       <li><a href="index.html">Accueil</a></li>
-      <li><a href="asso.html">L'asso</a></li>
+      <li><a href="asso.html">Asso</a></li>
+      <li><a href="les-mjc.html">MJC</a></li>
+      <li><a href="chalet.html" class="active">Chalet</a></li>
       <li><a href="activites.html">Activités</a></li>
-      <li><a href="chalet.html" class="active">Le chalet</a></li>
       <li><a href="actus.html">Actualités</a></li>
-      <li><a href="galerie.html">Galerie</a></li>
+      <li><a href="partenariats.html">Partenaires</a></li>
       <li><a href="contact.html">Contact</a></li>
     </ul>
   </div>
@@ -39,7 +57,7 @@
 <section>
   <div class="container">
     <div class="split reveal">
-      <div class="split-img">[ photo : façade du chalet en été ]</div>
+      <div class="split-img"><img src="images/chalet/chalet-24.jpg" alt="Façade du chalet ULMJC à l'Alpe du Grand Serre en été" loading="lazy"></div>
       <div>
         <h2>Présentation</h2>
         <p>
@@ -48,7 +66,7 @@
           dans une <strong>zone naturelle protégée</strong>.
         </p>
         <p>
-          Acquis en 1963 par les MJC de Grenoble, il a été pensé dès l'origine comme un lieu de séjour collectif pour les
+          Acquis en 1963 par l'Union Locale des MJC de Grenoble, il a été pensé dès l'origine comme un lieu de séjour collectif pour les
           enfants, les jeunes et les groupes. Plus de 60 ans après, il continue d'accueillir des générations d'associations,
           de familles et de camps dans le même esprit.
         </p>
@@ -60,33 +78,88 @@
   </div>
 </section>
 
+<section>
+  <div class="container">
+    <div class="chalet-weather reveal" data-chalet-weather>
+      <div class="weather-card">
+        <div class="weather-card-header">
+          <span class="section-eyebrow">Météo en direct</span>
+          <h2>Aujourd'hui au chalet.</h2>
+        </div>
+        <div class="weather-loading">Chargement de la météo…</div>
+        <div class="weather-content" hidden>
+          <div class="weather-main">
+            <span class="weather-emoji" data-emoji>☀️</span>
+            <div>
+              <div class="weather-temp"><span data-temp>—</span><span class="weather-unit">°C</span></div>
+              <div class="weather-condition" data-condition>—</div>
+            </div>
+          </div>
+          <div class="weather-details">
+            <div class="weather-detail">
+              <span class="weather-detail-label">Ressenti</span>
+              <span class="weather-detail-value"><span data-feels>—</span>°C</span>
+            </div>
+            <div class="weather-detail">
+              <span class="weather-detail-label">Min · Max</span>
+              <span class="weather-detail-value"><span data-tmin>—</span>° / <span data-tmax>—</span>°C</span>
+            </div>
+            <div class="weather-detail">
+              <span class="weather-detail-label">Vent</span>
+              <span class="weather-detail-value"><span data-wind>—</span>&nbsp;km/h</span>
+            </div>
+            <div class="weather-detail" data-snow-block hidden>
+              <span class="weather-detail-label">Neige du jour</span>
+              <span class="weather-detail-value"><span data-snow>—</span>&nbsp;cm</span>
+            </div>
+          </div>
+          <p class="weather-meta">À l'Alpe du Grand Serre · 1368&nbsp;m · données <a href="https://open-meteo.com" target="_blank" rel="noopener">Open-Meteo</a></p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
 <section style="background: var(--bg-soft);">
   <div class="container">
     <div class="center reveal">
       <span class="section-eyebrow">Configuration</span>
       <h2>Le chalet en détail.</h2>
     </div>
-    <div class="cards reveal-stagger">
-      <div class="card">
+    <p class="muted center" style="margin-top: 0; margin-bottom: 2rem; font-size: 0.95rem;">
+      Cliquez sur une catégorie pour voir les photos en grand.
+    </p>
+    <div class="cards reveal-stagger chalet-cards">
+      <button type="button" class="card chalet-card" data-photos="1,5,6,15,16,17,19,21,24,26,27" aria-label="Voir les photos de l'extérieur">
+        <div class="icon">🏞️</div>
+        <h3>Extérieur</h3>
+        <p>Le chalet sous toutes ses faces, le jardin, la vue sur le massif du Taillefer et l'Alpe du Grand Serre.</p>
+        <span class="card-link">Voir les photos</span>
+      </button>
+      <button type="button" class="card chalet-card" data-photos="2,8,10,11,13,22" aria-label="Voir les photos du couchage">
         <div class="icon">🛏️</div>
         <h3>Couchage</h3>
         <p>À l'étage : 2 dortoirs séparés (13 et 12 places) + 1 chambre double avec sanitaires indépendants.</p>
-      </div>
-      <div class="card">
+        <span class="card-link">Voir les photos</span>
+      </button>
+      <button type="button" class="card chalet-card" data-photos="7,9,18" aria-label="Voir les photos des sanitaires">
         <div class="icon">🚿</div>
         <h3>Sanitaires</h3>
         <p>2 blocs sanitaires à l'étage (lavabos, douches, WC) + 1 toilette avec lavabo au rez-de-chaussée.</p>
-      </div>
-      <div class="card">
+        <span class="card-link">Voir les photos</span>
+      </button>
+      <button type="button" class="card chalet-card" data-photos="3,20,23" aria-label="Voir les photos de la cuisine">
         <div class="icon">🍳</div>
         <h3>Cuisine</h3>
         <p>Cuisine équipée : gazinière, plan de travail, frigo, congélateur, four micro-ondes, vaisselle complète.</p>
-      </div>
-      <div class="card">
+        <span class="card-link">Voir les photos</span>
+      </button>
+      <button type="button" class="card chalet-card" data-photos="4,12,14,25,28" aria-label="Voir les photos des pièces de vie">
         <div class="icon">🏡</div>
         <h3>Pièces de vie</h3>
         <p>Grand réfectoire / salle de séjour au rez-de-chaussée. Cellier et local à skis. Ambiance chalet de montagne.</p>
-      </div>
+        <span class="card-link">Voir les photos</span>
+      </button>
     </div>
     <p class="muted center" style="margin-top: 2rem; font-size: 0.95rem;">
       <strong>Capacité&nbsp;:</strong> 25 personnes adultes maximum — ou 20 mineurs de + de 6 ans accompagnés d'adultes (agrément SDJES).<br>
@@ -152,7 +225,7 @@
   <div class="container">
     <div class="footer-grid">
       <div>
-        <h4>UL MJC Grenoble</h4>
+        <h4>ULMJC Grenoble</h4>
         <p>
           Union Locale des MJC de Grenoble<br>
           Association loi 1901 d'éducation populaire<br>
@@ -163,18 +236,17 @@
       <div>
         <h4>Naviguer</h4>
         <ul>
-          <li><a href="asso.html">L'asso</a></li>
+          <li><a href="asso.html">Asso</a></li>
+          <li><a href="les-mjc.html">MJC</a></li>
+          <li><a href="chalet.html">Chalet</a></li>
           <li><a href="activites.html">Activités</a></li>
-          <li><a href="chalet.html">Le chalet</a></li>
           <li><a href="actus.html">Actualités</a></li>
         </ul>
       </div>
       <div>
         <h4>Pratique</h4>
         <ul>
-          <li><a href="galerie.html">Galerie</a></li>
           <li><a href="contact.html">Contact</a></li>
-          <li><a href="https://app.ulmjcgrenoble.org/" target="_blank" rel="noopener">Espace membres ↗</a></li>
         </ul>
       </div>
       <div>
@@ -187,12 +259,13 @@
       </div>
     </div>
     <div class="footer-bottom">
-      <span>© UL MJC Grenoble — depuis 1961</span>
+      <span>© ULMJC Grenoble — depuis 1961</span>
       <span><a href="mentions-legales.html">Mentions légales</a> · <a href="#">Statuts</a></span>
     </div>
   </div>
 </footer>
 
-<script src="js/main.js"></script>
+<script src="js/main.js?v=20260524-14"></script>
+
 </body>
 </html>

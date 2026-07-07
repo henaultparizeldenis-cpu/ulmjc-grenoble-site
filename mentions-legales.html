@@ -4,25 +4,43 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="description" content="Mentions légales du site de l'Union Locale des MJC de Grenoble : éditeur, hébergeur, propriété intellectuelle, données personnelles, crédits.">
-<title>Mentions légales — UL MJC Grenoble</title>
+<title>Mentions légales — ULMJC Grenoble</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="css/style.css">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Lora:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="canonical" href="https://site.ulmjcgrenoble.org/mentions-legales.html">
+<link rel="stylesheet" href="css/style.css?v=20260524-14">
+<!-- Matomo Analytics - mode anonyme (sans cookies, IP anonymisee) -->
+<script>
+  var _paq = window._paq = window._paq || [];
+  _paq.push(['disableCookies']);
+  _paq.push(['setDoNotTrack', true]);
+  _paq.push(['trackPageView']);
+  _paq.push(['enableLinkTracking']);
+  (function() {
+    var u = "//site.ulmjcgrenoble.org/matomo/";
+    _paq.push(['setTrackerUrl', u + 'matomo.php']);
+    _paq.push(['setSiteId', '1']);
+    var d = document, g = d.createElement('script'), s = d.getElementsByTagName('script')[0];
+    g.async = true; g.src = u + 'matomo.js'; s.parentNode.insertBefore(g, s);
+  })();
+</script>
+<!-- End Matomo -->
 </head>
 <body>
 
 <header class="site-header">
   <div class="container nav">
-    <a href="index.html" class="brand">UL MJC<span class="brand-sub">Grenoble</span></a>
+    <a href="index.html" class="brand">ULMJC<span class="brand-sub">Grenoble</span></a>
     <button class="nav-toggle" aria-label="Menu" onclick="document.getElementById('nav-links').classList.toggle('open')">☰</button>
     <ul class="nav-links" id="nav-links">
       <li><a href="index.html">Accueil</a></li>
-      <li><a href="asso.html">L'asso</a></li>
+      <li><a href="asso.html">Asso</a></li>
+      <li><a href="les-mjc.html">MJC</a></li>
+      <li><a href="chalet.html">Chalet</a></li>
       <li><a href="activites.html">Activités</a></li>
-      <li><a href="chalet.html">Le chalet</a></li>
       <li><a href="actus.html">Actualités</a></li>
-      <li><a href="galerie.html">Galerie</a></li>
+      <li><a href="partenariats.html">Partenaires</a></li>
       <li><a href="contact.html">Contact</a></li>
     </ul>
   </div>
@@ -49,7 +67,7 @@
     </p>
     <p>
       <strong>Siège social</strong>&nbsp;:<br>
-      Maison des associations<br>
+      Maison de la vie associative et citoyenne<br>
       6 rue Berthe de Boissieux<br>
       38000 Grenoble
     </p>
@@ -62,8 +80,7 @@
       <strong>Contact</strong>&nbsp;: <a href="mailto:ulmjc.gre@free.fr">ulmjc.gre@free.fr</a>
     </p>
     <p>
-      <strong>Directrice de l'association</strong>&nbsp;: Marielle Louise-Julie<br>
-      <strong>Directeur de la publication</strong>&nbsp;: Denis Hénault-Parizel
+      <strong>Directrice de l'association et de la publication</strong>&nbsp;: Marielle Louise-Julie
     </p>
 
     <h2>Hébergement</h2>
@@ -90,8 +107,8 @@
 
     <h2>Crédits</h2>
     <ul>
-      <li><strong>Photographie aérienne du Fort de la Bastille</strong> (page d'accueil)&nbsp;: © S.&nbsp;Lafelt — utilisée avec autorisation.</li>
-      <li><strong>Brochure et infographie du chalet</strong>&nbsp;: UL MJC Grenoble.</li>
+      <li><strong>Conception et développement du site</strong>&nbsp;: Denis Hénault-Parizel.</li>
+      <li><strong>Brochure et infographie du chalet</strong>&nbsp;: ULMJC Grenoble.</li>
       <li><strong>Typographies</strong>&nbsp;: Fraunces et Inter via Google Fonts (licence Open Font Licence).</li>
       <li><strong>Données météo</strong> (page d'accueil)&nbsp;: <a href="https://open-meteo.com" target="_blank" rel="noopener">Open-Meteo</a> — service gratuit, licence CC BY 4.0.</li>
       <li><strong>Photos de la galerie et des sorties</strong>&nbsp;: bénévoles, adhérents et groupes accueillis au chalet — un grand merci à eux.</li>
@@ -118,13 +135,35 @@
 
     <h2>Cookies et stockage local</h2>
     <p>
-      Le site n'utilise <strong>aucun cookie de tracking</strong>, aucune analytique tierce, aucun pixel publicitaire.
+      Le site n'utilise <strong>aucun cookie</strong>, aucune analytique tierce externe, aucun pixel publicitaire.
     </p>
     <p>
-      Il utilise uniquement le <strong>stockage local</strong> de votre navigateur (<em>localStorage</em>) pour mettre
-      en cache la météo affichée sur la page d'accueil pendant 30 minutes, afin d'éviter des appels répétés au
-      service Open-Meteo. Cette donnée reste sur votre appareil et n'est jamais transmise.
+      Il utilise uniquement le <strong>stockage local</strong> de votre navigateur (<em>localStorage</em> / <em>sessionStorage</em>) pour&nbsp;:
     </p>
+    <ul>
+      <li>mettre en cache la météo affichée sur la page d'accueil et au chalet pendant 30 minutes (afin d'éviter des appels répétés au service Open-Meteo)&nbsp;;</li>
+      <li>se souvenir d'éléments d'interface (popup déjà fermé pendant la session, splash d'intro déjà vu, etc.).</li>
+    </ul>
+    <p>
+      Ces données restent sur votre appareil et ne sont jamais transmises à un tiers.
+    </p>
+
+    <h2>Mesure d'audience anonyme (Matomo)</h2>
+    <p>
+      Pour comprendre comment le site est utilisé (quelles pages sont les plus consultées, durée moyenne d'une visite,
+      interactions avec les éléments interactifs comme le quizz ou la galerie photo), nous utilisons
+      <strong><a href="https://matomo.org" target="_blank" rel="noopener">Matomo</a></strong>,
+      un outil de mesure d'audience open-source, <strong>installé et hébergé sur notre propre serveur</strong> chez Hostinger.
+      Aucune donnée n'est transmise à un service tiers&nbsp;:
+    </p>
+    <ul>
+      <li><strong>Aucun cookie</strong> n'est déposé (mode « cookieless » activé)&nbsp;;</li>
+      <li>Les <strong>adresses IP sont anonymisées</strong> avant tout traitement (les 2 derniers octets sont remplacés par des zéros)&nbsp;;</li>
+      <li>Aucun identifiant unique persistant n'est créé&nbsp;: chaque visite est anonyme&nbsp;;</li>
+      <li>L'option <em>Do Not Track</em> du navigateur est respectée&nbsp;: si vous l'activez, vous n'êtes pas comptabilisé&nbsp;;</li>
+      <li>Données conservées au maximum <strong>13 mois</strong>, puis anonymisées définitivement&nbsp;;</li>
+      <li>Conforme RGPD sans bandeau de consentement, selon les recommandations de la CNIL pour la mesure d'audience anonyme (délibération du 27 juillet 2020).</li>
+    </ul>
 
     <h2>Liens vers d'autres sites</h2>
     <p>
@@ -147,7 +186,7 @@
   <div class="container">
     <div class="footer-grid">
       <div>
-        <h4>UL MJC Grenoble</h4>
+        <h4>ULMJC Grenoble</h4>
         <p>
           Union Locale des MJC de Grenoble<br>
           Association loi 1901 d'éducation populaire<br>
@@ -158,18 +197,17 @@
       <div>
         <h4>Naviguer</h4>
         <ul>
-          <li><a href="asso.html">L'asso</a></li>
+          <li><a href="asso.html">Asso</a></li>
+          <li><a href="les-mjc.html">MJC</a></li>
+          <li><a href="chalet.html">Chalet</a></li>
           <li><a href="activites.html">Activités</a></li>
-          <li><a href="chalet.html">Le chalet</a></li>
           <li><a href="actus.html">Actualités</a></li>
         </ul>
       </div>
       <div>
         <h4>Pratique</h4>
         <ul>
-          <li><a href="galerie.html">Galerie</a></li>
           <li><a href="contact.html">Contact</a></li>
-          <li><a href="https://app.ulmjcgrenoble.org/" target="_blank" rel="noopener">Espace membres ↗</a></li>
         </ul>
       </div>
       <div>
@@ -182,12 +220,14 @@
       </div>
     </div>
     <div class="footer-bottom">
-      <span>© UL MJC Grenoble — depuis 1961</span>
+      <span>© ULMJC Grenoble — depuis 1961</span>
       <span><a href="mentions-legales.html">Mentions légales</a> · <a href="#">Statuts</a></span>
     </div>
   </div>
 </footer>
 
-<script src="js/main.js"></script>
+<script src="js/main.js?v=20260524-14"></script>
+<!-- Compteur anonyme - sans cookie, RGPD-friendly, donnees agregees -->
+
 </body>
 </html>

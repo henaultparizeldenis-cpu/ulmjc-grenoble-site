@@ -8,3 +8,17 @@ Thumbs.db
 *.swp
 .vscode/
 .idea/
+
+# Outils de dev locaux (tuner de boucle vidéo, serveur de test, frames)
+_*
+
+# Archives de déploiement (non versionnées)
+*.zip
+
+# Copie locale extraite d'un déploiement (doublon du site)
+site/
+
+# Compteur PHP abandonné (remplacé par Matomo, hébergé séparément)
+counter.php
+.counter.json
+.htaccess
