@@ -236,8 +236,11 @@ body{transition:padding-right .28s ease;}
 body.lp-open{padding-right:440px;}
 body.lp-open.lp-wide{padding-right:780px;}
 @media (max-width:900px){
+  /* Aperçu live DÉSACTIVÉ sur mobile : le panneau passait en plein écran et
+     recouvrait l'admin (« la version mobile affiche juste les pages du site »).
+     Son état « ouvert » était mémorisé → il se rouvrait à chaque page. On masque
+     tout le dispositif sur mobile ; l'aperçu côte-à-côte reste une fonction
+     desktop. Sur téléphone, on édite proprement et on visualise via la page publique. */
   body.lp-open,body.lp-open.lp-wide{padding-right:0;}
-  #livePreview .lp-panel{width:100vw;max-width:100vw;}
-  #livePreview[data-state=hidden] .lp-tab{display:none;}
-  .lp-body{align-items:stretch;}
+  .lp-fab,#livePreview{display:none!important;}
 }
