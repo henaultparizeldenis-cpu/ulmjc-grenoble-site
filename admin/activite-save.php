@@ -21,6 +21,12 @@ $origSlug    = preg_replace('/[^a-z0-9\-]/', '', $_POST['orig_slug'] ?? '');
 // Image choisie dans la médiathèque (chemin uploads/ ou images/), validée.
 $pickedCover = media_valid_src($_POST['cover'] ?? '');
 
+// Filtre / effet / taille de l'image (validés contre les listes autorisées).
+$filter     = array_key_exists($_POST['filter'] ?? '', cover_filters()) ? (string)$_POST['filter'] : 'naturel';
+$effect     = in_array($_POST['effect'] ?? '', array('kenburns','zoom','pano','fixe'), true) ? (string)$_POST['effect'] : 'kenburns';
+$coverW     = max(40, min(100, (int)($_POST['cover_w'] ?? 100)));
+$coverAlign = !empty($_POST['cover_align']);
+
 // Le titre est obligatoire.
 if ($title === '') { header('Location: activite-edit.php' . ($origSlug ? '?slug=' . $origSlug : '')); exit; }
 
@@ -73,6 +79,10 @@ $record = array(
   'title'       => $title,
   'description' => $description,
   'image'       => $image,
+  'filter'      => $filter,
+  'effect'      => $effect,
+  'cover_w'     => $coverW,
+  'cover_align' => $coverAlign,
   'jour'        => $jour,
   'horaire'     => $horaire,
   'public'      => $public,

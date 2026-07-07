@@ -31,7 +31,9 @@ $related = array_slice(array_values($related), 0, 3);
 .actu-article-head{padding:3.5rem 0 0;}
 .actu-back{display:inline-block;font-size:.9rem;color:var(--terra-dark);margin-bottom:1.2rem;border:none;}
 .actu-article-meta{font-size:.85rem;color:var(--ink-soft);margin-top:.4rem;}
-.actu-hero{max-width:960px;margin:2.5rem auto 0;border-radius:var(--radius);overflow:hidden;aspect-ratio:16/9;background:var(--bg-soft);}
+/* Couverture : rendue en background-image (filtre/effet/taille appliqués inline
+   via cover_style()/effect_class() ; règles fx-* + animations dans css/style.css). */
+.actu-hero{max-width:960px;margin:2.5rem auto 0;border-radius:var(--radius);overflow:hidden;aspect-ratio:16/9;background:var(--bg-soft);background-size:cover;background-position:center;}
 .actu-hero img{width:100%;height:100%;object-fit:cover;display:block;}
 .actu-content{max-width:720px;margin:0 auto;padding:2.5rem 0 1rem;}
 .actu-chapo{font-size:1.25rem;line-height:1.6;color:var(--pine);font-family:'Lora',Georgia,serif;font-style:italic;margin-bottom:1.8rem;}
@@ -73,10 +75,14 @@ $related = array_slice(array_values($related), 0, 3);
 
 <section>
   <div class="container">
-    <?php if (has_cover($a)): ?>
-    <div class="actu-hero reveal">
-      <img src="<?= e($a['cover']) ?>" alt="<?= e(display_title($a)) ?>">
-    </div>
+    <?php if (has_cover($a)):
+      // Couverture avec filtre couleur + effet de mouvement + taille (porté de mohamed).
+      // Rendue en background-image (cover_style) pour que le background-blend-mode du
+      // filtre s'applique. Taille en % de 960px, ou calée sur la largeur du contenu (720px).
+      $cw = cover_width($a); $alignTitle = cover_align($a);
+      $heroMax = $alignTitle ? 720 : (int)round(960 * $cw / 100);
+    ?>
+    <div class="actu-hero reveal<?= effect_class($a) ?>" role="img" aria-label="<?= e(display_title($a)) ?>" style="<?= cover_style($a) ?>aspect-ratio:<?= cover_hero_ratio($a) ?>;max-width:<?= $heroMax ?>px;"></div>
     <?php endif; ?>
 
     <div class="actu-content">

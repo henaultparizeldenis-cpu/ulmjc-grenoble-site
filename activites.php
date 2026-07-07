@@ -17,7 +17,9 @@ require __DIR__ . '/inc/head.php';
 .act-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:1.6rem;margin-top:2.5rem;}
 .act-card{background:var(--bg-card);border:1px solid var(--line);border-radius:var(--radius);overflow:hidden;display:flex;flex-direction:column;transition:transform .2s,box-shadow .2s,border-color .2s;}
 .act-card:hover{transform:translateY(-3px);box-shadow:var(--shadow);border-color:var(--pine-soft);}
-.act-card-cover{display:block;aspect-ratio:16/10;overflow:hidden;background:var(--bg-soft);}
+/* Cover : background-image pour appliquer le filtre couleur (blend-mode). L'effet
+   de mouvement (fx-*) et les animations sont définis dans css/style.css. */
+.act-card-cover{display:block;aspect-ratio:16/10;overflow:hidden;background:var(--bg-soft);background-size:cover;background-position:center;}
 .act-card-cover img{width:100%;height:100%;object-fit:cover;display:block;}
 .act-card-body{padding:1.6rem;display:flex;flex-direction:column;flex:1;}
 .act-card-body h3{color:var(--pine);margin-bottom:.5rem;}
@@ -51,7 +53,7 @@ require __DIR__ . '/inc/head.php';
           ?>
           <article class="act-card reveal">
             <?php if ($img !== ''): ?>
-            <div class="act-card-cover"><img src="<?= e($img) ?>" alt="<?= e($title) ?>" loading="lazy"></div>
+            <div class="act-card-cover<?= effect_class($ac) ?>" role="img" aria-label="<?= e($title) ?>" style="<?= cover_style($ac) ?>"></div>
             <?php endif; ?>
             <div class="act-card-body">
               <h3><?= e($title) ?></h3>

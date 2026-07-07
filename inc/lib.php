@@ -103,6 +103,90 @@ function has_thumb($a)  { return list_thumb($a) !== ''; }
 function has_cover($a)  { return !empty($a['cover']); }
 
 /* ============================================================
+   Couverture : filtre couleur + effet de mouvement + taille
+   ------------------------------------------------------------
+   Porté de mohamed-cms/site/inc/lib.php (cover_filters / cover_style /
+   effect_class / cover_aspect / cover_hero_ratio), avec la PALETTE adaptée à la
+   charte ULMJC (pin / terre cuite). Ces helpers servent aussi bien aux actus
+   qu'aux activités : les deux stockent 'filter'/'effect'/'cover_w'/'cover_align'
+   à côté de leur image (champ 'cover' pour les actus, 'image' pour les activités,
+   normalisé via cover_src()).
+   ============================================================ */
+
+/* Chemin de la couverture d'un élément, quel que soit le champ ('cover' ou 'image'). */
+function cover_src($a) {
+  if (!empty($a['cover'])) return $a['cover'];
+  if (!empty($a['image'])) return $a['image'];
+  return '';
+}
+
+/* Filtres couleur disponibles pour les couvertures (palette ULMJC : sobre).
+   'layers' = calques background empilés AVANT l'image ; 'blend' = background-blend-mode ;
+   'css'    = filtre CSS additionnel. Le duotone reprend pin (#1a3328) + terre cuite
+   (#c4623a) de la charte, en voile discret. */
+function cover_filters() {
+  return array(
+    'naturel' => array('label' => 'Couleur naturelle', 'layers' => "",                                                                                                 'blend' => 'normal',                'css' => ''),
+    'nb'      => array('label' => 'Noir & blanc',       'layers' => "linear-gradient(#808080,#808080),",                                                                'blend' => 'color,normal',          'css' => ''),
+    'sepia'   => array('label' => 'Sépia',              'layers' => "linear-gradient(150deg,rgba(120,82,42,.5),rgba(60,38,14,.55)),linear-gradient(#808080,#808080),",   'blend' => 'multiply,color,normal', 'css' => ''),
+    'vif'     => array('label' => 'Couleur vive',       'layers' => "",                                                                                                 'blend' => 'normal',                'css' => 'saturate(1.4) contrast(1.05)'),
+    'delave'  => array('label' => 'Délavé (doux)',      'layers' => "",                                                                                                 'blend' => 'normal',                'css' => 'saturate(.78) contrast(.93) brightness(1.05)'),
+    'duotone' => array('label' => 'Duotone pin/terre',  'layers' => "linear-gradient(150deg,rgba(196,98,58,.42),rgba(26,51,40,.55)),linear-gradient(#808080,#808080),", 'blend' => 'multiply,color,normal', 'css' => ''),
+  );
+}
+
+/* Clé de filtre validée (repli sur 'naturel'). */
+function cover_filter_key($a) {
+  $k = $a['filter'] ?? 'naturel';
+  return array_key_exists($k, cover_filters()) ? $k : 'naturel';
+}
+
+/* Style inline d'une couverture selon le filtre choisi. $prefix : "../" en admin. */
+function cover_style($a, $prefix = '') {
+  $src = cover_src($a);
+  if ($src === '') return '';
+  $url = $prefix . $src;
+  $filters = cover_filters();
+  $f = $filters[cover_filter_key($a)];
+  $style = "background-image:" . $f['layers'] . "url('" . e($url) . "');background-size:cover;background-position:center;background-blend-mode:" . $f['blend'] . ";";
+  if (!empty($f['css'])) $style .= "filter:" . $f['css'] . ";";
+  return $style;
+}
+
+/* Ratio (largeur/hauteur) de la couverture. Portrait → ratio naturel (pas de
+   recadrage) ; paysage → 16:9 (bandeau ULMJC). */
+function cover_aspect($a) {
+  $src = cover_src($a);
+  if ($src === '') return round(16 / 9, 4);
+  $p = media_disk_path($src);
+  if (is_file($p)) { $info = @getimagesize($p); if ($info && $info[1] > 0) return round($info[0] / $info[1], 4); }
+  return round(16 / 9, 4);
+}
+function cover_hero_ratio($a) {
+  $ar = cover_aspect($a);
+  return $ar < 1 ? $ar : round(16 / 9, 4);
+}
+
+/* Largeur (%) de la couverture, bornée 40–100 (100 par défaut). */
+function cover_width($a) {
+  return isset($a['cover_w']) ? max(40, min(100, (int)$a['cover_w'])) : 100;
+}
+/* La couverture est-elle calée sur la largeur du titre ? */
+function cover_align($a) { return !empty($a['cover_align']); }
+
+/* Classe d'effet (animation) de la couverture. 'kenburns' = animation par défaut. */
+function effect_class($a) {
+  $e = $a['effect'] ?? 'kenburns';
+  $map = array('fixe' => ' fx-fixe', 'zoom' => ' fx-zoom', 'pano' => ' fx-pano');
+  return isset($map[$e]) ? $map[$e] : '';
+}
+/* Clé d'effet validée (repli sur 'kenburns'). */
+function effect_key($a) {
+  $e = $a['effect'] ?? 'kenburns';
+  return in_array($e, array('kenburns', 'zoom', 'pano', 'fixe'), true) ? $e : 'kenburns';
+}
+
+/* ============================================================
    Tri par « ordre » (Activités, Partenaires) — croissant, puis titre/nom
    ============================================================ */
 
@@ -388,8 +472,8 @@ function sanitize_body($html, $allowed = null) {
             }
           }
           if (in_array($tag, array('p','h2','h3','blockquote','li'), true)) {
-            // alignement + taille : on ne garde que ces classes-là sur les blocs
-            $okCls = array('al-center','al-right');
+            // alignement : on ne garde que ces classes-là sur les blocs
+            $okCls = array('al-center','al-right','just');
             $kept  = array_values(array_intersect(preg_split('/\s+/', trim($child->getAttribute('class'))), $okCls));
             if ($kept) $child->setAttribute('class', implode(' ', $kept)); else $child->removeAttribute('class');
           }

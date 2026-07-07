@@ -49,6 +49,29 @@ function preview_body_html() {
 /* Champs texte communs (jamais enregistrés ici). */
 $coverUrl = preview_cover_url();
 
+/* Filtre / effet / taille postés (validés comme au save). Le filtre s'applique
+   ici DIRECTEMENT sur $coverUrl (qui peut être une data-URI d'un fichier non
+   encore enregistré) → on reconstruit le style depuis cover_filters(), au lieu de
+   passer par cover_style() qui attend un chemin disque. Résultat identique. */
+$pv_filter = array_key_exists($_POST['filter'] ?? '', cover_filters()) ? (string)$_POST['filter'] : 'naturel';
+$pv_effect = in_array($_POST['effect'] ?? '', array('kenburns','zoom','pano','fixe'), true) ? (string)$_POST['effect'] : 'kenburns';
+$pv_cover_w = max(40, min(100, (int)($_POST['cover_w'] ?? 100)));
+$pv_cover_align = !empty($_POST['cover_align']);
+
+/* Style inline de couverture pour l'aperçu, à partir d'une URL quelconque (data: OK). */
+function preview_cover_style($url, $filterKey) {
+  if ($url === '') return '';
+  $f = cover_filters()[array_key_exists($filterKey, cover_filters()) ? $filterKey : 'naturel'];
+  $style = "background-image:" . $f['layers'] . "url('" . e($url) . "');background-size:cover;background-position:center;background-blend-mode:" . $f['blend'] . ";";
+  if (!empty($f['css'])) $style .= "filter:" . $f['css'] . ";";
+  return $style;
+}
+/* Classe d'effet pour l'aperçu (kenburns = animation par défaut, pas de classe). */
+function preview_effect_class($effect) {
+  $map = array('fixe' => ' fx-fixe', 'zoom' => ' fx-zoom', 'pano' => ' fx-pano');
+  return isset($map[$effect]) ? $map[$effect] : '';
+}
+
 /* Détermine si des données ont été postées (1er chargement à vide → placeholder). */
 $hasPost = ($_SERVER['REQUEST_METHOD'] === 'POST');
 ?><!DOCTYPE html>
@@ -100,7 +123,7 @@ if ($type === 'actus') {
   .actu-article-head{padding:3.5rem 0 0;}
   .actu-back{display:inline-block;font-size:.9rem;color:var(--terra-dark);margin-bottom:1.2rem;border:none;}
   .actu-article-meta{font-size:.85rem;color:var(--ink-soft);margin-top:.4rem;}
-  .actu-hero{max-width:960px;margin:2.5rem auto 0;border-radius:var(--radius);overflow:hidden;aspect-ratio:16/9;background:var(--bg-soft);}
+  .actu-hero{max-width:960px;margin:2.5rem auto 0;border-radius:var(--radius);overflow:hidden;aspect-ratio:16/9;background:var(--bg-soft);background-size:cover;background-position:center;}
   .actu-hero img{width:100%;height:100%;object-fit:cover;display:block;}
   .actu-content{max-width:720px;margin:0 auto;padding:2.5rem 0 1rem;}
   .actu-chapo{font-size:1.25rem;line-height:1.6;color:var(--pine);font-family:'Lora',Georgia,serif;font-style:italic;margin-bottom:1.8rem;}
@@ -128,10 +151,10 @@ if ($type === 'actus') {
 
   <section>
     <div class="container">
-      <?php if ($coverUrl !== ''): ?>
-      <div class="actu-hero reveal">
-        <img src="<?= e($coverUrl) ?>" alt="<?= e($title) ?>">
-      </div>
+      <?php if ($coverUrl !== ''):
+        $heroMax = $pv_cover_align ? 720 : (int)round(960 * $pv_cover_w / 100);
+      ?>
+      <div class="actu-hero reveal<?= preview_effect_class($pv_effect) ?>" role="img" aria-label="<?= e($title) ?>" style="<?= preview_cover_style($coverUrl, $pv_filter) ?>max-width:<?= $heroMax ?>px;"></div>
       <?php endif; ?>
 
       <div class="actu-content">
@@ -159,7 +182,7 @@ if ($type === 'actus') {
   .act-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:1.6rem;margin-top:2.5rem;}
   .act-card{background:var(--bg-card);border:1px solid var(--line);border-radius:var(--radius);overflow:hidden;display:flex;flex-direction:column;transition:transform .2s,box-shadow .2s,border-color .2s;}
   .act-card:hover{transform:translateY(-3px);box-shadow:var(--shadow);border-color:var(--pine-soft);}
-  .act-card-cover{display:block;aspect-ratio:16/10;overflow:hidden;background:var(--bg-soft);}
+  .act-card-cover{display:block;aspect-ratio:16/10;overflow:hidden;background:var(--bg-soft);background-size:cover;background-position:center;}
   .act-card-cover img{width:100%;height:100%;object-fit:cover;display:block;}
   .act-card-body{padding:1.6rem;display:flex;flex-direction:column;flex:1;}
   .act-card-body h3{color:var(--pine);margin-bottom:.5rem;}
@@ -183,7 +206,7 @@ if ($type === 'actus') {
       <div class="act-grid reveal-stagger">
         <article class="act-card reveal">
           <?php if ($coverUrl !== ''): ?>
-          <div class="act-card-cover"><img src="<?= e($coverUrl) ?>" alt="<?= e($title) ?>"></div>
+          <div class="act-card-cover<?= preview_effect_class($pv_effect) ?>" role="img" aria-label="<?= e($title) ?>" style="<?= preview_cover_style($coverUrl, $pv_filter) ?>"></div>
           <?php endif; ?>
           <div class="act-card-body">
             <h3><?= e($title) ?></h3>

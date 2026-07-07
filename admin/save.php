@@ -20,6 +20,12 @@ $origSlug  = preg_replace('/[^a-z0-9\-]/', '', $_POST['orig_slug'] ?? '');
 // Couverture choisie dans la médiathèque (chemin uploads/ ou images/), validée.
 $pickedCover = media_valid_src($_POST['cover'] ?? '');
 
+// Filtre / effet / taille de la couverture (validés contre les listes autorisées).
+$filter     = array_key_exists($_POST['filter'] ?? '', cover_filters()) ? (string)$_POST['filter'] : 'naturel';
+$effect     = in_array($_POST['effect'] ?? '', array('kenburns','zoom','pano','fixe'), true) ? (string)$_POST['effect'] : 'kenburns';
+$coverW     = max(40, min(100, (int)($_POST['cover_w'] ?? 100)));
+$coverAlign = !empty($_POST['cover_align']);
+
 // Le titre est obligatoire.
 if ($title === '') { header('Location: edit.php' . ($origSlug ? '?slug=' . $origSlug : '')); exit; }
 if (!preg_match('/^\d{4}-\d{2}-\d{2}$/', $date)) $date = date('Y-m-d');
@@ -78,6 +84,10 @@ $record = array(
   'excerpt'   => $excerpt,
   'chapo'     => $chapo,
   'cover'     => $cover,
+  'filter'    => $filter,
+  'effect'    => $effect,
+  'cover_w'   => $coverW,
+  'cover_align' => $coverAlign,
   'body'      => $body,
   'published' => $published,
   'created'   => $created,
