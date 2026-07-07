@@ -178,8 +178,8 @@ a{color:var(--terra-dark);text-decoration:none;}
    (box-sizing:border-box → largeur utile 1092px). En-tête aligné à gauche
    comme la vraie page ; la couverture (.acover-prev) reste centrée. */
 .acover-doc{display:block;width:1140px;box-sizing:border-box;padding:30px 24px 34px;text-align:left;transform-origin:top left;}
-.acover-kicker{display:block;font-family:var(--sans);font-size:1rem;font-weight:500;letter-spacing:.14em;text-transform:uppercase;color:var(--terra-dark);margin-bottom:16px;}
-.acover-title{display:block;font-family:var(--display);font-weight:500;font-size:3.4rem;line-height:1.15;color:var(--pine);margin:0 0 34px;max-width:none;white-space:pre-wrap;}
+.acover-kicker{display:block;font-family:var(--sans);font-size:1rem;font-weight:500;letter-spacing:.14em;text-transform:uppercase;color:var(--terra-dark);margin:0 auto 16px;max-width:720px;}
+.acover-title{display:block;font-family:var(--display);font-weight:500;font-size:3.4rem;line-height:1.15;color:var(--pine);margin:0 auto 34px;max-width:720px;white-space:pre-wrap;}
 .acover-prev{display:block;width:100%;margin:0 auto;aspect-ratio:16/9;background-size:cover;background-position:center;background-blend-mode:multiply,color,normal;border-radius:var(--radius);animation:coverKenburns 22s ease-in-out infinite alternate;}
 .acover-prev.fx-fixe{animation:none;}
 .acover-prev.fx-zoom{animation:coverZoom 22s ease-in-out infinite alternate;}

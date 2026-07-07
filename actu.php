@@ -29,7 +29,10 @@ $related = array_slice(array_values($related), 0, 3);
 ?>
 <style>
 .actu-article-head{padding:3.5rem 0 0;}
-.actu-back{display:inline-block;font-size:.9rem;color:var(--terra-dark);margin-bottom:1.2rem;border:none;}
+/* En-tête (accroche, titre, méta) calé sur la MÊME colonne de lecture (720px)
+   que la couverture et le corps → tout s'aligne au lieu d'un titre pleine largeur. */
+.actu-article-head .container>*{display:block;max-width:720px;margin-left:auto;margin-right:auto;}
+.actu-back{display:block;max-width:720px;margin:0 auto 1.2rem;font-size:.9rem;color:var(--terra-dark);border:none;}
 .actu-article-meta{font-size:.85rem;color:var(--ink-soft);margin-top:.4rem;}
 /* Couverture : rendue en background-image (filtre/effet/taille appliqués inline
    via cover_style()/effect_class() ; règles fx-* + animations dans css/style.css). */
