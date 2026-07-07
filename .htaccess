@@ -5,6 +5,10 @@
 # depuis leur vrai dossier. Si le fichier existe bien ici (cas local/dev), il est
 # servi directement — la règle ne s'applique QUE quand le fichier est absent (!-f).
 # Minimal et sûr pour un hébergement statique + PHP sur Hostinger (LiteSpeed).
+
+# Le site est désormais entièrement en PHP : index.php est la page d'accueil.
+DirectoryIndex index.php index.html
+
 <IfModule mod_rewrite.c>
   RewriteEngine On
 
@@ -14,6 +18,15 @@
   RewriteRule ^activites\.html$ /activites.php [R=301,L]
   RewriteRule ^partenariats\.html$ /partenariats.php [R=301,L]
   RewriteRule ^chalet\.html$ /chalet.php [R=301,L]
+
+  # Anciennes pages statiques converties en PHP : redirections 301.
+  # L'accueil pointe vers la racine du site (/), pas vers index.php.
+  RewriteRule ^index\.html$ / [R=301,L]
+  RewriteRule ^asso\.html$ /asso.php [R=301,L]
+  RewriteRule ^les-mjc\.html$ /les-mjc.php [R=301,L]
+  RewriteRule ^contact\.html$ /contact.php [R=301,L]
+  RewriteRule ^mentions-legales\.html$ /mentions-legales.php [R=301,L]
+  RewriteRule ^galerie\.html$ /galerie.php [R=301,L]
 
   RewriteCond %{REQUEST_FILENAME} !-f
   RewriteCond %{REQUEST_FILENAME} !-d

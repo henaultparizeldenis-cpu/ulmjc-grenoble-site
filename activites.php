@@ -78,7 +78,7 @@ require __DIR__ . '/inc/head.php';
         </p>
         <p style="margin-top:2rem;">
           <a href="chalet.php" class="btn btn-accent">Voir le chalet</a>
-          <a href="contact.html" class="btn btn-ghost" style="margin-left:.6rem;">Nous contacter</a>
+          <a href="contact.php" class="btn btn-ghost" style="margin-left:.6rem;">Nous contacter</a>
         </p>
       </div>
     <?php endif; ?>
@@ -92,7 +92,7 @@ require __DIR__ . '/inc/head.php';
       Que ce soit pour un week-end, une semaine, un camp ou un séminaire associatif — le chalet est ouvert toute l'année.
       Contactez-nous pour vérifier les disponibilités.
     </p>
-    <a href="contact.html" class="btn">Nous écrire</a>
+    <a href="contact.php" class="btn">Nous écrire</a>
     <a href="chalet.php" class="btn btn-ghost" style="margin-left: 0.75rem;">Voir Le Chalet</a>
   </div>
 </section>

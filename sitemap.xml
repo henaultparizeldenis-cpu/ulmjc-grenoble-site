@@ -7,13 +7,13 @@
     <priority>1.0</priority>
   </url>
   <url>
-    <loc>https://site.ulmjcgrenoble.org/asso.html</loc>
+    <loc>https://site.ulmjcgrenoble.org/asso.php</loc>
     <lastmod>2026-07-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://site.ulmjcgrenoble.org/les-mjc.html</loc>
+    <loc>https://site.ulmjcgrenoble.org/les-mjc.php</loc>
     <lastmod>2026-07-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
@@ -49,19 +49,19 @@
     <priority>0.5</priority>
   </url>
   <url>
-    <loc>https://site.ulmjcgrenoble.org/contact.html</loc>
+    <loc>https://site.ulmjcgrenoble.org/contact.php</loc>
     <lastmod>2026-07-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://site.ulmjcgrenoble.org/galerie.html</loc>
+    <loc>https://site.ulmjcgrenoble.org/galerie.php</loc>
     <lastmod>2026-07-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://site.ulmjcgrenoble.org/mentions-legales.html</loc>
+    <loc>https://site.ulmjcgrenoble.org/mentions-legales.php</loc>
     <lastmod>2026-07-01</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.2</priority>

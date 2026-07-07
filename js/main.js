@@ -750,7 +750,7 @@ window.trackEvent = function (category, action, name, value) {
         '<p>L’union locale, c’est <strong>100&nbsp;% de bénévoles</strong>&nbsp;: des habitant·es des quartiers qui font vivre les MJC et le chalet. On accueille toutes les énergies — quelques heures par mois, un coup de main ponctuel, ou un engagement plus régulier.</p>' +
         '<p class="muted">Aucun pré-requis, juste l’envie de partager.</p>' +
         '<div class="volunteer-actions">' +
-          '<a href="contact.html" class="btn btn-accent">Je veux en savoir plus</a>' +
+          '<a href="contact.php" class="btn btn-accent">Je veux en savoir plus</a>' +
           '<button type="button" class="btn btn-ghost" data-volunteer-close>Pas maintenant</button>' +
         '</div>' +
       '</div>';

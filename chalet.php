@@ -163,7 +163,7 @@ require __DIR__ . '/inc/head.php';
       <li>✉️ <a href="mailto:ulmjc.gre@free.fr"><strong>ulmjc.gre@free.fr</strong></a></li>
     </ul>
     <p style="margin-top: 1.5rem;">
-      <a href="contact.html" class="btn btn-accent">Nous contacter</a>
+      <a href="contact.php" class="btn btn-accent">Nous contacter</a>
     </p>
 
     <h2>Restauration</h2>

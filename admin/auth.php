@@ -158,7 +158,7 @@ function admin_header($title) {
     $trashBadge = $trashN > 0 ? ' <span class="anav-badge">' . $trashN . '</span>' : '';
     $corbeilleLink = '<a href="corbeille.php"' . $trashAct . '>Corbeille' . $trashBadge . '</a>';
     echo '<header class="abar"><div class="abar-inner">'
-       . '<a class="abrand" href="../index.html" target="ulmjc_site">← Retour au site</a>'
+       . '<a class="abrand" href="../index.php" target="ulmjc_site">← Retour au site</a>'
        . '<button type="button" class="anav-toggle" aria-label="Menu" aria-expanded="false" aria-controls="anav"><span></span><span></span><span></span></button>'
        . '<nav class="anav" id="anav">'
        . $navlink('index.php', 'Actualités')

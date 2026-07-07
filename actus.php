@@ -52,8 +52,8 @@ require __DIR__ . '/inc/head.php';
           Inscrivez-vous à la newsletter pour ne rien rater.
         </p>
         <p style="margin-top:2rem;">
-          <a href="contact.html" class="btn btn-accent">Nous contacter</a>
-          <a href="index.html" class="btn btn-ghost" style="margin-left:.6rem;">Retour à l'accueil</a>
+          <a href="contact.php" class="btn btn-accent">Nous contacter</a>
+          <a href="index.php" class="btn btn-ghost" style="margin-left:.6rem;">Retour à l'accueil</a>
         </p>
       </div>
     <?php endif; ?>

@@ -12,19 +12,6 @@ $v = ASSET_V;
 header('Cache-Control: no-store, no-cache, must-revalidate, max-age=0');
 header('Pragma: no-cache');
 header('Expires: 0');
-
-// Lien actif dans la nav
-$nav = array(
-  'index.html'         => array('Accueil', ''),
-  'asso.html'          => array('Asso', 'asso'),
-  'les-mjc.html'       => array('MJC', 'mjc'),
-  'chalet.php'         => array('Chalet', 'chalet'),
-  'activites.php'      => array('Activités', 'activites'),
-  'actus.php'          => array('Actualités', 'actus'),
-  'blog.php'           => array('Blog', 'blog'),
-  'partenariats.php'   => array('Partenaires', 'partenaires'),
-  'contact.html'       => array('Contact', 'contact'),
-);
 ?><!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -55,14 +42,9 @@ $nav = array(
 </head>
 <body>
 
-<header class="site-header">
-  <div class="container nav">
-    <a href="index.html" class="brand">ULMJC<span class="brand-sub">Grenoble</span></a>
-    <button class="nav-toggle" aria-label="Menu" onclick="document.getElementById('nav-links').classList.toggle('open')">☰</button>
-    <ul class="nav-links" id="nav-links">
-      <?php foreach ($nav as $href => $n): ?>
-      <li><a href="<?= e($href) ?>"<?= $page_active === $n[1] ? ' class="active"' : '' ?>><?= e($n[0]) ?></a></li>
-      <?php endforeach; ?>
-    </ul>
-  </div>
-</header>
+<?php
+/* Menu unique partagé avec les pages statiques : la clé active vient de
+   $page_active (posé par la page CMS). On la transmet à nav.php via $active. */
+$active = $page_active;
+include __DIR__ . '/nav.php';
+?>

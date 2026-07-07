@@ -61,8 +61,8 @@ a.part-item:hover{border-color:var(--pine-soft);}
           En attendant, n'hésitez pas à nous contacter pour échanger sur un éventuel partenariat.
         </p>
         <p style="margin-top:2rem;">
-          <a href="contact.html" class="btn btn-accent">Nous contacter</a>
-          <a href="asso.html" class="btn btn-ghost" style="margin-left:.6rem;">Découvrir l'asso</a>
+          <a href="contact.php" class="btn btn-accent">Nous contacter</a>
+          <a href="asso.php" class="btn btn-ghost" style="margin-left:.6rem;">Découvrir l'asso</a>
         </p>
       </div>
     <?php endif; ?>
