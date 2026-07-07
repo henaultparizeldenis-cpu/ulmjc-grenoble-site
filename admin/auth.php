@@ -144,6 +144,7 @@ function admin_header($title) {
       'activites.php'  => array('activites.php', 'activite-edit.php', 'activite-save.php', 'activite-delete.php'),
       'partenaires.php'=> array('partenaires.php', 'partenaire-edit.php', 'partenaire-save.php', 'partenaire-delete.php'),
       'chalet.php'     => array('chalet.php', 'chalet-save.php'),
+      'corbeille.php'  => array('corbeille.php', 'corbeille-action.php'),
     );
     $navlink = function ($href, $label) use ($cur, $sections) {
       $base = strtok($href, '#');
@@ -151,6 +152,11 @@ function admin_header($title) {
       $act = in_array($cur, $group, true) ? ' class="anav-active" aria-current="page"' : '';
       return '<a href="' . $href . '"' . $act . '>' . $label . '</a>';
     };
+    /* Lien « Corbeille » avec badge du nombre d'éléments à la corbeille (tous types). */
+    $trashN   = trashed_count();
+    $trashAct = in_array($cur, $sections['corbeille.php'], true) ? ' class="anav-active" aria-current="page"' : '';
+    $trashBadge = $trashN > 0 ? ' <span class="anav-badge">' . $trashN . '</span>' : '';
+    $corbeilleLink = '<a href="corbeille.php"' . $trashAct . '>Corbeille' . $trashBadge . '</a>';
     echo '<header class="abar"><div class="abar-inner">'
        . '<a class="abrand" href="../index.html" target="ulmjc_site">← Retour au site</a>'
        . '<button type="button" class="anav-toggle" aria-label="Menu" aria-expanded="false" aria-controls="anav"><span></span><span></span><span></span></button>'
@@ -161,6 +167,7 @@ function admin_header($title) {
        . $navlink('partenaires.php', 'Partenaires')
        . $navlink('chalet.php', 'Photos chalet')
        . '<a href="#" onclick="if(window.openMediaPicker){openMediaPicker();}return false;">Médiathèque</a>'
+       . $corbeilleLink
        . $navlink('password.php', 'Mot de passe')
        . '<a href="logout.php" class="alogout" aria-label="Déconnexion">Déconnexion</a>'
        . '</nav></div></header>'

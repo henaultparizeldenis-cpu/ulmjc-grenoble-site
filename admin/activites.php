@@ -5,7 +5,7 @@
 require_once __DIR__ . '/auth.php';
 require_login();
 
-$activites = load_activites();
+$activites = active_items('activites'); // hors corbeille
 usort($activites, 'cmp_ordre');
 $flash    = isset($_GET['ok']) ? $_GET['ok'] : '';
 $savedSlug = isset($_GET['slug']) ? preg_replace('/[^a-z0-9\-]/', '', $_GET['slug']) : '';
@@ -22,6 +22,7 @@ admin_header('Activités');
       <span class="aflash-note">— brouillon, non visible sur le site</span>
     <?php endif; ?>
   </div>
+<?php elseif ($flash === 'trashed'): ?><div class="aflash">Activité déplacée vers la corbeille. <a class="aflash-link" href="corbeille.php">Voir la corbeille ↗</a></div>
 <?php elseif ($flash === 'deleted'): ?><div class="aflash">Activité supprimée.</div><?php endif; ?>
 
 <div class="ahead">
@@ -60,7 +61,7 @@ admin_header('Activités');
         </div>
         <div class="arow-actions">
           <a class="alink" href="activite-edit.php?slug=<?= e($ac['slug']) ?>">Modifier</a>
-          <form method="post" action="activite-delete.php" onsubmit="return confirm('Supprimer définitivement cette activité ?');">
+          <form method="post" action="activite-delete.php" onsubmit="return confirm('Mettre cette activité à la corbeille ?');">
             <?= csrf_field() ?>
             <input type="hidden" name="slug" value="<?= e($ac['slug']) ?>" />
             <button class="alink adanger" name="del" value="1">Supprimer</button>

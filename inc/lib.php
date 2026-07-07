@@ -52,23 +52,132 @@ function save_items($type, $items) {
   return file_put_contents($m['file'], $json, LOCK_EX) !== false;
 }
 
-/* Retrouve un élément par son slug dans un type donné. */
+/* Retrouve un élément par son slug dans un type donné.
+   IGNORE les éléments en corbeille (deleted=true) : un slug supprimé se comporte
+   comme absent (les pages publiques de détail utilisent find_* et ne doivent donc
+   jamais afficher un élément en corbeille, même si published=true). */
 function find_item($type, $slug) {
   foreach (load_items($type) as $it) {
+    if (is_deleted($it)) continue;
     if (isset($it['slug']) && $it['slug'] === $slug) return $it;
   }
   return null;
 }
 
-/* Éléments publiés d'un type, du plus récent au plus ancien. */
+/* Éléments publiés d'un type, du plus récent au plus ancien.
+   Exclut aussi les éléments en corbeille (sécurité : jamais visible côté public). */
 function published_items($type) {
-  $list = array_filter(load_items($type), function ($it) { return !empty($it['published']); });
+  $list = array_filter(load_items($type), function ($it) { return !empty($it['published']) && !is_deleted($it); });
   usort($list, function ($x, $y) {
     $dx = ($x['date'] ?? '') . ($x['created'] ?? '');
     $dy = ($y['date'] ?? '') . ($y['created'] ?? '');
     return strcmp($dy, $dx); // décroissant
   });
   return array_values($list);
+}
+
+/* ============================================================
+   Corbeille (suppression douce / soft-delete)
+   ------------------------------------------------------------
+   Un élément « à la corbeille » porte deleted=true + deleted_at (ISO 8601).
+   « Supprimer » (endpoints admin) = soft_delete_item : réversible.
+   La corbeille permet de restore_item (restaurer) ou purge_item (supprimer
+   définitivement, ancien comportement hard-delete). S'applique aux 4 types liste :
+   actus, blog, activites, partenaires (le chalet est une galerie, non concernée).
+   Clé d'un élément : 'slug' partout, sauf partenaires où c'est 'id'.
+   ============================================================ */
+
+/* L'élément est-il à la corbeille ? */
+function is_deleted($item) { return !empty($item['deleted']); }
+
+/* Nom du champ clé pour un type (partenaires = 'id', sinon 'slug'). */
+function item_key_field($type) { return $type === 'partenaires' ? 'id' : 'slug'; }
+
+/* Éléments NON supprimés d'un type (pour les listes admin). Ordre inchangé
+   (le tri reste à la charge de l'appelant, comme avant). */
+function active_items($type) {
+  return array_values(array_filter(load_items($type), function ($it) { return !is_deleted($it); }));
+}
+
+/* Éléments à la corbeille d'un type, triés par date de suppression décroissante
+   (les plus récemment supprimés d'abord). */
+function trashed_items($type) {
+  $list = array_filter(load_items($type), 'is_deleted');
+  usort($list, function ($x, $y) {
+    return strcmp((string)($y['deleted_at'] ?? ''), (string)($x['deleted_at'] ?? ''));
+  });
+  return array_values($list);
+}
+
+/* Met un élément à la corbeille (deleted=true + deleted_at). $key = slug (ou id
+   pour partenaires). Renvoie true si un élément a été trouvé et sauvegardé. */
+function soft_delete_item($type, $key) {
+  $field = item_key_field($type);
+  $items = load_items($type);
+  $found = false;
+  foreach ($items as &$it) {
+    if (($it[$field] ?? null) === $key && !is_deleted($it)) {
+      $it['deleted']    = true;
+      $it['deleted_at'] = date('c'); // ISO 8601
+      $found = true;
+      break;
+    }
+  }
+  unset($it);
+  if ($found) save_items($type, $items);
+  return $found;
+}
+
+/* Restaure un élément de la corbeille (retire deleted/deleted_at). */
+function restore_item($type, $key) {
+  $field = item_key_field($type);
+  $items = load_items($type);
+  $found = false;
+  foreach ($items as &$it) {
+    if (($it[$field] ?? null) === $key && is_deleted($it)) {
+      unset($it['deleted'], $it['deleted_at']);
+      $found = true;
+      break;
+    }
+  }
+  unset($it);
+  if ($found) save_items($type, $items);
+  return $found;
+}
+
+/* Supprime DÉFINITIVEMENT un élément (ancien comportement hard-delete) : le retire
+   du JSON et nettoie sa couverture/logo importé (hors dépôt), comme le faisaient les
+   anciens delete.php. Ne purge QUE des éléments déjà en corbeille (sécurité). */
+function purge_item($type, $key) {
+  $field = item_key_field($type);
+  $items = load_items($type);
+  $kept  = array();
+  $found = false;
+  foreach ($items as $it) {
+    if (($it[$field] ?? null) === $key && is_deleted($it)) {
+      // couverture uploadée hors dépôt : 'cover' (actus/blog), 'image' (activites), 'logo' (partenaires)
+      foreach (array('cover', 'image', 'logo') as $imgField) {
+        if (!empty($it[$imgField])) {
+          $f = upload_path($it[$imgField]);
+          if ($f !== '' && is_file($f)) @unlink($f);
+        }
+      }
+      $found = true;
+      continue; // on n'ajoute pas → supprimé pour de bon
+    }
+    $kept[] = $it;
+  }
+  if ($found) save_items($type, $kept);
+  return $found;
+}
+
+/* Nombre total d'éléments à la corbeille (tous types liste confondus) — badge de nav. */
+function trashed_count() {
+  $n = 0;
+  foreach (array('actus', 'blog', 'activites', 'partenaires') as $type) {
+    $n += count(trashed_items($type));
+  }
+  return $n;
 }
 
 /* Garantit l'unicité du slug dans un type (ignore l'élément en cours d'édition). */
@@ -235,7 +344,7 @@ function effect_key($a) {
 /* Éléments publiés d'un type, triés par le champ « ordre » (croissant).
    À défaut d'ordre identique, on départage par 'title' puis 'nom'. */
 function published_ordered($type) {
-  $list = array_filter(load_items($type), function ($it) { return !empty($it['published']); });
+  $list = array_filter(load_items($type), function ($it) { return !empty($it['published']) && !is_deleted($it); });
   usort($list, 'cmp_ordre');
   return array_values($list);
 }

@@ -1,20 +1,14 @@
 <?php
-/* Suppression d'une actualité. Basé sur mohamed-cms/site/admin/delete.php. */
+/* « Supprimer » une actualité = MISE À LA CORBEILLE (soft-delete, réversible).
+   Anciennement un hard-delete (basé sur mohamed-cms/site/admin/delete.php) ; on
+   pose désormais deleted=true + deleted_at et l'élément part dans corbeille.php,
+   d'où on peut le restaurer ou le supprimer définitivement (purge_item). */
 require_once __DIR__ . '/auth.php';
 require_login();
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && csrf_ok()) {
   $slug = preg_replace('/[^a-z0-9\-]/', '', $_POST['slug'] ?? '');
-  $kept = array();
-  foreach (load_actus() as $a) {
-    if (($a['slug'] ?? '') === $slug) {
-      $f = upload_path(isset($a['cover']) ? $a['cover'] : '');
-      if ($f !== '' && is_file($f)) @unlink($f);
-      continue; // on n'ajoute pas → supprimé
-    }
-    $kept[] = $a;
-  }
-  save_actus($kept);
+  soft_delete_item('actus', $slug);
 }
-header('Location: index.php?ok=deleted');
+header('Location: index.php?ok=trashed');
 exit;

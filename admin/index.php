@@ -155,8 +155,8 @@ if (!is_logged_in()) {
   exit;
 }
 
-/* --- Tableau de bord : liste des actualités --- */
-$actus = load_actus();
+/* --- Tableau de bord : liste des actualités (hors corbeille) --- */
+$actus = active_items('actus');
 usort($actus, function ($x, $y) {
   return strcmp(($y['date'] ?? '') . ($y['created'] ?? ''), ($x['date'] ?? '') . ($x['created'] ?? ''));
 });
@@ -175,6 +175,7 @@ admin_header('Actualités');
       <span class="aflash-note">— brouillon, non visible sur le site</span>
     <?php endif; ?>
   </div>
+<?php elseif ($flash === 'trashed'): ?><div class="aflash">Actualité déplacée vers la corbeille. <a class="aflash-link" href="corbeille.php">Voir la corbeille ↗</a></div>
 <?php elseif ($flash === 'deleted'): ?><div class="aflash">Actualité supprimée.</div>
 <?php elseif ($flash === 'pass'): ?><div class="aflash">Mot de passe mis à jour.</div><?php endif; ?>
 
@@ -215,7 +216,7 @@ admin_header('Actualités');
           <?php if (!empty($a['published'])): ?>
             <a class="alink" href="../actu.php?slug=<?= e($a['slug']) ?>" target="ulmjc_site">Voir</a>
           <?php endif; ?>
-          <form method="post" action="delete.php" onsubmit="return confirm('Supprimer définitivement cette actualité ?');">
+          <form method="post" action="delete.php" onsubmit="return confirm('Mettre cette actualité à la corbeille ?');">
             <?= csrf_field() ?>
             <input type="hidden" name="slug" value="<?= e($a['slug']) ?>" />
             <button class="alink adanger" name="del" value="1">Supprimer</button>

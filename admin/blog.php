@@ -5,8 +5,8 @@
 require_once __DIR__ . '/auth.php';
 require_login();
 
-/* --- Liste des billets --- */
-$billets = load_blog();
+/* --- Liste des billets (hors corbeille) --- */
+$billets = active_items('blog');
 usort($billets, function ($x, $y) {
   return strcmp(($y['date'] ?? '') . ($y['created'] ?? ''), ($x['date'] ?? '') . ($x['created'] ?? ''));
 });
@@ -25,6 +25,7 @@ admin_header('Blog');
       <span class="aflash-note">— brouillon, non visible sur le site</span>
     <?php endif; ?>
   </div>
+<?php elseif ($flash === 'trashed'): ?><div class="aflash">Billet déplacé vers la corbeille. <a class="aflash-link" href="corbeille.php">Voir la corbeille ↗</a></div>
 <?php elseif ($flash === 'deleted'): ?><div class="aflash">Billet supprimé.</div><?php endif; ?>
 
 <div class="ahead">
@@ -69,7 +70,7 @@ admin_header('Blog');
           <?php if (!empty($a['published'])): ?>
             <a class="alink" href="../billet.php?slug=<?= e($a['slug']) ?>" target="ulmjc_site">Voir</a>
           <?php endif; ?>
-          <form method="post" action="billet-delete.php" onsubmit="return confirm('Supprimer définitivement ce billet ?');">
+          <form method="post" action="billet-delete.php" onsubmit="return confirm('Mettre ce billet à la corbeille ?');">
             <?= csrf_field() ?>
             <input type="hidden" name="slug" value="<?= e($a['slug']) ?>" />
             <button class="alink adanger" name="del" value="1">Supprimer</button>

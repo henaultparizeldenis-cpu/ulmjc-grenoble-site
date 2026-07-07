@@ -5,7 +5,7 @@
 require_once __DIR__ . '/auth.php';
 require_login();
 
-$partenaires = load_partenaires();
+$partenaires = active_items('partenaires'); // hors corbeille
 usort($partenaires, 'cmp_ordre');
 $flash = isset($_GET['ok']) ? $_GET['ok'] : '';
 
@@ -13,6 +13,7 @@ admin_header('Partenaires');
 ?>
 <?php if ($flash === 'saved'): ?>
   <div class="aflash">Partenaire enregistré. <a class="aflash-link" href="../partenariats.php" target="ulmjc_site">Voir la page Partenaires ↗</a></div>
+<?php elseif ($flash === 'trashed'): ?><div class="aflash">Partenaire déplacé vers la corbeille. <a class="aflash-link" href="corbeille.php">Voir la corbeille ↗</a></div>
 <?php elseif ($flash === 'deleted'): ?><div class="aflash">Partenaire supprimé.</div><?php endif; ?>
 
 <div class="ahead">
@@ -51,7 +52,7 @@ admin_header('Partenaires');
         </div>
         <div class="arow-actions">
           <a class="alink" href="partenaire-edit.php?id=<?= e($p['id']) ?>">Modifier</a>
-          <form method="post" action="partenaire-delete.php" onsubmit="return confirm('Supprimer définitivement ce partenaire ?');">
+          <form method="post" action="partenaire-delete.php" onsubmit="return confirm('Mettre ce partenaire à la corbeille ?');">
             <?= csrf_field() ?>
             <input type="hidden" name="id" value="<?= e($p['id']) ?>" />
             <button class="alink adanger" name="del" value="1">Supprimer</button>

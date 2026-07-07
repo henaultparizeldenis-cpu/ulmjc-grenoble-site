@@ -89,7 +89,16 @@ a{color:var(--terra-dark);text-decoration:none;}
 .afield textarea{resize:vertical;}
 .agrid2{display:grid;grid-template-columns:1fr 1fr;gap:1.1rem;}
 @media (max-width:600px){.agrid2{grid-template-columns:1fr;}}
-.aactions{display:flex;align-items:center;gap:1.2rem;margin-top:.6rem;}
+/* Barre d'action « Enregistrer » : collée en bas de l'écran et suit le scroll,
+   pour rester toujours à portée sur les éditeurs longs (actu, billet, activité…).
+   Sur les formulaires courts, elle se pose simplement en fin de contenu. */
+.aactions{
+  display:flex;align-items:center;gap:1.2rem;
+  position:sticky;bottom:1rem;z-index:30;
+  margin-top:1.6rem;padding:.85rem 1.1rem;
+  background:var(--bg-card);border:1px solid var(--line);border-radius:var(--radius-sm);
+  box-shadow:0 10px 30px -14px rgba(42,41,38,.32),0 2px 6px rgba(42,41,38,.06);
+}
 
 /* Interrupteur publié/brouillon */
 .aswitch-field{gap:.5rem;}
