@@ -247,6 +247,13 @@ a{color:var(--terra-dark);text-decoration:none;}
 body{transition:padding-right .28s ease;}
 body.lp-open{padding-right:440px;}
 body.lp-open.lp-wide{padding-right:780px;}
+/* En aperçu « large », la colonne d'édition devient étroite : la nav admin
+   (9 entrées) débordait sur 2 lignes et grignotait la zone d'édition. On la
+   replie en menu ☰ (même mécanique que sur mobile), l'en-tête tient sur 1 ligne. */
+body.lp-wide .anav-toggle{display:flex;}
+body.lp-wide .anav{display:none;flex-direction:column;align-items:stretch;width:100%;}
+body.lp-wide .anav.open{display:flex;}
+body.lp-wide .anav a{padding:.6rem .8rem;}
 @media (max-width:900px){
   /* Aperçu live DÉSACTIVÉ sur mobile : le panneau passait en plein écran et
      recouvrait l'admin (« la version mobile affiche juste les pages du site »).
