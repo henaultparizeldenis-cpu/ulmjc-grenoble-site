@@ -314,8 +314,7 @@ function cover_aspect($a) {
   return round(16 / 9, 4);
 }
 function cover_hero_ratio($a) {
-  $ar = cover_aspect($a);
-  return $ar < 1 ? $ar : round(16 / 9, 4);
+  return cover_aspect($a); // ratio naturel de la photo — jamais de recadrage
 }
 
 /* Largeur (%) de la couverture, bornée 40–100 (100 par défaut). */

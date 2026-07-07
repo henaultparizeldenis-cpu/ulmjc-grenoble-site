@@ -296,7 +296,7 @@ admin_header($isNew ? 'Nouvelle actualité' : 'Modifier l\'actualité');
   function applyCoverRatio(){
     if(!cp||!coverUrl) return;
     var img=new Image();
-    img.onload=function(){ var r=img.naturalHeight?img.naturalWidth/img.naturalHeight:16/9; cp.style.aspectRatio=(r<1?r:16/9)+' / 1'; fitStage(); };
+    img.onload=function(){ var r=img.naturalHeight?img.naturalWidth/img.naturalHeight:16/9; cp.style.aspectRatio=r+' / 1'; fitStage(); };
     img.src=coverUrl;
   }
   function renderCoverPrev(){
