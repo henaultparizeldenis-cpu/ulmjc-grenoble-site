@@ -193,7 +193,7 @@ function admin_footer() {
     <div class="mp-head">
       <span class="mp-title">Médiathèque</span>
       <button type="button" class="abtn mp-validate" id="mpValidate" hidden>Valider la sélection (0)</button>
-      <label class="abtn abtn-ghost mp-upbtn">Importer une image<input type="file" id="mpUpload" accept="image/jpeg,image/png,image/webp"></label>
+      <label class="abtn abtn-ghost mp-upbtn">Importer des images<input type="file" id="mpUpload" accept="image/jpeg,image/png,image/webp" multiple></label>
       <button type="button" class="abtn abtn-ghost" data-mp-close>Fermer</button>
     </div>
     <div class="mp-grid" id="mpGrid"><p class="mp-empty">Chargement…</p></div>
@@ -251,11 +251,17 @@ function admin_footer() {
     }).catch(function(){ grid.innerHTML='<p class="mp-empty">Erreur de chargement.</p>'; });
   }
   if(validate) validate.addEventListener('click',function(){ if(!multi||!cb||!sel.length)return; var picked=sel.slice(), fn=cb; closeMp(); fn(picked); });
+  // Import multiple : on envoie les fichiers un par un (chacun passe par
+  // optimize_image côté serveur), avec une progression « n/total ».
   if(up) up.addEventListener('change',function(){
-    var f=up.files&&up.files[0]; if(!f)return;
-    grid.innerHTML='<p class="mp-empty">Envoi…</p>';
-    var fd=new FormData(); fd.append('csrf',window.__CSRF); fd.append('file',f);
-    fetch('upload.php',{method:'POST',body:fd}).then(function(r){return r.json();}).then(function(j){ up.value=''; if(j.error)alert('Import : '+j.error); load(); }).catch(function(){ alert('Import impossible.'); load(); });
+    var files=up.files?Array.prototype.slice.call(up.files):[]; if(!files.length)return;
+    var total=files.length, errors=0;
+    (function step(i){
+      if(i>=total){ up.value=''; if(errors)alert(errors+' image(s) sur '+total+' n\'ont pas pu être importées.'); load(); return; }
+      grid.innerHTML='<p class="mp-empty">Import en cours… '+(i+1)+'/'+total+'</p>';
+      var fd=new FormData(); fd.append('csrf',window.__CSRF); fd.append('file',files[i]);
+      fetch('upload.php',{method:'POST',body:fd}).then(function(r){return r.json();}).then(function(j){ if(j&&j.error)errors++; step(i+1); }).catch(function(){ errors++; step(i+1); });
+    })(0);
   });
   Array.prototype.forEach.call(modal.querySelectorAll('[data-mp-close]'),function(el){ el.addEventListener('click',closeMp); });
   document.addEventListener('keydown',function(e){ if(e.key==='Escape'&&!modal.hidden)closeMp(); });

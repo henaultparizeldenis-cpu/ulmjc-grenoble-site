@@ -31,10 +31,11 @@ admin_header('Photos du chalet');
     <div class="chalet-cat-head">
       <h2><span class="chalet-cat-icon"><?= $meta['icon'] ?></span> <?= e($meta['label']) ?> <span class="ahint chalet-count">(<?= count($photos) ?>)</span></h2>
       <div class="chalet-cat-actions">
-        <label class="abtn abtn-ghost">Importer une photo
-          <input type="file" class="chalet-upload" accept="image/jpeg,image/png,image/webp" />
+        <label class="abtn abtn-ghost">Importer des photos
+          <input type="file" class="chalet-upload" accept="image/jpeg,image/png,image/webp" multiple />
         </label>
         <button type="button" class="abtn abtn-ghost chalet-pick">Choisir dans la médiathèque</button>
+        <span class="ahint chalet-progress" aria-live="polite"></span>
       </div>
     </div>
     <div class="chalet-grid" data-cat="<?= e($key) ?>">
@@ -117,11 +118,17 @@ admin_header('Photos du chalet');
 
     // Import fichier → upload + ajout
     upInput.addEventListener('change',function(){
-      var f=upInput.files&&upInput.files[0]; if(!f)return;
+      var files=upInput.files?Array.prototype.slice.call(upInput.files):[]; if(!files.length)return;
+      var total=files.length, errors=0, lastItems=null;
       busy(true);
-      var fd=new FormData(); fd.append('action','upload'); fd.append('cat',cat); fd.append('file',f);
-      post(fd).then(function(j){ upInput.value=''; busy(false); if(j.error){alert(j.error);return;} render(grid,j.items||[]); })
-              .catch(function(){ upInput.value=''; busy(false); alert('Import impossible.'); });
+      var lbl=sec.querySelector('.chalet-progress');
+      (function step(i){
+        if(i>=total){ upInput.value=''; busy(false); if(lbl)lbl.textContent=''; if(lastItems)render(grid,lastItems); if(errors)alert(errors+' photo(s) sur '+total+' n\'ont pas pu être importées.'); return; }
+        if(lbl)lbl.textContent='Import… '+(i+1)+'/'+total;
+        var fd=new FormData(); fd.append('action','upload'); fd.append('cat',cat); fd.append('file',files[i]);
+        post(fd).then(function(j){ if(j&&j.error){errors++;} else if(j&&j.items){lastItems=j.items;} step(i+1); })
+                .catch(function(){ errors++; step(i+1); });
+      })(0);
     });
 
     // Médiathèque → ajout (multiple)
