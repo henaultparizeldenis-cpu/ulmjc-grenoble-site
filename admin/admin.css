@@ -163,3 +163,51 @@ a{color:var(--terra-dark);text-decoration:none;}
 .mp-cell--sel .mp-pick{border-color:var(--terra);box-shadow:0 0 0 3px var(--terra);}
 .mp-num{position:absolute;top:5px;left:5px;min-width:22px;height:22px;padding:0 6px;border-radius:11px;background:var(--terra);color:#fff;font-size:.74rem;font-weight:600;display:flex;align-items:center;justify-content:center;}
 .mp-empty{grid-column:1/-1;text-align:center;color:var(--ink-soft);padding:30px;font-size:.9rem;}
+
+/* =========================================================
+   Aperçu du site en direct (panneau commun, persistant).
+   Règles .lp-* portées de mohamed-cms/site/admin/admin.css et RESKINNÉES aux
+   tokens ULMJC : barre en --pine, accents --terra, fonds crème (--bg / --bg-soft),
+   texte --ink. Le panneau doit ressembler à un prolongement du back-office ULMJC.
+   ========================================================= */
+.lp-fab{display:none;position:fixed;right:16px;bottom:16px;z-index:62;align-items:center;gap:7px;padding:12px 18px;border:0;border-radius:30px;background:var(--terra);color:#fff;font-family:var(--sans);font-size:.9rem;cursor:pointer;box-shadow:0 6px 20px -6px rgba(42,41,38,.5);}
+.lp-fab:hover{background:var(--terra-dark);}
+#livePreview .lp-panel{position:fixed;top:0;right:0;height:100vh;width:440px;max-width:48vw;display:flex;flex-direction:column;background:var(--bg-card);border-left:1px solid var(--line);box-shadow:-16px 0 46px -30px rgba(42,41,38,.45);z-index:60;transition:transform .28s ease,width .2s ease;}
+#livePreview[data-state=wide] .lp-panel{width:780px;}
+#livePreview.lp-mobileview .lp-panel{width:440px;}            /* mobile : panneau ajusté à la largeur du téléphone (l'« élargir » ne s'applique pas) */
+#livePreview.lp-mobileview #lpWide{display:none;}             /* mobile : bouton « élargir » inutile → masqué */
+#livePreview[data-state=hidden] .lp-panel{transform:translateX(100%);}
+.lp-panel:fullscreen{width:100vw;max-width:100vw;height:100vh;transform:none;border-left:0;}
+.lp-bar{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:9px 12px;background:var(--pine);color:var(--bg);flex:none;}
+.lp-title{font-family:var(--display);font-weight:500;font-size:.95rem;color:var(--bg);}
+.lp-tools{display:flex;gap:2px;}
+.lp-btn{border:1px solid transparent;background:none;cursor:pointer;font-size:1rem;line-height:1;padding:6px 8px;border-radius:6px;color:rgba(251,247,241,.9);display:inline-flex;align-items:center;}
+.lp-btn:hover{background:rgba(255,255,255,.14);color:#fff;}
+.lp-device-btn svg{display:block;}
+.lp-body{flex:1;min-height:0;overflow:hidden;background:var(--bg-soft);display:flex;justify-content:center;align-items:flex-start;}
+.lp-frame-wrap{position:relative;overflow:hidden;background:var(--bg-card);flex:none;}
+.lp-panel iframe{position:absolute;top:0;left:0;border:0;background:var(--bg-card);display:block;}
+/* Aperçu détaché (fenêtre sur 2ᵉ écran) : on RETIRE le panneau du 1er écran ; il ne
+   reste qu'une petite barre flottante (bascule appareil + rattacher). */
+#livePreview.lp-detached .lp-panel{display:none;}
+#livePreview.lp-detached .lp-tab{display:none !important;}
+.lp-detached-bar{display:none;}
+#livePreview.lp-detached .lp-detached-bar{display:flex;align-items:center;gap:10px;position:fixed;bottom:18px;right:18px;z-index:62;background:var(--pine);color:var(--bg);padding:8px 12px 8px 14px;border-radius:10px;box-shadow:0 16px 40px -18px rgba(42,41,38,.7);font-size:.82rem;}
+.lp-dbar-label{letter-spacing:.02em;opacity:.85;white-space:nowrap;}
+.lp-detached-bar .lp-device-btn{background:rgba(255,255,255,.14);border:0;color:var(--bg);width:30px;height:30px;border-radius:6px;cursor:pointer;display:flex;align-items:center;justify-content:center;padding:0;}
+.lp-detached-bar .lp-device-btn:hover{background:rgba(255,255,255,.24);}
+.lp-dbar-reattach{font:inherit;cursor:pointer;border:1px solid var(--bg);background:var(--bg);color:var(--pine);padding:6px 12px;border-radius:6px;letter-spacing:.02em;transition:background .2s,color .2s;}
+.lp-dbar-reattach:hover{background:transparent;color:var(--bg);}
+@media(max-width:900px){.lp-detached-bar{display:none !important;}}
+.lp-tab{display:none;position:fixed;top:50%;right:0;transform:translateY(-50%);z-index:61;cursor:pointer;writing-mode:vertical-rl;background:var(--terra);color:#fff;border:0;padding:16px 9px;border-radius:8px 0 0 8px;font-size:.82rem;letter-spacing:.06em;box-shadow:-7px 0 20px -10px rgba(42,41,38,.5);}
+.lp-tab:hover{background:var(--terra-dark);}
+#livePreview[data-state=hidden] .lp-tab{display:block;}
+body{transition:padding-right .28s ease;}
+body.lp-open{padding-right:440px;}
+body.lp-open.lp-wide{padding-right:780px;}
+@media (max-width:900px){
+  body.lp-open,body.lp-open.lp-wide{padding-right:0;}
+  #livePreview .lp-panel{width:100vw;max-width:100vw;}
+  #livePreview[data-state=hidden] .lp-tab{display:none;}
+  .lp-body{align-items:stretch;}
+}

@@ -168,6 +168,12 @@ function admin_header($title) {
 }
 function admin_footer() {
   echo '</main>';
+  /* Panneau d'aperçu du site en direct (commun aux écrans d'administration connectés).
+     _live_preview.php choisit lui-même s'il s'affiche selon la page (mapping interne :
+     écrans d'édition = aperçu LIVE via preview.php ; listes = aperçu simple ; autres =
+     masqué). Ajouté ici comme dans mohamed-cms/site/admin/auth.php. Placé AVANT le reste
+     pour que le sélecteur de médiathèque (plus bas) reste inchangé. */
+  if (is_logged_in()) include __DIR__ . '/_live_preview.php';
   // Une seule case « Voir le mot de passe » qui révèle tous les champs de la page.
   echo '<script>(function(){'
      . 'var pws=document.querySelectorAll("input[type=password]"); if(!pws.length)return;'
