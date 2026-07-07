@@ -32,7 +32,10 @@ $related = array_filter(published_blog(), function ($x) use ($a) { return $x['sl
 $related = array_slice(array_values($related), 0, 3);
 ?>
 <style>
-.actu-article-head{padding:3.5rem 0 0;}
+/* En-tête d'article SANS bandeau : le titre respire sur le fond de page,
+   juste au-dessus de la photo (pas de fond coloré ni de bordure « boîte »). */
+.actu-article-head{padding:3rem 0 0;background:transparent;border-bottom:none;}
+.actu-article-head+section{padding-top:0;}
 /* En-tête (accroche, titre, méta) calé sur la MÊME colonne de lecture (720px)
    que la couverture et le corps → tout s'aligne au lieu d'un titre pleine largeur. */
 .actu-article-head .container>*{display:block;max-width:720px;margin-left:auto;margin-right:auto;}

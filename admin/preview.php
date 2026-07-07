@@ -120,7 +120,8 @@ if ($type === 'actus') {
   ?>
   <style>
   /* Styles repris de actu.php (détail) — nécessaires hors de la page publique. */
-  .actu-article-head{padding:3.5rem 0 0;}
+  .actu-article-head{padding:3rem 0 0;background:transparent;border-bottom:none;}
+  .actu-article-head+section{padding-top:0;}
   .actu-article-head .container>*{display:block;max-width:720px;margin-left:auto;margin-right:auto;}
   .actu-back{display:block;max-width:720px;margin:0 auto 1.2rem;font-size:.9rem;color:var(--terra-dark);border:none;}
   .actu-article-meta{font-size:.85rem;color:var(--ink-soft);margin-top:.4rem;}
@@ -180,7 +181,8 @@ if ($type === 'actus') {
   ?>
   <style>
   /* Styles repris de billet.php (détail) — nécessaires hors de la page publique. */
-  .actu-article-head{padding:3.5rem 0 0;}
+  .actu-article-head{padding:3rem 0 0;background:transparent;border-bottom:none;}
+  .actu-article-head+section{padding-top:0;}
   .actu-article-head .container>*{display:block;max-width:720px;margin-left:auto;margin-right:auto;}
   .actu-back{display:block;max-width:720px;margin:0 auto 1.2rem;font-size:.9rem;color:var(--terra-dark);border:none;}
   .actu-article-meta{font-size:.85rem;color:var(--ink-soft);margin-top:.4rem;}
