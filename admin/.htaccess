@@ -1,0 +1,13 @@
+# Back-office : couche de protection supplémentaire.
+# La sécurité principale est applicative (mot de passe bcrypt + session), mais on
+# durcit ici l'accès aux fichiers sensibles du dossier /admin.
+
+# Aucun fichier de données JSON ne doit être servi directement depuis /admin.
+<FilesMatch "\.(json|log)$">
+  Require all denied
+</FilesMatch>
+
+# Interdire l'accès direct aux dotfiles (.htaccess, etc.).
+<FilesMatch "^\.">
+  Require all denied
+</FilesMatch>

@@ -1,0 +1,22 @@
+# Réécriture des images importées (CMS ULMJC).
+# Sur le serveur, les photos importées vivent HORS du dépôt (ulmjc-data/uploads)
+# pour ne PAS être effacées à chaque déploiement. Elles ne sont donc plus présentes
+# physiquement dans /uploads : on route alors la demande vers media.php, qui les sert
+# depuis leur vrai dossier. Si le fichier existe bien ici (cas local/dev), il est
+# servi directement — la règle ne s'applique QUE quand le fichier est absent (!-f).
+# Minimal et sûr pour un hébergement statique + PHP sur Hostinger (LiteSpeed).
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+  RewriteCond %{REQUEST_FILENAME} !-f
+  RewriteCond %{REQUEST_FILENAME} !-d
+  RewriteRule ^uploads/(.+)$ media.php?f=$1 [L,QSA]
+</IfModule>
+
+# Sécurité générale : couper l'accès direct aux dossiers de code et de données.
+RedirectMatch 403 ^/inc/
+RedirectMatch 403 ^/data/
+
+# Interdire l'accès à tout dotfile (.git, .htaccess, .user.ini, .default.json exposé, etc.)
+<FilesMatch "^\.">
+  Require all denied
+</FilesMatch>

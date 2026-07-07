@@ -21,4 +21,16 @@ site/
 # Compteur PHP abandonné (remplacé par Matomo, hébergé séparément)
 counter.php
 .counter.json
-.htaccess
+
+# =========================================================
+# CMS Actualités — données de production (NE PAS versionner).
+# Le contenu réel vit sur le serveur dans /public_html/ulmjc-data/
+# (hors dépôt, survit aux déploiements). On ne versionne que les
+# graines *.default.json et les .htaccess du CMS.
+# =========================================================
+data/*.json
+!data/*.default.json
+data/admin.json
+uploads/*
+!uploads/.gitkeep
+!uploads/.htaccess

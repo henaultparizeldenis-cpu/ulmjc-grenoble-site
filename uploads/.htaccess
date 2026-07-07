@@ -1,0 +1,6 @@
+# Dossier des images importées : on sert des fichiers statiques, JAMAIS de code.
+# Coupe toute exécution PHP (défense en profondeur si un .php y était déposé).
+<FilesMatch "\.(php|php\d|phtml|phar|cgi|pl|py|sh)$">
+  Require all denied
+</FilesMatch>
+php_flag engine off
