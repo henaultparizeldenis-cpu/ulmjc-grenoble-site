@@ -21,6 +21,7 @@ $nav = array(
   'chalet.php'         => array('Chalet', 'chalet'),
   'activites.php'      => array('Activités', 'activites'),
   'actus.php'          => array('Actualités', 'actus'),
+  'blog.php'           => array('Blog', 'blog'),
   'partenariats.php'   => array('Partenaires', 'partenaires'),
   'contact.html'       => array('Contact', 'contact'),
 );

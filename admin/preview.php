@@ -17,7 +17,7 @@ require_once __DIR__ . '/auth.php';
 require_login();
 
 $type = $_POST['type'] ?? ($_GET['type'] ?? '');
-if (!in_array($type, array('actus', 'activites', 'partenaires'), true)) $type = 'actus';
+if (!in_array($type, array('actus', 'blog', 'activites', 'partenaires'), true)) $type = 'actus';
 
 /* ------------------------------------------------------------------
    Couverture / image / logo d'aperçu.
@@ -146,6 +146,69 @@ if ($type === 'actus') {
       <span class="section-eyebrow">Actualité</span>
       <h1><?= e($title) ?></h1>
       <div class="actu-article-meta"><?= $date ? fr_date($date) : '' ?> · <?= reading_time($body) ?></div>
+    </div>
+  </div>
+
+  <section>
+    <div class="container">
+      <?php if ($coverUrl !== ''):
+        $heroMax = $pv_cover_align ? 720 : (int)round(960 * $pv_cover_w / 100);
+      ?>
+      <div class="actu-hero reveal<?= preview_effect_class($pv_effect) ?>" role="img" aria-label="<?= e($title) ?>" style="<?= preview_cover_style($coverUrl, $pv_filter) ?>max-width:<?= $heroMax ?>px;"></div>
+      <?php endif; ?>
+
+      <div class="actu-content">
+        <?php if ($chapo !== ''): ?>
+          <p class="actu-chapo reveal"><?= e($chapo) ?></p>
+        <?php endif; ?>
+        <div class="actu-body reveal"><?= $body ?></div>
+      </div>
+    </div>
+  </section>
+  <?php
+} elseif ($type === 'blog') {
+  /* Reprend billet.php (détail d'un billet de blog). Comme l'actu, PLUS l'auteur
+     et la catégorie affichés (« Par X · Catégorie · date »). */
+  $title   = clean_utf8(trim($_POST['title'] ?? ''));
+  if ($title === '') $title = '(Titre du billet)';
+  $date    = trim($_POST['date'] ?? '');
+  $author  = clean_utf8(trim($_POST['author'] ?? ''));
+  $catLabel = blog_category_label(array_key_exists($_POST['category'] ?? '', blog_categories()) ? (string)$_POST['category'] : '');
+  $chapo   = clean_utf8(trim($_POST['chapo'] ?? ''));
+  $body    = preview_body_html();
+  ?>
+  <style>
+  /* Styles repris de billet.php (détail) — nécessaires hors de la page publique. */
+  .actu-article-head{padding:3.5rem 0 0;}
+  .actu-back{display:inline-block;font-size:.9rem;color:var(--terra-dark);margin-bottom:1.2rem;border:none;}
+  .actu-article-meta{font-size:.85rem;color:var(--ink-soft);margin-top:.4rem;}
+  .actu-hero{max-width:960px;margin:2.5rem auto 0;border-radius:var(--radius);overflow:hidden;aspect-ratio:16/9;background:var(--bg-soft);background-size:cover;background-position:center;}
+  .actu-hero img{width:100%;height:100%;object-fit:cover;display:block;}
+  .actu-content{max-width:720px;margin:0 auto;padding:2.5rem 0 1rem;}
+  .actu-chapo{font-size:1.25rem;line-height:1.6;color:var(--pine);font-family:'Lora',Georgia,serif;font-style:italic;margin-bottom:1.8rem;}
+  .actu-body h2{margin-top:2.4rem;}
+  .actu-body h3{margin-top:1.8rem;}
+  .actu-body ul{padding-left:1.4rem;}
+  .actu-body li{margin-bottom:.5rem;}
+  .actu-body img{max-width:100%;height:auto;border-radius:var(--radius-sm);margin:1.4rem 0;}
+  .actu-body figure{margin:1.6rem 0;}
+  .actu-body figure img{margin:0;}
+  .actu-body figcaption{font-size:.85rem;color:var(--ink-soft);margin-top:.5rem;text-align:center;}
+  .actu-body blockquote{border-left:4px solid var(--terra);background:var(--bg-soft);margin:1.6rem 0;padding:1rem 1.4rem;border-radius:var(--radius-sm);font-family:'Lora',Georgia,serif;font-size:1.1rem;color:var(--pine);}
+  .actu-body .al-center{text-align:center;}
+  .actu-body .al-right{text-align:right;}
+  </style>
+
+  <div class="page-header actu-article-head">
+    <div class="container">
+      <a href="#" class="actu-back" onclick="return false;">← Retour au blog</a>
+      <span class="section-eyebrow">Blog<?= $catLabel !== '' ? ' · ' . e($catLabel) : '' ?></span>
+      <h1><?= e($title) ?></h1>
+      <div class="actu-article-meta">
+        <?php if ($author !== ''): ?>Par <?= e($author) ?> · <?php endif; ?>
+        <?php if ($catLabel !== ''): ?><?= e($catLabel) ?> · <?php endif; ?>
+        <?= $date ? fr_date($date) : '' ?> · <?= reading_time($body) ?>
+      </div>
     </div>
   </div>
 

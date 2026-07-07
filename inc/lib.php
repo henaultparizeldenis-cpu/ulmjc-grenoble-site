@@ -92,6 +92,48 @@ function save_actus($items)      { return save_items('actus', $items); }
 function find_actu($slug)        { return find_item('actus', $slug); }
 function published_actus()       { return published_items('actus'); }
 
+/* ============================================================
+   Blog (billets) — même socle que les actus (helpers génériques),
+   AVEC en plus un auteur (author) et une catégorie/thème (category).
+   Un billet a la même forme qu'une actu : slug, title, date, excerpt,
+   chapo, cover, filter, effect, cover_w, cover_align, body, published,
+   created, updated + author + category. Tri par date décroissante.
+   ============================================================ */
+
+function load_blog()             { return load_items('blog'); }
+function save_blog($items)       { return save_items('blog', $items); }
+function find_blog($slug)        { return find_item('blog', $slug); }
+function published_blog()        { return published_items('blog'); }
+
+/* Catégories (thèmes) du blog : clé => libellé (ordre = ordre d'affichage).
+   L'éditeur choisit une clé dans cette liste ; le rendu affiche le libellé.
+   Toute catégorie stockée hors de cette liste est traitée comme « absente »
+   (voir blog_category_label / save). */
+function blog_categories() {
+  return array(
+    'educ-pop'  => 'Éducation populaire',
+    'sorties'   => 'Sorties & séjours',
+    'vie-asso'  => "Vie de l'association",
+    'chalet'    => 'Le chalet',
+    'portraits' => 'Portraits',
+  );
+}
+
+/* Clé de catégorie validée pour un billet (repli sur '' si inconnue/absente). */
+function blog_category_key($a) {
+  $k = trim((string)($a['category'] ?? ''));
+  return array_key_exists($k, blog_categories()) ? $k : '';
+}
+
+/* Libellé d'affichage d'une catégorie (à partir d'une clé), ou '' si inconnue. */
+function blog_category_label($key) {
+  $cats = blog_categories();
+  return isset($cats[$key]) ? $cats[$key] : '';
+}
+
+/* Auteur nettoyé d'un billet (chaîne, ou ''). */
+function blog_author($a) { return trim((string)($a['author'] ?? '')); }
+
 /* Titre d'affichage d'une actu (repli si vide). */
 function display_title($a) {
   return !empty($a['title']) ? $a['title'] : 'Sans titre';

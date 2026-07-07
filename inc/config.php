@@ -53,6 +53,11 @@ $GLOBALS['ITEM_TYPES'] = array(
     'seed'  => REPO_DATA . '/partenaires.default.json',
     'label' => 'Partenaires',
   ),
+  'blog' => array(
+    'file'  => DATA_DIR  . '/blog.json',
+    'seed'  => REPO_DATA . '/blog.default.json',
+    'label' => 'Blog',
+  ),
 );
 
 /* Photos du chalet : galerie par catégories (structure DIFFÉRENTE d'une liste plate,

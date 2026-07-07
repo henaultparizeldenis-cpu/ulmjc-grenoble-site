@@ -37,6 +37,12 @@
     <priority>0.6</priority>
   </url>
   <url>
+    <loc>https://site.ulmjcgrenoble.org/blog.php</loc>
+    <lastmod>2026-07-01</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
     <loc>https://site.ulmjcgrenoble.org/partenariats.php</loc>
     <lastmod>2026-07-01</lastmod>
     <changefreq>monthly</changefreq>

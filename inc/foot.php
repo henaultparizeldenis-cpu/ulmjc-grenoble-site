@@ -19,6 +19,7 @@
           <li><a href="chalet.php">Chalet</a></li>
           <li><a href="activites.php">Activités</a></li>
           <li><a href="actus.php">Actualités</a></li>
+          <li><a href="blog.php">Blog</a></li>
           <li><a href="partenariats.php">Partenaires</a></li>
         </ul>
       </div>
@@ -26,6 +27,7 @@
         <h4>Pratique</h4>
         <ul>
           <li><a href="contact.html">Contact</a></li>
+          <li><a href="blog-rss.php">Flux RSS du blog</a></li>
         </ul>
       </div>
       <div>

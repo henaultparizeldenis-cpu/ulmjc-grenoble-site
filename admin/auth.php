@@ -140,6 +140,7 @@ function admin_header($title) {
        l'onglet reste surligné pendant la création/modification d'un élément. */
     $sections = array(
       'index.php'      => array('index.php', 'edit.php', 'save.php', 'delete.php'),
+      'blog.php'       => array('blog.php', 'billet-edit.php', 'billet-save.php', 'billet-delete.php'),
       'activites.php'  => array('activites.php', 'activite-edit.php', 'activite-save.php', 'activite-delete.php'),
       'partenaires.php'=> array('partenaires.php', 'partenaire-edit.php', 'partenaire-save.php', 'partenaire-delete.php'),
       'chalet.php'     => array('chalet.php', 'chalet-save.php'),
@@ -155,6 +156,7 @@ function admin_header($title) {
        . '<button type="button" class="anav-toggle" aria-label="Menu" aria-expanded="false" aria-controls="anav"><span></span><span></span><span></span></button>'
        . '<nav class="anav" id="anav">'
        . $navlink('index.php', 'Actualités')
+       . $navlink('blog.php', 'Blog')
        . $navlink('activites.php', 'Activités')
        . $navlink('partenaires.php', 'Partenaires')
        . $navlink('chalet.php', 'Photos chalet')

@@ -61,10 +61,12 @@
   var _MAP = {
     // Écrans d'édition (LIVE : on poste le formulaire d'édition à preview.php)
     'edit.php':             { ep: 'preview.php?type=actus',       live: true, art: true, scroll: true },
+    'billet-edit.php':      { ep: 'preview.php?type=blog',        live: true, art: true, scroll: true },
     'activite-edit.php':    { ep: 'preview.php?type=activites',   live: true, art: true, scroll: true },
     'partenaire-edit.php':  { ep: 'preview.php?type=partenaires', live: true },
     // Listes / gestion (aperçu simple, non live)
     'index.php':            { ep: '../actus.php',        live: false },
+    'blog.php':             { ep: '../blog.php',         live: false },
     'activites.php':        { ep: '../activites.php',    live: false },
     'partenaires.php':      { ep: '../partenariats.php', live: false },
     'chalet.php':           { ep: '../chalet.php',       live: false }
