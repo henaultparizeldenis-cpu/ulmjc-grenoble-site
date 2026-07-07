@@ -30,17 +30,36 @@ if (is_dir(DATA_DIR) && !is_file(DATA_DIR . '/.htaccess')) @file_put_contents(DA
 define('REPO_DATA', BASE_DIR . '/data');         // graines VERSIONNÉES (restent dans le dépôt)
 define('ADMIN_FILE', DATA_DIR . '/admin.json');  // empreinte du mot de passe (bcrypt)
 
-/* Types de contenu gérés par le CMS. Pour le PILOTE, seul « actus » est actif.
-   Ajouter une entrée ici + une graine data/<type>.default.json suffit à étendre
-   (activites, partenaires, chalet viendront plus tard). load_items()/save_items()
-   dans lib.php sont génériques et s'appuient sur cette table. */
+/* Types de contenu « liste » gérés par le CMS. Ajouter une entrée ici + une graine
+   data/<type>.default.json suffit à étendre. load_items()/save_items() dans lib.php
+   sont génériques et s'appuient sur cette table.
+   NB : les Photos du chalet (« chalet ») NE sont PAS une liste plate mais un
+   dictionnaire catégorie→liste d'images ; elles ont donc leurs propres helpers
+   load_gallery()/save_gallery() dans lib.php et leur graine dédiée (voir
+   GALLERY_FILE / GALLERY_SEED plus bas). */
 $GLOBALS['ITEM_TYPES'] = array(
   'actus' => array(
     'file'  => DATA_DIR  . '/actus.json',
     'seed'  => REPO_DATA . '/actus.default.json',
     'label' => 'Actualités',
   ),
+  'activites' => array(
+    'file'  => DATA_DIR  . '/activites.json',
+    'seed'  => REPO_DATA . '/activites.default.json',
+    'label' => 'Activités',
+  ),
+  'partenaires' => array(
+    'file'  => DATA_DIR  . '/partenaires.json',
+    'seed'  => REPO_DATA . '/partenaires.default.json',
+    'label' => 'Partenaires',
+  ),
 );
+
+/* Photos du chalet : galerie par catégories (structure DIFFÉRENTE d'une liste plate,
+   d'où des helpers dédiés load_gallery()/save_gallery() dans lib.php). Même mécanique
+   d'amorçage que les listes : fichier serveur hors dépôt + graine versionnée. */
+define('GALLERY_FILE', DATA_DIR  . '/chalet.json');
+define('GALLERY_SEED', REPO_DATA . '/chalet.default.json');
 
 /* Photos importées : mêmes contraintes que les données (survivre au déploiement),
    MAIS elles doivent rester AFFICHABLES sur le web. Solution :

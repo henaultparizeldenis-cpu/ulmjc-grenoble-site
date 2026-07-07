@@ -324,16 +324,16 @@ window.trackEvent = function (category, action, name, value) {
       });
     });
 
-    // Cards cliquables avec liste d'indexes (page chalet : Extérieur, Couchage, etc.)
+    // Cards cliquables (page chalet : Extérieur, Couchage, etc.)
+    // data-photos contient désormais une liste de CHEMINS d'images directement
+    // (ex. "images/chalet/chalet-01.jpg,uploads/ab.jpg"), générée côté serveur
+    // depuis chalet.json — plus d'index numériques à reconstruire ici.
     photoCards.forEach((card) => {
       card.addEventListener('click', () => {
         const list = (card.dataset.photos || '').split(',').map((s) => s.trim()).filter(Boolean);
         if (!list.length) return;
-        const items = list.map((n) => {
-          const padded = n.padStart(2, '0');
-          return { src: 'images/chalet/chalet-' + padded + '.jpg', alt: 'Chalet ULMJC — photo ' + n };
-        });
         const cardTitle = card.querySelector('h3') ? card.querySelector('h3').textContent.trim() : 'Catégorie';
+        const items = list.map((src) => ({ src: src, alt: 'Chalet ULMJC — ' + cardTitle }));
         window.trackEvent('Photos', 'Ouverture catégorie chalet', cardTitle);
         openLightbox(items, 0);
       });

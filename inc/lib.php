@@ -103,6 +103,121 @@ function has_thumb($a)  { return list_thumb($a) !== ''; }
 function has_cover($a)  { return !empty($a['cover']); }
 
 /* ============================================================
+   Tri par « ordre » (Activités, Partenaires) — croissant, puis titre/nom
+   ============================================================ */
+
+/* Éléments publiés d'un type, triés par le champ « ordre » (croissant).
+   À défaut d'ordre identique, on départage par 'title' puis 'nom'. */
+function published_ordered($type) {
+  $list = array_filter(load_items($type), function ($it) { return !empty($it['published']); });
+  usort($list, 'cmp_ordre');
+  return array_values($list);
+}
+
+/* Comparateur réutilisable (liste admin ET public) : ordre croissant, repli alpha. */
+function cmp_ordre($x, $y) {
+  $ox = (int)($x['ordre'] ?? 0);
+  $oy = (int)($y['ordre'] ?? 0);
+  if ($ox !== $oy) return $ox <=> $oy;
+  $lx = (string)($x['title'] ?? $x['nom'] ?? '');
+  $ly = (string)($y['title'] ?? $y['nom'] ?? '');
+  return strcmp($lx, $ly);
+}
+
+/* ============================================================
+   Activités (par-dessus les helpers génériques, comme les actus)
+   ============================================================ */
+
+function load_activites()       { return load_items('activites'); }
+function save_activites($items) { return save_items('activites', $items); }
+function find_activite($slug)   { return find_item('activites', $slug); }
+function published_activites()  { return published_ordered('activites'); }
+
+/* ============================================================
+   Partenaires (par-dessus les helpers génériques)
+   ============================================================ */
+
+function load_partenaires()       { return load_items('partenaires'); }
+function save_partenaires($items) { return save_items('partenaires', $items); }
+function published_partenaires()  { return published_ordered('partenaires'); }
+
+/* ============================================================
+   Photos du chalet : galerie par catégories (helpers DÉDIÉS)
+   ------------------------------------------------------------
+   Structure JSON = dictionnaire { "<categorie>": ["images/chalet/chalet-01.jpg", "uploads/xxx.jpg", …] }.
+   Les 5 catégories sont FIXES (ordre d'affichage figé, libellés/icônes en dur dans les vues).
+   Les chemins sont MIXTES : « images/… » (photos versionnées dans le dépôt) ou
+   « uploads/… » (ajouts hors dépôt, servis par media.php). On ne force JAMAIS cette
+   structure dans load_items() : d'où load_gallery()/save_gallery() séparés.
+   ============================================================ */
+
+/* Catégories du chalet : clé => libellé + icône (ordre = ordre d'affichage). */
+function chalet_categories() {
+  return array(
+    'exterieur'     => array('label' => 'Extérieur',     'icon' => '🏞️'),
+    'couchage'      => array('label' => 'Couchage',      'icon' => '🛏️'),
+    'sanitaires'    => array('label' => 'Sanitaires',    'icon' => '🚿'),
+    'cuisine'       => array('label' => 'Cuisine',       'icon' => '🍳'),
+    'pieces-de-vie' => array('label' => 'Pièces de vie', 'icon' => '🏡'),
+  );
+}
+
+/* Charge la galerie du chalet (dict catégorie→liste de chemins). Auto-amorçage
+   depuis la graine versionnée, comme load_items(). Garantit TOUJOURS les 5 clés
+   (dans le bon ordre) avec une liste, et ne conserve que des chemins valides. */
+function load_gallery() {
+  if (!is_file(GALLERY_FILE) && is_file(GALLERY_SEED)) {
+    if (!is_dir(DATA_DIR)) @mkdir(DATA_DIR, 0775, true);
+    @copy(GALLERY_SEED, GALLERY_FILE);
+  }
+  $raw = is_file(GALLERY_FILE) ? json_decode(file_get_contents(GALLERY_FILE), true) : array();
+  if (!is_array($raw)) $raw = array();
+  $out = array();
+  foreach (chalet_categories() as $cat => $_meta) {
+    $list = isset($raw[$cat]) && is_array($raw[$cat]) ? $raw[$cat] : array();
+    $clean = array();
+    foreach ($list as $src) {
+      $v = gallery_valid_src($src);
+      if ($v !== '' && !in_array($v, $clean, true)) $clean[] = $v;
+    }
+    $out[$cat] = $clean;
+  }
+  return $out;
+}
+
+/* Enregistre la galerie du chalet (écriture atomique). On ne conserve que les
+   catégories connues et les chemins valides ; on n'écrit jamais 'false'. */
+function save_gallery($gallery) {
+  if (!is_dir(DATA_DIR)) @mkdir(DATA_DIR, 0775, true);
+  $out = array();
+  foreach (chalet_categories() as $cat => $_meta) {
+    $list = isset($gallery[$cat]) && is_array($gallery[$cat]) ? $gallery[$cat] : array();
+    $clean = array();
+    foreach ($list as $src) {
+      $v = gallery_valid_src($src);
+      if ($v !== '' && !in_array($v, $clean, true)) $clean[] = $v;
+    }
+    $out[$cat] = $clean;
+  }
+  $json = json_encode($out, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+  if ($json === false) return false;
+  return file_put_contents(GALLERY_FILE, $json, LOCK_EX) !== false;
+}
+
+/* Valide un chemin d'image de galerie : soit « images/… » (dépôt), soit « uploads/… »
+   (hors dépôt). Contrairement à media_valid_src(), on accepte les sous-dossiers
+   (images/chalet/…) et on n'exige PAS que le fichier existe sur le disque (les
+   uploads vivent hors dépôt et ne sont pas forcément visibles en dev). */
+function gallery_valid_src($src) {
+  $src = trim((string) $src);
+  if ($src !== '' && preg_match('#^(uploads|images)/[A-Za-z0-9._\-/]+\.(jpe?g|png|webp|gif)$#i', $src)
+      && strpos($src, '..') === false) {
+    return $src;
+  }
+  return '';
+}
+
+/* ============================================================
    Formatage
    ============================================================ */
 

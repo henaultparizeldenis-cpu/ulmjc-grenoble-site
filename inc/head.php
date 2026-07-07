@@ -18,10 +18,10 @@ $nav = array(
   'index.html'         => array('Accueil', ''),
   'asso.html'          => array('Asso', 'asso'),
   'les-mjc.html'       => array('MJC', 'mjc'),
-  'chalet.html'        => array('Chalet', 'chalet'),
-  'activites.html'     => array('Activités', 'activites'),
+  'chalet.php'         => array('Chalet', 'chalet'),
+  'activites.php'      => array('Activités', 'activites'),
   'actus.php'          => array('Actualités', 'actus'),
-  'partenariats.html'  => array('Partenaires', 'partenaires'),
+  'partenariats.php'   => array('Partenaires', 'partenaires'),
   'contact.html'       => array('Contact', 'contact'),
 );
 ?><!DOCTYPE html>

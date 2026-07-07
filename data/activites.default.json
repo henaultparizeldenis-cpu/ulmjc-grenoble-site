@@ -1,0 +1,35 @@
+[
+    {
+        "slug": "ski-alpin",
+        "title": "Ski alpin",
+        "description": "<p>Domaine skiable de l'Alpe du Grand Serre, accessible à pied depuis la station. Une station familiale qui offre une grande variété de glisse, pour tous les niveaux.</p><p>Location de matériel chez <strong>Vincent Sports</strong> et <strong>La Case à Skis</strong>. Navettes disponibles pendant la saison de ski.</p>",
+        "image": "images/chalet/chalet-01.jpg",
+        "jour": "Hiver",
+        "horaire": "Selon ouverture station",
+        "public": "Tous niveaux",
+        "ordre": 1,
+        "published": true
+    },
+    {
+        "slug": "randonnee-pedestre",
+        "title": "Randonnée pédestre",
+        "description": "<p>Boucles courtes en famille ou itinéraires d'altitude : le réseau de sentiers du massif du Taillefer est dense et bien balisé.</p><p>À découvrir aussi, le chapelet de lacs d'altitude : Poursollet, Fourchu, Brouffier, Claret…</p>",
+        "image": "images/chalet/chalet-15.jpg",
+        "jour": "Toute l'année",
+        "horaire": "En journée",
+        "public": "Tous niveaux",
+        "ordre": 2,
+        "published": true
+    },
+    {
+        "slug": "raquettes",
+        "title": "Raquettes",
+        "description": "<p>Balades en raquettes autour du chalet et sur les plateaux du Taillefer. Idéal en famille ou en groupe constitué, pour découvrir la montagne enneigée en douceur.</p>",
+        "image": "images/chalet/chalet-05.jpg",
+        "jour": "Hiver",
+        "horaire": "En journée",
+        "public": "Tous niveaux",
+        "ordre": 3,
+        "published": true
+    }
+]

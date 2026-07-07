@@ -45,6 +45,84 @@ if (needs_setup()) {
   exit;
 }
 
+/* --- Mot de passe oublié : envoi d'un lien de réinitialisation par email --- */
+if (isset($_GET['forgot']) && !is_logged_in()) {
+  $sent = false;
+  if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['forgot'])) {
+    $token = create_reset_token();
+    if ($token !== '') { send_reset_email($token); }
+    $sent = true; // message identique dans tous les cas (pas de fuite d'info)
+  }
+  admin_header('Mot de passe oublié');
+  ?>
+  <div class="acard alogin">
+    <span class="amark big">ULMJC</span>
+    <h1 class="atitle">Mot de passe oublié</h1>
+    <?php if ($sent): ?>
+      <p class="asub">Si un compte existe, un lien de réinitialisation vient d'être envoyé à l'adresse de l'association (<strong>ulmjc.gre@free.fr</strong>). Il est valable 1 heure. Pensez à vérifier les courriers indésirables.</p>
+      <p style="margin-top:1.2rem;"><a class="abtn abtn-ghost block" href="index.php">Retour à la connexion</a></p>
+    <?php else: ?>
+      <p class="asub">Un lien de réinitialisation sera envoyé à l'adresse officielle de l'association. Cliquez pour l'envoyer.</p>
+      <form method="post">
+        <?= csrf_field() ?>
+        <button class="abtn block" name="forgot" value="1">Envoyer le lien de réinitialisation</button>
+      </form>
+      <p style="margin-top:1rem;"><a class="alink" href="index.php">← Retour à la connexion</a></p>
+    <?php endif; ?>
+  </div>
+  <?php
+  admin_footer();
+  exit;
+}
+
+/* --- Réinitialisation via le lien reçu par email --- */
+if (isset($_GET['reset']) && !is_logged_in()) {
+  $token = (string)$_GET['reset'];
+  if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['reset'])) {
+    $token = (string)($_POST['token'] ?? '');
+    $new = (string)($_POST['pass'] ?? '');
+    $conf = (string)($_POST['confirm'] ?? '');
+    if (!check_reset_token($token))    $error = 'Lien invalide ou expiré. Redemandez une réinitialisation.';
+    elseif (mb_strlen($new) < 8)       $error = 'Choisissez un mot de passe d\'au moins 8 caractères.';
+    elseif ($new !== $conf)            $error = 'La confirmation ne correspond pas.';
+    elseif (consume_reset_and_set_pass($token, $new)) {
+      $_SESSION['ulmjc_admin'] = true;
+      session_regenerate_id(true);
+      $_SESSION['ulmjc_admin'] = true;
+      header('Location: index.php?ok=pass'); exit;
+    } else {
+      $error = 'Impossible d\'enregistrer le mot de passe (droits du dossier ?).';
+    }
+  }
+  $valid = check_reset_token($token);
+  admin_header('Réinitialisation');
+  ?>
+  <div class="acard alogin">
+    <span class="amark big">ULMJC</span>
+    <h1 class="atitle">Nouveau mot de passe</h1>
+    <?php if (!$valid && !$error): ?>
+      <p class="asub">Ce lien de réinitialisation est invalide ou a expiré (il n'est valable qu'une heure).</p>
+      <p style="margin-top:1.2rem;"><a class="abtn abtn-ghost block" href="?forgot=1">Redemander un lien</a></p>
+    <?php else: ?>
+      <p class="asub">Choisissez votre nouveau mot de passe (au moins 8 caractères).</p>
+      <?php if ($error): ?><p class="aerror"><?= e($error) ?></p><?php endif; ?>
+      <form method="post">
+        <input type="hidden" name="token" value="<?= e($token) ?>" />
+        <label class="afield">Nouveau mot de passe
+          <input type="password" name="pass" autofocus required minlength="8" />
+        </label>
+        <label class="afield">Confirmer le mot de passe
+          <input type="password" name="confirm" required minlength="8" />
+        </label>
+        <button class="abtn block" name="reset" value="1">Enregistrer le nouveau mot de passe</button>
+      </form>
+    <?php endif; ?>
+  </div>
+  <?php
+  admin_footer();
+  exit;
+}
+
 /* --- Connexion --- */
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['login'])) {
   if (check_admin_pass($_POST['pass'] ?? '')) {
@@ -70,6 +148,7 @@ if (!is_logged_in()) {
       </label>
       <button class="abtn block" name="login" value="1">Se connecter</button>
     </form>
+    <p style="margin-top:1rem;"><a class="alink" href="?forgot=1">Mot de passe oublié&nbsp;?</a></p>
   </div>
   <?php
   admin_footer();

@@ -16,9 +16,10 @@
         <ul>
           <li><a href="asso.html">Asso</a></li>
           <li><a href="les-mjc.html">MJC</a></li>
-          <li><a href="chalet.html">Chalet</a></li>
-          <li><a href="activites.html">Activités</a></li>
+          <li><a href="chalet.php">Chalet</a></li>
+          <li><a href="activites.php">Activités</a></li>
           <li><a href="actus.php">Actualités</a></li>
+          <li><a href="partenariats.php">Partenaires</a></li>
         </ul>
       </div>
       <div>

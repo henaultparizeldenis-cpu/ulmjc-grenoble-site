@@ -1,0 +1,40 @@
+{
+    "exterieur": [
+        "images/chalet/chalet-01.jpg",
+        "images/chalet/chalet-05.jpg",
+        "images/chalet/chalet-06.jpg",
+        "images/chalet/chalet-15.jpg",
+        "images/chalet/chalet-16.jpg",
+        "images/chalet/chalet-17.jpg",
+        "images/chalet/chalet-19.jpg",
+        "images/chalet/chalet-21.jpg",
+        "images/chalet/chalet-24.jpg",
+        "images/chalet/chalet-26.jpg",
+        "images/chalet/chalet-27.jpg"
+    ],
+    "couchage": [
+        "images/chalet/chalet-02.jpg",
+        "images/chalet/chalet-08.jpg",
+        "images/chalet/chalet-10.jpg",
+        "images/chalet/chalet-11.jpg",
+        "images/chalet/chalet-13.jpg",
+        "images/chalet/chalet-14.jpg",
+        "images/chalet/chalet-22.jpg"
+    ],
+    "sanitaires": [
+        "images/chalet/chalet-07.jpg",
+        "images/chalet/chalet-09.jpg",
+        "images/chalet/chalet-18.jpg"
+    ],
+    "cuisine": [
+        "images/chalet/chalet-03.jpg",
+        "images/chalet/chalet-20.jpg",
+        "images/chalet/chalet-23.jpg"
+    ],
+    "pieces-de-vie": [
+        "images/chalet/chalet-04.jpg",
+        "images/chalet/chalet-12.jpg",
+        "images/chalet/chalet-25.jpg",
+        "images/chalet/chalet-28.jpg"
+    ]
+}

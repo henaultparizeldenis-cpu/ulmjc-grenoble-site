@@ -1,0 +1,26 @@
+[
+    {
+        "id": "ville-de-grenoble",
+        "nom": "Ville de Grenoble",
+        "logo": "",
+        "url": "https://www.grenoble.fr",
+        "ordre": 1,
+        "published": true
+    },
+    {
+        "id": "departement-isere",
+        "nom": "Département de l'Isère",
+        "logo": "",
+        "url": "https://www.isere.fr",
+        "ordre": 2,
+        "published": true
+    },
+    {
+        "id": "region-auvergne-rhone-alpes",
+        "nom": "Région Auvergne-Rhône-Alpes",
+        "logo": "",
+        "url": "https://www.auvergnerhonealpes.fr",
+        "ordre": 3,
+        "published": true
+    }
+]

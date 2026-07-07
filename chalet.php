@@ -1,50 +1,35 @@
-<!DOCTYPE html>
-<html lang="fr">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="description" content="Le chalet de l'ULMJC Grenoble, à l'Alpe du Grand Serre (1368 m) : 25 places en gestion libre, ouvert aux associations, collectivités, familles et groupes. Tarifs 2026/2027.">
-<title>Le chalet — ULMJC Grenoble</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Lora:wght@400;500;600;700&display=swap" rel="stylesheet">
-<link rel="canonical" href="https://site.ulmjcgrenoble.org/chalet.html">
-<link rel="stylesheet" href="css/style.css?v=20260524-14">
-<!-- Matomo Analytics - mode anonyme (sans cookies, IP anonymisee) -->
-<script>
-  var _paq = window._paq = window._paq || [];
-  _paq.push(['disableCookies']);
-  _paq.push(['setDoNotTrack', true]);
-  _paq.push(['trackPageView']);
-  _paq.push(['enableLinkTracking']);
-  (function() {
-    var u = "//stats.ulmjcgrenoble.org/matomo/";
-    _paq.push(['setTrackerUrl', u + 'matomo.php']);
-    _paq.push(['setSiteId', '1']);
-    var d = document, g = d.createElement('script'), s = d.getElementsByTagName('script')[0];
-    g.async = true; g.src = u + 'matomo.js'; s.parentNode.insertBefore(g, s);
-  })();
-</script>
-<!-- End Matomo -->
-</head>
-<body>
+<?php
+/* Page publique : Le chalet. Version PHP de l'ancien chalet.html.
+   SEULE différence de fond : les 5 cartes « catégorie » et leurs listes de photos
+   sont générées DEPUIS chalet.json (helper load_gallery()) au lieu d'être codées en
+   dur. Chaque bouton expose la liste des CHEMINS d'images dans data-photos
+   (ex. « images/chalet/chalet-01.jpg,uploads/ab.jpg ») — le handler lightbox de
+   js/main.js lit directement ces chemins (voir la modif dans main.js).
+   Le reste (présentation, météo, tarifs, accès…) est repris tel quel de chalet.html,
+   avec head.php/foot.php pour l'en-tête/pied communs. */
+require_once __DIR__ . '/inc/lib.php';
 
-<header class="site-header">
-  <div class="container nav">
-    <a href="index.html" class="brand">ULMJC<span class="brand-sub">Grenoble</span></a>
-    <button class="nav-toggle" aria-label="Menu" onclick="document.getElementById('nav-links').classList.toggle('open')">☰</button>
-    <ul class="nav-links" id="nav-links">
-      <li><a href="index.html">Accueil</a></li>
-      <li><a href="asso.html">Asso</a></li>
-      <li><a href="les-mjc.html">MJC</a></li>
-      <li><a href="chalet.html" class="active">Chalet</a></li>
-      <li><a href="activites.html">Activités</a></li>
-      <li><a href="actus.php">Actualités</a></li>
-      <li><a href="partenariats.html">Partenaires</a></li>
-      <li><a href="contact.html">Contact</a></li>
-    </ul>
-  </div>
-</header>
+$page_title  = 'Le chalet — ULMJC Grenoble';
+$page_desc   = "Le chalet de l'ULMJC Grenoble, à l'Alpe du Grand Serre (1368 m) : 25 places en gestion libre, ouvert aux associations, collectivités, familles et groupes. Tarifs 2026/2027.";
+$page_active = 'chalet';
+
+$gallery = load_gallery();
+$cats    = chalet_categories();
+
+/* Texte descriptif de chaque carte (repris de chalet.html). */
+$catText = array(
+  'exterieur'     => "Le chalet sous toutes ses faces, le jardin, la vue sur le massif du Taillefer et l'Alpe du Grand Serre.",
+  'couchage'      => "À l'étage : 2 dortoirs séparés (13 et 12 places) + 1 chambre double avec sanitaires indépendants.",
+  'sanitaires'    => "2 blocs sanitaires à l'étage (lavabos, douches, WC) + 1 toilette avec lavabo au rez-de-chaussée.",
+  'cuisine'       => "Cuisine équipée : gazinière, plan de travail, frigo, congélateur, four micro-ondes, vaisselle complète.",
+  'pieces-de-vie' => "Grand réfectoire / salle de séjour au rez-de-chaussée. Cellier et local à skis. Ambiance chalet de montagne.",
+);
+
+/* Photo de présentation (split) : 1re photo « extérieur » si dispo, sinon repli. */
+$splitImg = !empty($gallery['exterieur'][0]) ? $gallery['exterieur'][0] : 'images/chalet/chalet-24.jpg';
+
+require __DIR__ . '/inc/head.php';
+?>
 
 <div class="page-header">
   <div class="container">
@@ -57,7 +42,7 @@
 <section>
   <div class="container">
     <div class="split reveal">
-      <div class="split-img"><img src="images/chalet/chalet-24.jpg" alt="Façade du chalet ULMJC à l'Alpe du Grand Serre en été" loading="lazy"></div>
+      <div class="split-img"><img src="<?= e($splitImg) ?>" alt="Façade du chalet ULMJC à l'Alpe du Grand Serre en été" loading="lazy"></div>
       <div>
         <h2>Présentation</h2>
         <p>
@@ -130,36 +115,18 @@
       Cliquez sur une catégorie pour voir les photos en grand.
     </p>
     <div class="cards reveal-stagger chalet-cards">
-      <button type="button" class="card chalet-card" data-photos="1,5,6,15,16,17,19,21,24,26,27" aria-label="Voir les photos de l'extérieur">
-        <div class="icon">🏞️</div>
-        <h3>Extérieur</h3>
-        <p>Le chalet sous toutes ses faces, le jardin, la vue sur le massif du Taillefer et l'Alpe du Grand Serre.</p>
+      <?php foreach ($cats as $key => $meta):
+        $photos = isset($gallery[$key]) ? $gallery[$key] : array();
+        if (!$photos) continue; // catégorie sans photo : on n'affiche pas la carte
+        $label = $meta['label'];
+        ?>
+      <button type="button" class="card chalet-card" data-photos="<?= e(implode(',', $photos)) ?>" aria-label="Voir les photos : <?= e($label) ?>">
+        <div class="icon"><?= $meta['icon'] ?></div>
+        <h3><?= e($label) ?></h3>
+        <p><?= e($catText[$key] ?? '') ?></p>
         <span class="card-link">Voir les photos</span>
       </button>
-      <button type="button" class="card chalet-card" data-photos="2,8,10,11,13,14,22" aria-label="Voir les photos du couchage">
-        <div class="icon">🛏️</div>
-        <h3>Couchage</h3>
-        <p>À l'étage : 2 dortoirs séparés (13 et 12 places) + 1 chambre double avec sanitaires indépendants.</p>
-        <span class="card-link">Voir les photos</span>
-      </button>
-      <button type="button" class="card chalet-card" data-photos="7,9,18" aria-label="Voir les photos des sanitaires">
-        <div class="icon">🚿</div>
-        <h3>Sanitaires</h3>
-        <p>2 blocs sanitaires à l'étage (lavabos, douches, WC) + 1 toilette avec lavabo au rez-de-chaussée.</p>
-        <span class="card-link">Voir les photos</span>
-      </button>
-      <button type="button" class="card chalet-card" data-photos="3,20,23" aria-label="Voir les photos de la cuisine">
-        <div class="icon">🍳</div>
-        <h3>Cuisine</h3>
-        <p>Cuisine équipée : gazinière, plan de travail, frigo, congélateur, four micro-ondes, vaisselle complète.</p>
-        <span class="card-link">Voir les photos</span>
-      </button>
-      <button type="button" class="card chalet-card" data-photos="4,12,25,28" aria-label="Voir les photos des pièces de vie">
-        <div class="icon">🏡</div>
-        <h3>Pièces de vie</h3>
-        <p>Grand réfectoire / salle de séjour au rez-de-chaussée. Cellier et local à skis. Ambiance chalet de montagne.</p>
-        <span class="card-link">Voir les photos</span>
-      </button>
+      <?php endforeach; ?>
     </div>
     <p class="muted center" style="margin-top: 2rem; font-size: 0.95rem;">
       <strong>Capacité&nbsp;:</strong> 25 personnes adultes maximum — ou 20 mineurs de + de 6 ans accompagnés d'adultes (agrément SDJES).<br>
@@ -217,55 +184,8 @@
     <p><strong>Office du tourisme</strong> Alpe du Grand Serre&nbsp;: 04&nbsp;76&nbsp;56&nbsp;24&nbsp;72 — <em>navettes disponibles pendant la saison de ski.</em></p>
     <p><strong>Commerces en station</strong> : Vincent Sports Intersports, Sherpa Alimentation (Relais La Poste, distributeur, gaz), La Case à Skis,
       La Ferme du Grand Rif, Les Petits Soins de Marie, Les Typotes Vagabondes de La Morte. Restaurants et bar en station.</p>
-    <p>Voir aussi la page <a href="activites.html">Activités</a> pour les loisirs autour du chalet.</p>
+    <p>Voir aussi la page <a href="activites.php">Activités</a> pour les loisirs autour du chalet.</p>
   </div>
 </section>
 
-<footer class="site-footer">
-  <div class="container">
-    <div class="footer-grid">
-      <div>
-        <h4>ULMJC Grenoble</h4>
-        <p>
-          Union Locale des MJC de Grenoble<br>
-          Association loi 1901 d'éducation populaire<br>
-          <span class="muted">Siège : 6 rue Berthe de Boissieux, 38000 Grenoble</span><br>
-          <span class="muted">Chalet : 1407 route du Désert, 38350 La Morte</span>
-        </p>
-      </div>
-      <div>
-        <h4>Naviguer</h4>
-        <ul>
-          <li><a href="asso.html">Asso</a></li>
-          <li><a href="les-mjc.html">MJC</a></li>
-          <li><a href="chalet.html">Chalet</a></li>
-          <li><a href="activites.html">Activités</a></li>
-          <li><a href="actus.php">Actualités</a></li>
-        </ul>
-      </div>
-      <div>
-        <h4>Pratique</h4>
-        <ul>
-          <li><a href="contact.html">Contact</a></li>
-        </ul>
-      </div>
-      <div>
-        <h4>Nous suivre</h4>
-        <ul>
-          <li><a href="#">Facebook</a></li>
-          <li><a href="#">Instagram</a></li>
-          <li><a href="mailto:ulmjc.gre@free.fr">Newsletter</a></li>
-        </ul>
-      </div>
-    </div>
-    <div class="footer-bottom">
-      <span>© ULMJC Grenoble — depuis 1961</span>
-      <span><a href="mentions-legales.html">Mentions légales</a> · <a href="#">Statuts</a></span>
-    </div>
-  </div>
-</footer>
-
-<script src="js/main.js?v=20260524-14"></script>
-
-</body>
-</html>
+<?php require __DIR__ . '/inc/foot.php'; ?>

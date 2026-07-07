@@ -43,6 +43,74 @@ function check_admin_pass($plain) {
   return $hash !== '' && password_verify((string)$plain, $hash);
 }
 
+/* ---------- Mot de passe oublié (réinitialisation par email) ----------
+   Adresse de destination FIGÉE (jamais saisie par l'utilisateur) → personne ne
+   peut détourner la réinitialisation vers sa propre boîte. Un jeton à usage unique
+   (haché en base, expire en 1 h) est envoyé par email ; le lien permet de choisir
+   un nouveau mot de passe. Secours d'urgence : supprimer admin.json (ulmjc-data). */
+define('RESET_EMAIL', 'ulmjc.gre@free.fr');
+define('RESET_FROM',  'no-reply@ulmjcgrenoble.org');
+define('RESET_ADMIN_URL', 'https://site.ulmjcgrenoble.org/admin/'); // figé (anti host-header)
+define('RESET_TTL', 3600); // 1 heure
+
+function _admin_data() {
+  $d = is_file(ADMIN_FILE) ? json_decode(file_get_contents(ADMIN_FILE), true) : array();
+  return is_array($d) ? $d : array();
+}
+function _admin_data_save($d) {
+  if (!is_dir(DATA_DIR)) @mkdir(DATA_DIR, 0775, true);
+  $j = json_encode($d);
+  if ($j === false) return false;
+  return file_put_contents(ADMIN_FILE, $j, LOCK_EX) !== false;
+}
+
+/* Génère un jeton, stocke son empreinte + expiration, renvoie le jeton en clair.
+   Renvoie '' s'il n'y a pas de compte à réinitialiser. */
+function create_reset_token() {
+  $d = _admin_data();
+  if (empty($d['pass'])) return '';
+  $token = bin2hex(random_bytes(32));
+  $d['reset_hash']    = password_hash($token, PASSWORD_DEFAULT);
+  $d['reset_expires'] = time() + RESET_TTL;
+  if (!_admin_data_save($d)) return '';
+  return $token;
+}
+function check_reset_token($token) {
+  $token = (string)$token;
+  if ($token === '') return false;
+  $d = _admin_data();
+  if (empty($d['reset_hash']) || empty($d['reset_expires'])) return false;
+  if (time() > (int)$d['reset_expires']) return false;
+  return password_verify($token, $d['reset_hash']);
+}
+/* Valide le jeton et fixe le nouveau mot de passe (usage unique). */
+function consume_reset_and_set_pass($token, $newplain) {
+  if (!check_reset_token($token)) return false;
+  $d = _admin_data();
+  $hash = password_hash((string)$newplain, PASSWORD_DEFAULT);
+  if ($hash === false || $hash === null) return false;
+  $d['pass'] = $hash;
+  unset($d['reset_hash'], $d['reset_expires']);
+  return _admin_data_save($d);
+}
+function send_reset_email($token) {
+  $link = RESET_ADMIN_URL . '?reset=' . urlencode($token);
+  $subject = 'Réinitialisation du mot de passe — Espace de publication ULMJC';
+  $body =
+      "Bonjour,\r\n\r\n"
+    . "Une réinitialisation du mot de passe de l'espace de publication du site ULMJC a été demandée.\r\n\r\n"
+    . "Pour choisir un nouveau mot de passe, ouvrez ce lien (valable 1 heure) :\r\n"
+    . $link . "\r\n\r\n"
+    . "Si vous n'êtes pas à l'origine de cette demande, ignorez cet email : le mot de passe actuel reste inchangé.\r\n\r\n"
+    . "— Site de l'Union Locale des MJC de Grenoble";
+  $headers = "From: ULMJC Grenoble <" . RESET_FROM . ">\r\n"
+           . "Reply-To: " . RESET_EMAIL . "\r\n"
+           . "Content-Type: text/plain; charset=UTF-8\r\n"
+           . "MIME-Version: 1.0\r\n";
+  $encSubject = '=?UTF-8?B?' . base64_encode($subject) . '?=';
+  return @mail(RESET_EMAIL, $encSubject, $body, $headers);
+}
+
 function is_logged_in() { return !empty($_SESSION['ulmjc_admin']); }
 function require_login() { if (!is_logged_in()) { header('Location: index.php'); exit; } }
 
@@ -68,8 +136,18 @@ function admin_header($title) {
      . '</head><body>';
   if (is_logged_in()) {
     $cur = basename($_SERVER['SCRIPT_NAME'] ?? '');
-    $navlink = function ($href, $label) use ($cur) {
-      $act = (strtok($href, '#') === $cur) ? ' class="anav-active" aria-current="page"' : '';
+    /* Chaque section regroupe sa page de liste ET ses écrans d'édition, pour que
+       l'onglet reste surligné pendant la création/modification d'un élément. */
+    $sections = array(
+      'index.php'      => array('index.php', 'edit.php', 'save.php', 'delete.php'),
+      'activites.php'  => array('activites.php', 'activite-edit.php', 'activite-save.php', 'activite-delete.php'),
+      'partenaires.php'=> array('partenaires.php', 'partenaire-edit.php', 'partenaire-save.php', 'partenaire-delete.php'),
+      'chalet.php'     => array('chalet.php', 'chalet-save.php'),
+    );
+    $navlink = function ($href, $label) use ($cur, $sections) {
+      $base = strtok($href, '#');
+      $group = isset($sections[$base]) ? $sections[$base] : array($base);
+      $act = in_array($cur, $group, true) ? ' class="anav-active" aria-current="page"' : '';
       return '<a href="' . $href . '"' . $act . '>' . $label . '</a>';
     };
     echo '<header class="abar"><div class="abar-inner">'
@@ -77,10 +155,9 @@ function admin_header($title) {
        . '<button type="button" class="anav-toggle" aria-label="Menu" aria-expanded="false" aria-controls="anav"><span></span><span></span><span></span></button>'
        . '<nav class="anav" id="anav">'
        . $navlink('index.php', 'Actualités')
-       // Place prévue pour les prochains types de contenu :
-       // . $navlink('activites.php', 'Activités')
-       // . $navlink('partenaires.php', 'Partenaires')
-       // . $navlink('chalet.php', 'Chalet')
+       . $navlink('activites.php', 'Activités')
+       . $navlink('partenaires.php', 'Partenaires')
+       . $navlink('chalet.php', 'Photos chalet')
        . '<a href="#" onclick="if(window.openMediaPicker){openMediaPicker();}return false;">Médiathèque</a>'
        . $navlink('password.php', 'Mot de passe')
        . '<a href="logout.php" class="alogout" aria-label="Déconnexion">Déconnexion</a>'

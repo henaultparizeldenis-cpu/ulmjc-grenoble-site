@@ -8,9 +8,12 @@
 <IfModule mod_rewrite.c>
   RewriteEngine On
 
-  # Ancienne URL statique remplacée par la page CMS : redirection permanente
+  # Anciennes URL statiques remplacées par les pages CMS : redirections permanentes
   # (301) pour conserver le référencement Google et les favoris existants.
   RewriteRule ^actus\.html$ /actus.php [R=301,L]
+  RewriteRule ^activites\.html$ /activites.php [R=301,L]
+  RewriteRule ^partenariats\.html$ /partenariats.php [R=301,L]
+  RewriteRule ^chalet\.html$ /chalet.php [R=301,L]
 
   RewriteCond %{REQUEST_FILENAME} !-f
   RewriteCond %{REQUEST_FILENAME} !-d
