@@ -7,6 +7,11 @@
 # Minimal et sûr pour un hébergement statique + PHP sur Hostinger (LiteSpeed).
 <IfModule mod_rewrite.c>
   RewriteEngine On
+
+  # Ancienne URL statique remplacée par la page CMS : redirection permanente
+  # (301) pour conserver le référencement Google et les favoris existants.
+  RewriteRule ^actus\.html$ /actus.php [R=301,L]
+
   RewriteCond %{REQUEST_FILENAME} !-f
   RewriteCond %{REQUEST_FILENAME} !-d
   RewriteRule ^uploads/(.+)$ media.php?f=$1 [L,QSA]
