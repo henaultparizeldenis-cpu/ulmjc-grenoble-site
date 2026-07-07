@@ -93,7 +93,7 @@ admin_header($isNew ? 'Nouvelle actualitÃ©' : 'Modifier l\'actualitÃ©');
         <span class="acover-prev<?= effect_class($d) ?>" id="coverPrev" style="<?= $d['cover'] ? cover_style($d, '../') : '' ?>"></span>
       </span>
     </span>
-    <label class="cover-align"><input type="checkbox" name="cover_align" id="coverAlign" value="1"<?= $d['cover_align'] ? ' checked' : '' ?> /> Aligner sur la largeur du titre</label>
+    <label class="cover-align"><input type="checkbox" name="cover_align" id="coverAlign" value="1"<?= $d['cover_align'] ? ' checked' : '' ?> /> Aligner sur la largeur du texte</label>
     <span class="cover-w-row" id="coverWRow"<?= $d['cover_align'] ? ' hidden' : '' ?>>
       <input type="range" name="cover_w" id="coverW" min="40" max="100" step="5" value="<?= (int)$d['cover_w'] ?>" />
     </span>
@@ -286,8 +286,10 @@ admin_header($isNew ? 'Nouvelle actualitÃ©' : 'Modifier l\'actualitÃ©');
   }
   function applyCoverWidth(){
     if(!cp) return;
-    if(coverAlign&&coverAlign.checked){ fitStage(); alignCoverToTitle(); if(coverWVal) coverWVal.textContent='largeur du titre'; }
-    else if(coverW){ cp.style.width=coverW.value+'%'; if(coverWVal) coverWVal.textContent=coverW.value+'%'; }
+    // Fidèle à la vraie page : bandeau CENTRÉ, à l'échelle réelle du conteneur (1092px).
+    // Aligné = 720px (largeur de la colonne de texte) ; sinon 960·cw%.
+    if(coverAlign&&coverAlign.checked){ cp.style.width='720px'; if(coverWVal) coverWVal.textContent='largeur du texte'; }
+    else if(coverW){ cp.style.width=Math.round(960*coverW.value/100)+'px'; if(coverWVal) coverWVal.textContent=coverW.value+'%'; }
     fitStage();
   }
   // Ratio du bandeau d'aprÃ¨s la vraie photo : portrait â†’ ratio naturel ; paysage â†’ 16:9.

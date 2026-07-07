@@ -97,7 +97,7 @@ admin_header($isNew ? 'Nouvelle activit√©' : 'Modifier l\'activit√©');
         <span class="acover-prev<?= effect_class($d) ?>" id="coverPrev" style="<?= $d['image'] ? cover_style($d, '../') : '' ?>"></span>
       </span>
     </span>
-    <label class="cover-align"><input type="checkbox" name="cover_align" id="coverAlign" value="1"<?= $d['cover_align'] ? ' checked' : '' ?> /> Aligner sur la largeur du titre</label>
+    <label class="cover-align"><input type="checkbox" name="cover_align" id="coverAlign" value="1"<?= $d['cover_align'] ? ' checked' : '' ?> /> Aligner sur la largeur du texte</label>
     <span class="cover-w-row" id="coverWRow"<?= $d['cover_align'] ? ' hidden' : '' ?>>
       <input type="range" name="cover_w" id="coverW" min="40" max="100" step="5" value="<?= (int)$d['cover_w'] ?>" />
     </span>
@@ -278,8 +278,10 @@ admin_header($isNew ? 'Nouvelle activit√©' : 'Modifier l\'activit√©');
   }
   function applyCoverWidth(){
     if(!cp) return;
-    if(coverAlign&&coverAlign.checked){ fitStage(); alignCoverToTitle(); if(coverWVal) coverWVal.textContent='largeur du titre'; }
-    else if(coverW){ cp.style.width=coverW.value+'%'; if(coverWVal) coverWVal.textContent=coverW.value+'%'; }
+    // FidËle ‡ la vraie page : bandeau CENTR…, ‡ l'Èchelle rÈelle du conteneur (1092px).
+    // AlignÈ = 720px (largeur de la colonne de texte) ; sinon 960∑cw%.
+    if(coverAlign&&coverAlign.checked){ cp.style.width='720px'; if(coverWVal) coverWVal.textContent='largeur du texte'; }
+    else if(coverW){ cp.style.width=Math.round(960*coverW.value/100)+'px'; if(coverWVal) coverWVal.textContent=coverW.value+'%'; }
     fitStage();
   }
   function applyCoverRatio(){
