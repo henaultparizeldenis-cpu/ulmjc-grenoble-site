@@ -42,13 +42,21 @@ a{color:var(--terra-dark);text-decoration:none;}
 .alogout{color:rgba(251,247,241,.7)!important;}
 .alogout:hover{color:#fff!important;}
 .anav-toggle{display:none;background:transparent;border:1px solid rgba(255,255,255,.3);border-radius:var(--radius-sm);padding:.4rem .6rem;cursor:pointer;flex-direction:column;gap:4px;}
-.anav-toggle span{display:block;width:20px;height:2px;background:var(--bg);}
+.anav-toggle span{display:block;width:20px;height:2px;background:var(--bg);border-radius:2px;transition:transform .32s cubic-bezier(.4,0,.2,1),opacity .2s ease;}
+/* ☰ → ✕ quand le menu est ouvert */
+.anav-toggle.open span:nth-child(1){transform:translateY(6px) rotate(45deg);}
+.anav-toggle.open span:nth-child(2){opacity:0;transform:scaleX(.3);}
+.anav-toggle.open span:nth-child(3){transform:translateY(-6px) rotate(-45deg);}
 .anav-badge{display:inline-flex;align-items:center;justify-content:center;min-width:18px;height:18px;padding:0 5px;margin-left:2px;border-radius:9px;background:var(--terra);color:#fff;font-size:.66rem;font-weight:600;vertical-align:middle;}
 @media (max-width:720px){
   .anav-toggle{display:flex;}
-  .anav{display:none;flex-direction:column;align-items:stretch;width:100%;}
-  .anav.open{display:flex;}
-  .anav a{padding:.6rem .8rem;}
+  .anav{display:flex;flex-direction:column;align-items:stretch;width:100%;
+        max-height:0;overflow:hidden;opacity:0;
+        transition:max-height .34s cubic-bezier(.4,0,.2,1),opacity .24s ease;}
+  .anav.open{max-height:560px;opacity:1;}
+  .anav a{padding:.6rem .8rem;opacity:0;transform:translateY(-8px);
+          transition:opacity .28s ease,transform .28s ease;}
+  .anav.open a{opacity:1;transform:none;}
 }
 
 /* ---------- Zone principale ---------- */
@@ -183,7 +191,7 @@ a{color:var(--terra-dark);text-decoration:none;}
 .cover-align{display:flex;align-items:center;gap:8px;margin:4px 0 8px;cursor:pointer;font-size:.9rem;}
 .cover-align input[type=checkbox]{width:auto;margin:0;accent-color:var(--terra);cursor:pointer;}
 .cover-w-field input[type=range]{display:block;width:100%;max-width:520px;margin-top:2px;accent-color:var(--terra);cursor:pointer;}
-@media (prefers-reduced-motion:reduce){.acover-prev{animation:none!important;}}
+@media (prefers-reduced-motion:reduce){.acover-prev{animation:none!important;}.anav,.anav a,.anav-toggle span{transition:none!important;}}
 
 /* ---------- Case « voir le mot de passe » ---------- */
 .pw-show{display:inline-flex;align-items:center;gap:7px;margin-top:8px;font-size:.8rem;color:var(--ink-soft);cursor:pointer;user-select:none;font-weight:400;}
@@ -251,9 +259,13 @@ body.lp-open.lp-wide{padding-right:780px;}
    (9 entrées) débordait sur 2 lignes et grignotait la zone d'édition. On la
    replie en menu ☰ (même mécanique que sur mobile), l'en-tête tient sur 1 ligne. */
 body.lp-wide .anav-toggle{display:flex;}
-body.lp-wide .anav{display:none;flex-direction:column;align-items:stretch;width:100%;}
-body.lp-wide .anav.open{display:flex;}
-body.lp-wide .anav a{padding:.6rem .8rem;}
+body.lp-wide .anav{display:flex;flex-direction:column;align-items:stretch;width:100%;
+      max-height:0;overflow:hidden;opacity:0;
+      transition:max-height .34s cubic-bezier(.4,0,.2,1),opacity .24s ease;}
+body.lp-wide .anav.open{max-height:560px;opacity:1;}
+body.lp-wide .anav a{padding:.6rem .8rem;opacity:0;transform:translateY(-8px);
+      transition:opacity .28s ease,transform .28s ease;}
+body.lp-wide .anav.open a{opacity:1;transform:none;}
 @media (max-width:900px){
   /* Aperçu live DÉSACTIVÉ sur mobile : le panneau passait en plein écran et
      recouvrait l'admin (« la version mobile affiche juste les pages du site »).
