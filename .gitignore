@@ -10,7 +10,9 @@ Thumbs.db
 .idea/
 
 # Outils de dev locaux (tuner de boucle vidéo, serveur de test, frames)
-_*
+# NB : uniquement à la RACINE (/_*) — sinon on ignorerait admin/_live_preview.php,
+# un vrai fichier du CMS (le panneau d'aperçu).
+/_*
 
 # Archives de déploiement (non versionnées)
 *.zip
