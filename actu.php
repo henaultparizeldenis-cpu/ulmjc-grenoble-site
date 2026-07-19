@@ -39,7 +39,7 @@ $related = array_slice(array_values($related), 0, 3);
 .actu-article-meta{font-size:.85rem;color:var(--ink-soft);margin-top:.4rem;}
 /* Couverture : rendue en background-image (filtre/effet/taille appliqués inline
    via cover_style()/effect_class() ; règles fx-* + animations dans css/style.css). */
-.actu-hero{max-width:960px;margin:2.5rem auto 0;border-radius:var(--radius);overflow:hidden;aspect-ratio:16/9;background:var(--bg-soft);background-size:cover;background-position:center;}
+.actu-hero{max-width:960px;margin:2.5rem auto 0;border-radius:var(--radius);overflow:hidden;aspect-ratio:3/2;background:var(--bg-soft);background-size:cover;background-position:center;}
 .actu-hero img{width:100%;height:100%;object-fit:cover;display:block;}
 .actu-content{max-width:720px;margin:0 auto;padding:2.5rem 0 1rem;}
 .actu-chapo{font-size:1.25rem;line-height:1.6;color:var(--pine);font-family:'Lora',Georgia,serif;font-style:italic;margin-bottom:1.8rem;}

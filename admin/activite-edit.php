@@ -285,10 +285,10 @@ admin_header($isNew ? 'Nouvelle activité' : 'Modifier l\'activité');
     fitStage();
   }
   function applyCoverRatio(){
-    if(!cp||!coverUrl) return;
-    var img=new Image();
-    img.onload=function(){ var r=img.naturalHeight?img.naturalWidth/img.naturalHeight:16/9; cp.style.aspectRatio=r+' / 1'; fitStage(); };
-    img.src=coverUrl;
+    if(!cp) return;
+    // Bandeau paysage RÉGULIER 3:2 (recadrage centré) — même règle que la vraie page.
+    cp.style.aspectRatio='3 / 2';
+    fitStage();
   }
   function renderCoverPrev(){
     if(!cp) return;

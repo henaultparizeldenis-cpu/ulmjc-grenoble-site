@@ -314,7 +314,9 @@ function cover_aspect($a) {
   return round(16 / 9, 4);
 }
 function cover_hero_ratio($a) {
-  return cover_aspect($a); // ratio naturel de la photo — jamais de recadrage
+  // Bandeau paysage RÉGULIER 3:2 pour toutes les couvertures : rendu homogène
+  // d'un billet à l'autre. Le recadrage centré est fait par background-size:cover.
+  return round(3 / 2, 4);
 }
 
 /* Largeur (%) de la couverture, bornée 40–100 (100 par défaut). */

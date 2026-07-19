@@ -58,23 +58,9 @@ $pv_effect = in_array($_POST['effect'] ?? '', array('kenburns','zoom','pano','fi
 $pv_cover_w = max(40, min(100, (int)($_POST['cover_w'] ?? 100)));
 $pv_cover_align = !empty($_POST['cover_align']);
 
-/* Ratio naturel de la couverture (jamais de recadrage), comme cover_hero_ratio()
-   sur la vraie page : lu depuis le fichier envoyé ou la photo choisie. */
-function preview_cover_aspect() {
-  if (!empty($_POST['cover_remove'])) return round(16 / 9, 4);
-  if (isset($_FILES['cover_file']) && $_FILES['cover_file']['error'] === UPLOAD_ERR_OK
-      && is_uploaded_file($_FILES['cover_file']['tmp_name'])
-      && ($info = @getimagesize($_FILES['cover_file']['tmp_name'])) && $info[1] > 0) {
-    return round($info[0] / $info[1], 4);
-  }
-  $picked = media_valid_src($_POST['cover'] ?? '');
-  if ($picked !== '') {
-    $p = media_disk_path($picked);
-    if (is_file($p) && ($info = @getimagesize($p)) && $info[1] > 0) return round($info[0] / $info[1], 4);
-  }
-  return round(16 / 9, 4);
-}
-$pv_aspect = preview_cover_aspect();
+/* Couverture : bandeau paysage RÉGULIER 3:2, identique à cover_hero_ratio()
+   sur la vraie page (recadrage centré assuré par background-size:cover). */
+$pv_aspect = round(3 / 2, 4);
 
 /* Style inline de couverture pour l'aperçu, à partir d'une URL quelconque (data: OK). */
 function preview_cover_style($url, $filterKey) {
@@ -143,7 +129,7 @@ if ($type === 'actus') {
   .actu-article-head .container>*{display:block;max-width:720px;margin-left:auto;margin-right:auto;}
   .actu-back{display:block;max-width:720px;margin:0 auto 1.2rem;font-size:.9rem;color:var(--terra-dark);border:none;}
   .actu-article-meta{font-size:.85rem;color:var(--ink-soft);margin-top:.4rem;}
-  .actu-hero{max-width:960px;margin:2.5rem auto 0;border-radius:var(--radius);overflow:hidden;aspect-ratio:16/9;background:var(--bg-soft);background-size:cover;background-position:center;}
+  .actu-hero{max-width:960px;margin:2.5rem auto 0;border-radius:var(--radius);overflow:hidden;aspect-ratio:3/2;background:var(--bg-soft);background-size:cover;background-position:center;}
   .actu-hero img{width:100%;height:100%;object-fit:cover;display:block;}
   .actu-content{max-width:720px;margin:0 auto;padding:2.5rem 0 1rem;}
   .actu-chapo{font-size:1.25rem;line-height:1.6;color:var(--pine);font-family:'Lora',Georgia,serif;font-style:italic;margin-bottom:1.8rem;}
@@ -204,7 +190,7 @@ if ($type === 'actus') {
   .actu-article-head .container>*{display:block;max-width:720px;margin-left:auto;margin-right:auto;}
   .actu-back{display:block;max-width:720px;margin:0 auto 1.2rem;font-size:.9rem;color:var(--terra-dark);border:none;}
   .actu-article-meta{font-size:.85rem;color:var(--ink-soft);margin-top:.4rem;}
-  .actu-hero{max-width:960px;margin:2.5rem auto 0;border-radius:var(--radius);overflow:hidden;aspect-ratio:16/9;background:var(--bg-soft);background-size:cover;background-position:center;}
+  .actu-hero{max-width:960px;margin:2.5rem auto 0;border-radius:var(--radius);overflow:hidden;aspect-ratio:3/2;background:var(--bg-soft);background-size:cover;background-position:center;}
   .actu-hero img{width:100%;height:100%;object-fit:cover;display:block;}
   .actu-content{max-width:720px;margin:0 auto;padding:2.5rem 0 1rem;}
   .actu-chapo{font-size:1.25rem;line-height:1.6;color:var(--pine);font-family:'Lora',Georgia,serif;font-style:italic;margin-bottom:1.8rem;}
