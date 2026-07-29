@@ -1,0 +1,37 @@
+name: Déploiement site ULMJC (FTP)
+
+# Remplace l'auto-deploy Git natif d'Hostinger (limité à 1 par domaine).
+# À chaque push sur la branche de prod, GitHub envoie les fichiers par FTP
+# vers /public_html/site/. Le contenu (ulmjc-data) est un dossier VOISIN,
+# hors de portée du compte FTP dédié → jamais écrasé.
+
+on:
+  push:
+    branches: [ claude/hungry-shirley-13a6fd ]
+  workflow_dispatch:      # permet aussi de lancer le déploiement à la main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    concurrency:
+      group: ftp-deploy   # jamais deux déploiements en parallèle
+      cancel-in-progress: false
+    steps:
+      - name: Récupérer le code
+        uses: actions/checkout@v4
+
+      - name: Envoyer par FTP vers /public_html/site
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+        with:
+          server:   ${{ secrets.FTP_SERVER }}
+          username: ${{ secrets.FTP_USERNAME }}
+          password: ${{ secrets.FTP_PASSWORD }}
+          protocol: ftps            # FTP sécurisé (repli sur "ftp" si l'hôte ne le gère pas)
+          # Racine du compte FTP = /public_html/site → on envoie à sa racine.
+          server-dir: ./
+          # Ne pas déployer les fichiers de dépôt inutiles sur le serveur.
+          exclude: |
+            **/.git*
+            **/.git*/**
+            **/.github/**
+            **/README.md
