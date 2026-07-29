@@ -23,9 +23,11 @@ jobs:
       - name: Envoyer par FTP vers /public_html/site
         uses: SamKirkland/FTP-Deploy-Action@v4.3.5
         with:
-          server:   ${{ secrets.FTP_SERVER }}
-          username: ${{ secrets.FTP_USERNAME }}
-          password: ${{ secrets.FTP_PASSWORD }}
+          # Noms de secrets SANS tiret bas : plus simples à saisir dans GitHub
+          # (que des lettres, aucun caractère spécial à taper).
+          server:   ${{ secrets.FTPHOTE }}
+          username: ${{ secrets.FTPUSER }}
+          password: ${{ secrets.FTPMDP }}
           protocol: ftps            # FTP sécurisé (repli sur "ftp" si l'hôte ne le gère pas)
           # Le compte FTP principal atterrit dans public_html ; le site vitrine est
           # le sous-dossier site/. On cible UNIQUEMENT ./site/ → le déploiement ne
