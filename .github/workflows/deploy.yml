@@ -27,8 +27,10 @@ jobs:
           username: ${{ secrets.FTP_USERNAME }}
           password: ${{ secrets.FTP_PASSWORD }}
           protocol: ftps            # FTP sécurisé (repli sur "ftp" si l'hôte ne le gère pas)
-          # Racine du compte FTP = /public_html/site → on envoie à sa racine.
-          server-dir: ./
+          # Le compte FTP principal atterrit dans public_html ; le site vitrine est
+          # le sous-dossier site/. On cible UNIQUEMENT ./site/ → le déploiement ne
+          # touche JAMAIS l'app chalet (public_html/) ni le contenu (ulmjc-data/).
+          server-dir: ./site/
           # Ne pas déployer les fichiers de dépôt inutiles sur le serveur.
           exclude: |
             **/.git*
