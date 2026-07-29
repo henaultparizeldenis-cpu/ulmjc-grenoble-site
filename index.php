@@ -73,7 +73,7 @@
 
 <?php $active = 'accueil'; include __DIR__ . '/inc/nav.php'; ?>
 
-<section class="hero has-photo" data-weather-target>
+<section class="hero has-photo">
   <div class="hero-bg-wrap" data-parallax>
     <video class="hero-bg" autoplay muted loop playsinline preload="metadata" poster="images/bastille.jpg" aria-hidden="true" data-loop-start="0" data-loop-end="11.2">
       <source src="videos/hero.mp4" type="video/mp4">
@@ -81,7 +81,6 @@
   </div>
   <div class="hero-overlay"></div>
   <div class="hero-vignette"></div>
-  <div class="weather-fx" aria-hidden="true"></div>
   <div class="container hero-content">
     <span class="section-eyebrow">Union Locale des MJC de Grenoble · depuis 1961</span>
     <h1>Sept maisons, un mouvement.</h1>
