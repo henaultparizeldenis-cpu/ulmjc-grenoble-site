@@ -147,8 +147,8 @@
         <span class="stat-label">Création de l'union</span>
       </div>
       <div class="stat">
-        <span class="stat-num"><span data-count="7">0</span></span>
-        <span class="stat-label">MJC et MPT membres</span>
+        <span class="stat-num"><span data-count="6">0</span></span>
+        <span class="stat-label">MJC membres</span>
       </div>
       <div class="stat">
         <span class="stat-num"><span data-count="60">0</span><span class="stat-suffix">+</span></span>
