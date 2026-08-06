@@ -132,6 +132,17 @@ function admin_header($title) {
      . '<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>'
      . '<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Lora:wght@400;500;600;700&display=swap" rel="stylesheet">'
      . '<link rel="stylesheet" href="admin.css?v=' . (@filemtime(__DIR__ . '/admin.css') ?: '1') . '">'
+     /* Application installable (PWA) : le back-office peut être ajouté à l'écran
+        d'accueil d'un téléphone et s'ouvre alors en plein écran, sans navigateur.
+        Portée limitée à /admin/ — le site public n'est pas concerné. */
+     . '<link rel="manifest" href="manifest.webmanifest">'
+     . '<meta name="theme-color" content="#16302A">'
+     . '<meta name="mobile-web-app-capable" content="yes">'
+     . '<meta name="apple-mobile-web-app-capable" content="yes">'
+     . '<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">'
+     . '<meta name="apple-mobile-web-app-title" content="ULMJC Publication">'
+     . '<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">'
+     . '<link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192.png">'
      . '<script>try{window.name="ulmjc_admin";}catch(e){}</script>'
      . '</head><body>';
   if (is_logged_in()) {
@@ -179,6 +190,11 @@ function admin_header($title) {
 }
 function admin_footer() {
   echo '</main>';
+  /* Enregistrement du service worker : condition de l'installation sur mobile.
+     Il ne met en cache QUE le statique (voir sw.js) — jamais les pages, qui
+     dépendent de la session et changeraient sous les pieds du rédacteur. */
+  echo '<script>if("serviceWorker" in navigator){window.addEventListener("load",function(){'
+     . 'navigator.serviceWorker.register("sw.js",{scope:"./"}).catch(function(){});});}</script>';
   /* Panneau d'aperçu du site en direct (commun aux écrans d'administration connectés).
      _live_preview.php choisit lui-même s'il s'affiche selon la page (mapping interne :
      écrans d'édition = aperçu LIVE via preview.php ; listes = aperçu simple ; autres =

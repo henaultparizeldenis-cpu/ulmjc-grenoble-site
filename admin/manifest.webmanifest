@@ -1,0 +1,26 @@
+{
+  "id": "/admin/",
+  "name": "ULMJC — Espace de publication",
+  "short_name": "ULMJC Publication",
+  "description": "Publier et mettre à jour les contenus du site de l'Union locale des MJC de Grenoble : actualités, blog, activités, offres d'emploi, photos du chalet.",
+  "lang": "fr",
+  "dir": "ltr",
+  "start_url": "/admin/",
+  "scope": "/admin/",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "theme_color": "#16302A",
+  "background_color": "#FBF7F1",
+  "categories": ["productivity", "utilities"],
+  "icons": [
+    { "src": "icons/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "icons/icon-192-maskable.png", "sizes": "192x192", "type": "image/png", "purpose": "maskable" },
+    { "src": "icons/icon-512-maskable.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ],
+  "shortcuts": [
+    { "name": "Nouvelle actualité", "url": "/admin/edit.php" },
+    { "name": "Nouveau billet",     "url": "/admin/billet-edit.php" },
+    { "name": "Nouvelle offre",     "url": "/admin/offre-edit.php" }
+  ]
+}

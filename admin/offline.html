@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Hors connexion — Publication ULMJC</title>
+<style>
+  :root{ --bg:#FBF7F1; --pine:#16302A; --terra:#C4623A; --ink:#2A2926; --soft:#6B6660; --line:#E8E0D5; }
+  *{ box-sizing:border-box; }
+  body{ margin:0; min-height:100vh; display:flex; align-items:center; justify-content:center;
+        background:var(--bg); color:var(--ink); padding:24px;
+        font-family:'Segoe UI',-apple-system,BlinkMacSystemFont,Helvetica,Arial,sans-serif; }
+  .box{ max-width:440px; text-align:center; }
+  .mark{ width:64px; height:64px; margin:0 auto 22px; border-radius:16px; background:var(--pine);
+         display:flex; align-items:center; justify-content:center; }
+  .mark svg{ width:36px; height:36px; }
+  h1{ font-family:Georgia,'Times New Roman',serif; font-weight:400; font-size:1.6rem;
+      color:var(--pine); margin:0 0 12px; }
+  p{ line-height:1.65; color:var(--soft); margin:0 0 14px; font-size:.98rem; }
+  .note{ margin-top:22px; padding-top:18px; border-top:1px solid var(--line);
+         font-size:.87rem; color:var(--soft); }
+  button{ margin-top:20px; background:var(--pine); color:#FFFDF8; border:0; border-radius:8px;
+          padding:12px 26px; font-size:1rem; cursor:pointer; font-family:inherit; }
+  button:hover{ background:#24443A; }
+</style>
+</head>
+<body>
+  <div class="box">
+    <div class="mark" aria-hidden="true">
+      <svg viewBox="0 0 24 24" fill="none" stroke="#FBF7F1" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M2 18h20L15 6l-4 6-2.5-3L2 18z"/>
+      </svg>
+    </div>
+
+    <h1>Pas de connexion</h1>
+
+    <p>L'espace de publication a besoin d'Internet : les contenus sont enregistrés
+       sur le serveur, jamais sur votre téléphone.</p>
+
+    <p>Reconnectez-vous au réseau, puis réessayez.</p>
+
+    <button type="button" onclick="location.reload()">Réessayer</button>
+
+    <p class="note">Si vous étiez en train d'écrire un texte, ne fermez pas l'onglet
+       d'édition : revenez-y une fois le réseau revenu, votre saisie y sera toujours.</p>
+  </div>
+</body>
+</html>
