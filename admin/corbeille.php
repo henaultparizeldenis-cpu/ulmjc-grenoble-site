@@ -1,6 +1,7 @@
 <?php
-/* Corbeille du back-office ULMJC : éléments supprimés (soft-delete) des 4 types
-   « liste » (Actualités / Blog / Activités / Partenaires), regroupés par type.
+/* Corbeille du back-office ULMJC : éléments supprimés (soft-delete) des 5 types
+   « liste » (Actualités / Blog / Activités / Partenaires / Offres d'emploi),
+   regroupés par type.
    Pour chacun : vignette + titre + date de suppression, et deux actions —
    RESTAURER (revient dans la liste) et SUPPRIMER DÉFINITIVEMENT (irréversible).
    Les actions passent par corbeille-action.php (POST + CSRF). Calqué sur les
@@ -15,6 +16,7 @@ $TYPES = array(
   'blog'        => array('label' => 'Blog',         'key' => 'slug', 'title' => 'title', 'thumb' => 'cover', 'contain' => false),
   'activites'   => array('label' => 'Activités',    'key' => 'slug', 'title' => 'title', 'thumb' => 'image', 'contain' => false),
   'partenaires' => array('label' => 'Partenaires',  'key' => 'id',   'title' => 'nom',   'thumb' => 'logo',  'contain' => true),
+  'emplois'     => array('label' => "Offres d'emploi", 'key' => 'slug', 'title' => 'title', 'thumb' => '',   'contain' => false),
 );
 
 $total = trashed_count();
@@ -55,14 +57,15 @@ admin_header('Corbeille');
         $key   = (string)($it[$meta['key']] ?? '');
         $title = trim((string)($it[$meta['title']] ?? ''));
         if ($title === '') $title = 'Sans titre';
-        $thumb = media_valid_src($it[$meta['thumb']] ?? '');
+        // Types sans image (offres d'emploi) : 'thumb' vide → pas de vignette.
+        $thumb = $meta['thumb'] !== '' ? media_valid_src($it[$meta['thumb']] ?? '') : '';
         $delAt = !empty($it['deleted_at']) ? date('d/m/Y à H\hi', strtotime($it['deleted_at'])) : '';
       ?>
         <div class="arow">
           <?php if ($thumb !== ''): ?>
             <span class="arow-cover" style="background-image:url('<?= e('../' . $thumb) ?>');<?= $meta['contain'] ? 'background-size:contain;background-color:#fff;' : '' ?>"></span>
           <?php else: ?>
-            <span class="arow-cover arow-cover--empty" aria-hidden="true">Sans image</span>
+            <span class="arow-cover arow-cover--empty" aria-hidden="true"><?= $meta['thumb'] !== '' ? 'Sans image' : 'Offre' ?></span>
           <?php endif; ?>
           <div class="arow-main">
             <div class="arow-title"><?= e($title) ?></div>

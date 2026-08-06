@@ -27,13 +27,15 @@ if (!isset($active)) {
     'blog.php'             => 'blog',
     'billet.php'           => 'blog',
     'partenariats.php'     => 'partenaires',
+    'emplois.php'          => 'emplois',
+    'offre.php'            => 'emplois',
     'contact.php'          => 'contact',
   );
   $active = $__map[$__self] ?? '';
 }
 
 // Items du menu, dans l'ordre : Accueil, Asso, MJC, Chalet, Activités,
-// Actualités, Blog, Partenaires, Contact. Tous les liens en .php.
+// Actualités, Blog, Partenaires, Emplois, Contact. Tous les liens en .php.
 $__nav = array(
   array('index.php',        'Accueil',     'accueil'),
   array('asso.php',         'Asso',        'asso'),
@@ -43,6 +45,7 @@ $__nav = array(
   array('actus.php',        'Actualités',  'actus'),
   array('blog.php',         'Blog',        'blog'),
   array('partenariats.php', 'Partenaires', 'partenaires'),
+  array('emplois.php',      'Emplois',     'emplois'),
   array('contact.php',      'Contact',     'contact'),
 );
 ?>

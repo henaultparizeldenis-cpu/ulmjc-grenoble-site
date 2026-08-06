@@ -9,7 +9,7 @@ require_once __DIR__ . '/auth.php';
 require_login();
 
 /* Types « liste » concernés par la corbeille (le chalet est une galerie, exclu). */
-$ALLOWED_TYPES = array('actus', 'blog', 'activites', 'partenaires');
+$ALLOWED_TYPES = array('actus', 'blog', 'activites', 'partenaires', 'emplois');
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && csrf_ok()) {
   $action = $_POST['action'] ?? '';

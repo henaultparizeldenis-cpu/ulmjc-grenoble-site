@@ -24,6 +24,7 @@
           <li><a href="actus.php">Actualités</a></li>
           <li><a href="blog.php">Blog</a></li>
           <li><a href="partenariats.php">Partenaires</a></li>
+          <li><a href="emplois.php">Offres d'emploi</a></li>
         </ul>
       </div>
       <div>

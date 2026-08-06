@@ -64,11 +64,13 @@
     'billet-edit.php':      { ep: 'preview.php?type=blog',        live: true, art: true, scroll: true },
     'activite-edit.php':    { ep: 'preview.php?type=activites',   live: true, art: true, scroll: true },
     'partenaire-edit.php':  { ep: 'preview.php?type=partenaires', live: true },
+    'offre-edit.php':       { ep: 'preview.php?type=emplois',     live: true, art: true, scroll: true },
     // Listes / gestion (aperçu simple, non live)
     'index.php':            { ep: '../actus.php',        live: false },
     'blog.php':             { ep: '../blog.php',         live: false },
     'activites.php':        { ep: '../activites.php',    live: false },
     'partenaires.php':      { ep: '../partenariats.php', live: false },
+    'emplois.php':          { ep: '../emplois.php',      live: false },
     'chalet.php':           { ep: '../chalet.php',       live: false }
   };
   // Pages admin non mappées (mot de passe…) : pas de panneau d'aperçu.

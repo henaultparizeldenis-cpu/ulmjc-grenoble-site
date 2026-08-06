@@ -4,7 +4,7 @@
    d'édition. Affiché dans l'iframe du panneau d'aperçu live (_live_preview.php).
 
    Basé sur mohamed-cms/site/admin/preview.php. Adapté au CMS ULMJC :
-   - plusieurs types (?type=actus|activites|partenaires) au lieu d'un seul ;
+   - plusieurs types (?type=actus|blog|activites|partenaires|emplois) au lieu d'un seul ;
    - le rendu réutilise EXACTEMENT le markup des pages publiques de détail/carte
      (actu.php pour l'actu ; activites.php / partenariats.php pour un item) pour que
      l'aperçu soit fidèle ;
@@ -17,7 +17,7 @@ require_once __DIR__ . '/auth.php';
 require_login();
 
 $type = $_POST['type'] ?? ($_GET['type'] ?? '');
-if (!in_array($type, array('actus', 'blog', 'activites', 'partenaires'), true)) $type = 'actus';
+if (!in_array($type, array('actus', 'blog', 'activites', 'partenaires', 'emplois'), true)) $type = 'actus';
 
 /* ------------------------------------------------------------------
    Couverture / image / logo d'aperçu.
@@ -291,6 +291,93 @@ if ($type === 'actus') {
             <div class="act-desc"><?= $desc ?></div>
           </div>
         </article>
+      </div>
+    </div>
+  </section>
+  <?php
+} elseif ($type === 'emplois') {
+  /* Reprend offre.php (détail d'une offre d'emploi). Pas d'image : une offre n'a
+     pas de couverture. Les étiquettes contrat / temps / lieu et l'encart
+     « Comment postuler » sont rendus à l'identique de la page publique. */
+  $title = clean_utf8(trim($_POST['title'] ?? ''));
+  if ($title === '') $title = "(Intitulé du poste)";
+  $date    = trim($_POST['date'] ?? '');
+  $limite  = emploi_deadline(array('date_limite' => $_POST['date_limite'] ?? ''));
+  $contrat = emploi_contrat_label(array_key_exists($_POST['contrat'] ?? '', emploi_contrats()) ? (string)$_POST['contrat'] : '');
+  $temps   = clean_utf8(trim($_POST['temps'] ?? ''));
+  $lieu    = clean_utf8(trim($_POST['lieu'] ?? ''));
+  $excerpt = clean_utf8(trim($_POST['excerpt'] ?? ''));
+  $contact = clean_utf8(trim($_POST['contact'] ?? ''));
+  $body    = preview_body_html();
+  /* Même traitement que offre.php : échappement PUIS liens mailto. */
+  $contactHtml = nl2br(e($contact));
+  $contactHtml = preg_replace('/([A-Za-z0-9._%+\-]+@[A-Za-z0-9.\-]+\.[A-Za-z]{2,})/',
+                              '<a href="mailto:$1" onclick="return false;">$1</a>', $contactHtml);
+  ?>
+  <style>
+  /* Styles repris de offre.php (détail) — nécessaires hors de la page publique. */
+  .actu-article-head{padding:3rem 0 0;background:transparent;border-bottom:none;text-align:center;}
+  .actu-article-head+section{padding-top:0;}
+  .actu-article-head .container>*{display:block;max-width:720px;margin-left:auto;margin-right:auto;}
+  .actu-back{display:block;max-width:720px;margin:0 auto 1.2rem;font-size:.9rem;color:var(--terra-dark);border:none;}
+  .actu-article-meta{font-size:.85rem;color:var(--ink-soft);margin-top:.4rem;}
+  .actu-content{max-width:720px;margin:0 auto;padding:2.5rem 0 1rem;}
+  .actu-chapo{font-size:1.25rem;line-height:1.6;color:var(--pine);font-family:'Lora',Georgia,serif;font-style:italic;margin-bottom:1.8rem;}
+  .actu-body h2{margin-top:2.4rem;}
+  .actu-body h3{margin-top:1.8rem;}
+  .actu-body ul{padding-left:1.4rem;}
+  .actu-body li{margin-bottom:.5rem;}
+  .actu-body img{max-width:100%;height:auto;border-radius:var(--radius-sm);margin:1.4rem 0;}
+  .actu-body figure{margin:1.6rem 0;}
+  .actu-body figure img{margin:0;}
+  .actu-body figcaption{font-size:.85rem;color:var(--ink-soft);margin-top:.5rem;text-align:center;}
+  .actu-body blockquote{border-left:4px solid var(--terra);background:var(--bg-soft);margin:1.6rem 0;padding:1rem 1.4rem;border-radius:var(--radius-sm);font-family:'Lora',Georgia,serif;font-size:1.1rem;color:var(--pine);}
+  .actu-body .al-center{text-align:center;}
+  .actu-body .al-right{text-align:right;}
+  .emploi-tags{display:flex;flex-wrap:wrap;gap:.4rem;justify-content:center;margin:1rem 0 0;}
+  .emploi-tag{display:inline-block;font-size:.8rem;font-weight:500;letter-spacing:.04em;color:var(--terra-dark);background:var(--bg-soft);border:1px solid var(--taupe);border-radius:12px;padding:.2rem .7rem;}
+  .emploi-apply{max-width:720px;margin:1.5rem auto 0;}
+  .emploi-apply h2{margin-top:0;font-size:1.25rem;}
+  </style>
+
+  <div class="page-header actu-article-head">
+    <div class="container">
+      <a href="#" class="actu-back" onclick="return false;">← Retour aux offres</a>
+      <span class="section-eyebrow">Offre d'emploi<?= $contrat !== '' ? ' · ' . e($contrat) : '' ?></span>
+      <h1><?= e($title) ?></h1>
+      <div class="actu-article-meta">
+        Publiée le <?= $date ? fr_date($date) : '' ?>
+        <?php if ($limite !== ''): ?> · Candidatures jusqu'au <?= fr_date($limite) ?><?php endif; ?>
+      </div>
+      <?php if ($contrat !== '' || $temps !== '' || $lieu !== ''): ?>
+      <div class="emploi-tags">
+        <?php if ($contrat !== ''): ?><span class="emploi-tag">📄 <?= e($contrat) ?></span><?php endif; ?>
+        <?php if ($temps !== ''): ?><span class="emploi-tag">🕒 <?= e($temps) ?></span><?php endif; ?>
+        <?php if ($lieu !== ''): ?><span class="emploi-tag">📍 <?= e($lieu) ?></span><?php endif; ?>
+      </div>
+      <?php endif; ?>
+    </div>
+  </div>
+
+  <section>
+    <div class="container">
+      <div class="actu-content">
+        <?php if ($excerpt !== ''): ?>
+          <p class="actu-chapo reveal"><?= e($excerpt) ?></p>
+        <?php endif; ?>
+        <div class="actu-body reveal"><?= $body ?></div>
+      </div>
+
+      <div class="prose-callout emploi-apply reveal">
+        <h2>Comment postuler</h2>
+        <?php if ($contact !== ''): ?>
+          <p><?= $contactHtml ?></p>
+        <?php else: ?>
+          <p>Écrivez-nous via la <a href="#" onclick="return false;">page contact</a> en précisant l'intitulé du poste.</p>
+        <?php endif; ?>
+        <?php if ($limite !== ''): ?>
+          <p><strong>Date limite de candidature :</strong> <?= fr_date($limite) ?>.</p>
+        <?php endif; ?>
       </div>
     </div>
   </section>

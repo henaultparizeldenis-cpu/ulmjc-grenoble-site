@@ -82,8 +82,8 @@ function published_items($type) {
    Un élément « à la corbeille » porte deleted=true + deleted_at (ISO 8601).
    « Supprimer » (endpoints admin) = soft_delete_item : réversible.
    La corbeille permet de restore_item (restaurer) ou purge_item (supprimer
-   définitivement, ancien comportement hard-delete). S'applique aux 4 types liste :
-   actus, blog, activites, partenaires (le chalet est une galerie, non concernée).
+   définitivement, ancien comportement hard-delete). S'applique aux 5 types liste :
+   actus, blog, activites, partenaires, emplois (le chalet est une galerie, non concernée).
    Clé d'un élément : 'slug' partout, sauf partenaires où c'est 'id'.
    ============================================================ */
 
@@ -174,7 +174,7 @@ function purge_item($type, $key) {
 /* Nombre total d'éléments à la corbeille (tous types liste confondus) — badge de nav. */
 function trashed_count() {
   $n = 0;
-  foreach (array('actus', 'blog', 'activites', 'partenaires') as $type) {
+  foreach (array('actus', 'blog', 'activites', 'partenaires', 'emplois') as $type) {
     $n += count(trashed_items($type));
   }
   return $n;
@@ -376,6 +376,76 @@ function published_activites()  { return published_ordered('activites'); }
 function load_partenaires()       { return load_items('partenaires'); }
 function save_partenaires($items) { return save_items('partenaires', $items); }
 function published_partenaires()  { return published_ordered('partenaires'); }
+
+/* ============================================================
+   Offres d'emploi (par-dessus les helpers génériques, comme le blog)
+   ------------------------------------------------------------
+   Une offre a la forme : slug, title, contrat, temps, lieu, date,
+   date_limite, excerpt, body, contact, published, created, updated
+   (+ deleted / deleted_at quand elle est à la corbeille).
+   Particularité : une offre dont la DATE LIMITE de candidature est passée
+   n'apparaît plus côté public (elle reste en base et reste éditable en
+   administration) — voir emploi_expired() / published_emplois().
+   ============================================================ */
+
+function load_emplois()        { return load_items('emplois'); }
+function save_emplois($items)  { return save_items('emplois', $items); }
+function find_emploi($slug)    { return find_item('emplois', $slug); }
+
+/* Types de contrat : clé => libellé (liste FERMÉE, ordre = ordre d'affichage).
+   L'éditeur choisit une clé ; le rendu affiche le libellé. Toute valeur hors de
+   cette liste est traitée comme « absente » (voir emploi_contrat_key). */
+function emploi_contrats() {
+  return array(
+    'cdi'             => 'CDI',
+    'cdd'             => 'CDD',
+    'apprentissage'   => 'Apprentissage',
+    'stage'           => 'Stage',
+    'service-civique' => 'Service civique',
+    'benevolat'       => 'Bénévolat',
+  );
+}
+
+/* Clé de contrat validée pour une offre (repli sur '' si inconnue/absente). */
+function emploi_contrat_key($o) {
+  $k = trim((string)($o['contrat'] ?? ''));
+  return array_key_exists($k, emploi_contrats()) ? $k : '';
+}
+
+/* Libellé d'affichage d'un type de contrat (à partir d'une clé), ou ''. */
+function emploi_contrat_label($key) {
+  $c = emploi_contrats();
+  return isset($c[$key]) ? $c[$key] : '';
+}
+
+/* Date limite de candidature (AAAA-MM-JJ), ou '' si absente/mal formée.
+   On vérifie aussi que la date EXISTE au calendrier (checkdate) : une valeur
+   aberrante ne doit ni s'afficher telle quelle, ni fausser la comparaison qui
+   décide de l'expiration. */
+function emploi_deadline($o) {
+  $d = trim((string)($o['date_limite'] ?? ''));
+  if (!preg_match('/^(\d{4})-(\d{2})-(\d{2})$/', $d, $m)) return '';
+  return checkdate((int)$m[2], (int)$m[3], (int)$m[1]) ? $d : '';
+}
+
+/* La date limite est-elle DÉPASSÉE ? (le jour même compte encore comme ouvert).
+   Sans date limite, une offre n'expire jamais. */
+function emploi_expired($o, $today = null) {
+  $d = emploi_deadline($o);
+  if ($d === '') return false;
+  if ($today === null) $today = date('Y-m-d');
+  return strcmp($d, $today) < 0;
+}
+
+/* Offres visibles sur le site : publiées, hors corbeille, date limite non
+   dépassée — de la plus récente à la plus ancienne (published_items trie déjà). */
+function published_emplois() {
+  $today = date('Y-m-d');
+  $list  = array_filter(published_items('emplois'), function ($o) use ($today) {
+    return !emploi_expired($o, $today);
+  });
+  return array_values($list);
+}
 
 /* ============================================================
    Photos du chalet : galerie par catégories (helpers DÉDIÉS)

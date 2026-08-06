@@ -143,6 +143,7 @@ function admin_header($title) {
       'blog.php'       => array('blog.php', 'billet-edit.php', 'billet-save.php', 'billet-delete.php'),
       'activites.php'  => array('activites.php', 'activite-edit.php', 'activite-save.php', 'activite-delete.php'),
       'partenaires.php'=> array('partenaires.php', 'partenaire-edit.php', 'partenaire-save.php', 'partenaire-delete.php'),
+      'emplois.php'    => array('emplois.php', 'offre-edit.php', 'offre-save.php', 'offre-delete.php'),
       'chalet.php'     => array('chalet.php', 'chalet-save.php'),
       'corbeille.php'  => array('corbeille.php', 'corbeille-action.php'),
     );
@@ -165,6 +166,7 @@ function admin_header($title) {
        . $navlink('blog.php', 'Blog')
        . $navlink('activites.php', 'Activités')
        . $navlink('partenaires.php', 'Partenaires')
+       . $navlink('emplois.php', 'Offres d\'emploi')
        . $navlink('chalet.php', 'Photos chalet')
        . '<a href="#" onclick="if(window.openMediaPicker){openMediaPicker();}return false;">Médiathèque</a>'
        . $corbeilleLink

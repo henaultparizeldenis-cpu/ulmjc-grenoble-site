@@ -58,6 +58,11 @@ $GLOBALS['ITEM_TYPES'] = array(
     'seed'  => REPO_DATA . '/blog.default.json',
     'label' => 'Blog',
   ),
+  'emplois' => array(
+    'file'  => DATA_DIR  . '/emplois.json',
+    'seed'  => REPO_DATA . '/emplois.default.json',
+    'label' => "Offres d'emploi",
+  ),
 );
 
 /* Photos du chalet : galerie par catégories (structure DIFFÉRENTE d'une liste plate,
