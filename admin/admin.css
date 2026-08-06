@@ -190,6 +190,9 @@ a{color:var(--terra-dark);text-decoration:none;}
 @keyframes coverPano{from{background-size:132% 132%;background-position:0% 50%;}to{background-size:132% 132%;background-position:100% 50%;}}
 /* Pièce jointe PDF (fiche de poste d'une offre d'emploi) */
 .doc-row{display:flex;align-items:center;gap:12px;margin:4px 0 8px;}
+/* display:flex écrase le display:none de l'attribut « hidden » : sans cette
+   règle, la ligne du PDF s'affiche même quand aucun document n'est joint. */
+.doc-row[hidden]{display:none;}
 .doc-chip{display:inline-flex;align-items:center;gap:6px;background:var(--bg-soft);
   border:1px solid var(--line);border-radius:var(--radius-sm);padding:.4rem .7rem;font-size:.9rem;}
 
