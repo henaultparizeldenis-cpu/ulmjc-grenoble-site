@@ -22,6 +22,7 @@ $d = array(
   'excerpt'     => $a['excerpt']     ?? '',
   'body'        => $a['body']        ?? '',
   'contact'     => $a['contact']     ?? '',
+  'fiche'       => $a['fiche']       ?? '',   // PDF joint (fiche de poste complète)
   'published'   => $a['published']   ?? true,
 );
 
@@ -118,6 +119,21 @@ admin_header($isNew ? 'Nouvelle offre' : "Modifier l'offre");
     <textarea name="contact" rows="2" maxlength="400" placeholder="Ex. : CV et lettre de motivation à ulmjc.gre@free.fr avant le 30 septembre."><?= e($d['contact']) ?></textarea>
   </label>
 
+  <div class="afield">
+    <span>Fiche de poste (PDF) <span class="ahint">(facultatif — proposée en téléchargement sur l'offre)</span></span>
+    <input type="hidden" name="fiche" id="ficheField" value="<?= e($d['fiche']) ?>" />
+    <div class="doc-row" id="ficheRow"<?= $d['fiche'] ? '' : ' hidden' ?>>
+      <span class="doc-chip">📄 <a id="ficheLink" href="../<?= e($d['fiche']) ?>" target="_blank" rel="noopener">Voir le PDF joint</a></span>
+      <button type="button" class="alink adanger" id="ficheRemove">Retirer</button>
+    </div>
+    <div>
+      <button type="button" class="abtn abtn-ghost" id="ficheBtn">Importer un PDF</button>
+      <input type="file" id="ficheInput" accept="application/pdf,.pdf" hidden />
+      <span class="ahint" id="ficheState"></span>
+    </div>
+    <span class="ahint">12 Mo maximum. Le PDF s'ouvre dans le navigateur ; le visiteur peut l'enregistrer.</span>
+  </div>
+
   <div class="aactions">
     <button class="abtn" type="submit" id="saveBtn">Enregistrer</button>
     <a class="alink" href="emplois.php">Annuler</a>
@@ -195,6 +211,41 @@ admin_header($isNew ? 'Nouvelle offre' : "Modifier l'offre");
   form.addEventListener('submit',function(){
     var html=area.innerHTML.replace(/src="\.\.\/(uploads|images)\//g,'src="$1/');
     bodyField.value=html;
+  });
+})();
+
+/* ---- Fiche de poste PDF : import, affichage, retrait ---- */
+(function(){
+  var btn=document.getElementById('ficheBtn'), input=document.getElementById('ficheInput'),
+      field=document.getElementById('ficheField'), row=document.getElementById('ficheRow'),
+      link=document.getElementById('ficheLink'), rm=document.getElementById('ficheRemove'),
+      state=document.getElementById('ficheState');
+  if(!btn||!input||!field) return;
+
+  function show(src){
+    field.value=src;
+    if(src){ link.href='../'+src; row.hidden=false; } else { row.hidden=true; }
+  }
+  btn.addEventListener('click',function(){ input.click(); });
+  rm.addEventListener('click',function(){ show(''); state.textContent='PDF retiré — pensez à enregistrer.'; });
+
+  input.addEventListener('change',function(){
+    var f=input.files&&input.files[0]; if(!f) return;
+    state.textContent='Envoi en cours…';
+    var fd=new FormData();
+    fd.append('csrf',window.__CSRF);
+    /* Nom neutralisé : une apostrophe dans le nom déclenche un 403 du pare-feu. */
+    fd.append('file',f,window.__safeUploadName?window.__safeUploadName(f.name):'fiche.pdf');
+    fetch('upload-doc.php',{method:'POST',body:fd})
+      .then(function(r){ return r.text().then(function(t){ return {status:r.status,text:t}; }); })
+      .then(function(res){
+        var j=null; try{ j=JSON.parse(res.text); }catch(e){}
+        if(j&&j.url){ show(j.url); state.textContent='PDF joint — pensez à enregistrer.'; }
+        else if(j&&j.error){ state.textContent='Échec : '+j.error; }
+        else { state.textContent='Échec (HTTP '+res.status+') — réponse inattendue du serveur.'; }
+        input.value='';
+      })
+      .catch(function(){ state.textContent='Échec : requête bloquée avant d\'atteindre le serveur.'; input.value=''; });
   });
 })();
 </script>

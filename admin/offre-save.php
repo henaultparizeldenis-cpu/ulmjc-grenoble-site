@@ -36,7 +36,23 @@ $lieu    = mb_substr($lieu, 0, 120);
 $excerpt = mb_substr($excerpt, 0, 200);
 $contact = mb_substr($contact, 0, 400);
 
+/* Fiche de poste PDF : on n'accepte qu'un chemin uploads/….pdf existant
+   (doc_valid_src) — jamais une valeur brute du formulaire. */
+$fiche = doc_valid_src($_POST['fiche'] ?? '');
+
 $offres = load_emplois();
+
+/* Si le PDF a été remplacé ou retiré, on efface l'ancien fichier du disque
+   pour ne pas accumuler des documents orphelins hors dépôt. */
+if ($origSlug) {
+  foreach ($offres as $it) {
+    if (($it['slug'] ?? '') === $origSlug && !empty($it['fiche']) && $it['fiche'] !== $fiche) {
+      $old = upload_path($it['fiche']);
+      if ($old !== '' && is_file($old)) @unlink($old);
+      break;
+    }
+  }
+}
 
 /* Slug : stable en édition, généré à la création. */
 if ($origSlug && find_emploi($origSlug)) {
@@ -62,6 +78,7 @@ $record = array(
   'excerpt'     => $excerpt,
   'body'        => $body,
   'contact'     => $contact,
+  'fiche'       => $fiche,
   'published'   => $published,
   'created'     => $created,
   'updated'     => date('c'),

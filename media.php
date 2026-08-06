@@ -17,6 +17,7 @@ $types = array(
   'jpg' => 'image/jpeg', 'jpeg' => 'image/jpeg', 'png' => 'image/png',
   'webp' => 'image/webp', 'gif' => 'image/gif',
   'mp4' => 'video/mp4', 'webm' => 'video/webm',
+  'pdf' => 'application/pdf',   // pièces jointes : fiches de poste des offres d'emploi
 );
 if (!isset($types[$ext])) { http_response_code(404); exit; }
 
@@ -37,6 +38,10 @@ if (($inm !== '' && $inm === $etag) || ($ims && $mtime && $ims >= $mtime)) {
 }
 
 header('Content-Type: ' . $types[$ext]);
+/* Un PDF s'ouvre dans le lecteur du navigateur plutôt que de se télécharger
+   d'office ; le nom d'origine n'ayant aucun sens (doc-<horodatage>.pdf), on
+   force un nom parlant. « inline » laisse le visiteur choisir d'enregistrer. */
+if ($ext === 'pdf') { header('Content-Disposition: inline; filename="fiche-de-poste.pdf"'); }
 header('Content-Length: ' . $size);
 header('Cache-Control: public, max-age=31536000, immutable');
 header('Last-Modified: ' . gmdate('D, d M Y H:i:s', (int) $mtime) . ' GMT');

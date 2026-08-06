@@ -155,8 +155,9 @@ function purge_item($type, $key) {
   $found = false;
   foreach ($items as $it) {
     if (($it[$field] ?? null) === $key && is_deleted($it)) {
-      // couverture uploadée hors dépôt : 'cover' (actus/blog), 'image' (activites), 'logo' (partenaires)
-      foreach (array('cover', 'image', 'logo') as $imgField) {
+      // fichiers uploadés hors dépôt : 'cover' (actus/blog), 'image' (activites),
+      // 'logo' (partenaires), 'fiche' (PDF des offres d'emploi)
+      foreach (array('cover', 'image', 'logo', 'fiche') as $imgField) {
         if (!empty($it[$imgField])) {
           $f = upload_path($it[$imgField]);
           if ($f !== '' && is_file($f)) @unlink($f);
@@ -633,6 +634,26 @@ function media_valid_src($src) {
   $src = trim((string) $src);
   if ($src !== '' && preg_match('#^(uploads|images)/[A-Za-z0-9._\-]+\.(jpe?g|png|webp|gif)$#i', $src) && is_file(media_disk_path($src))) return $src;
   return '';
+}
+
+/* Chemin de DOCUMENT validé (PDF uniquement, dans uploads/).
+   Même logique que media_valid_src, mais pour les pièces jointes : fiches de
+   poste des offres d'emploi, etc. Le fichier doit exister réellement. */
+function doc_valid_src($src) {
+  $src = trim((string) $src);
+  if ($src !== '' && preg_match('#^uploads/[A-Za-z0-9._\-]+\.pdf$#i', $src) && is_file(media_disk_path($src))) return $src;
+  return '';
+}
+
+/* Poids lisible d'un document (« 375 Ko », « 1,2 Mo ») — affiché à côté du lien
+   de téléchargement, pour que le visiteur sache ce qu'il déclenche. */
+function doc_filesize_label($src) {
+  $p = media_disk_path($src);
+  if ($p === '' || !is_file($p)) return '';
+  $o = (int) @filesize($p);
+  if ($o <= 0) return '';
+  if ($o < 1024 * 1024) return number_format($o / 1024, 0, ',', ' ') . ' Ko';
+  return number_format($o / 1048576, 1, ',', ' ') . ' Mo';
 }
 
 /* ============================================================

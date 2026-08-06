@@ -72,6 +72,9 @@ $related = array_slice(array_values($related), 0, 3);
 .emploi-limit{font-size:.85rem;color:var(--ink-soft);font-style:italic;margin:.6rem 0 .2rem;}
 .emploi-apply{max-width:720px;margin:1.5rem auto 0;}
 .emploi-apply h2{margin-top:0;font-size:1.25rem;}
+/* Lien vers la fiche de poste PDF : posé sous le corps, avant l'encart de candidature. */
+.emploi-fiche{max-width:720px;margin:2rem auto 0;}
+.emploi-fiche .btn{display:inline-block;}
 .actu-card{padding:0;overflow:hidden;display:flex;flex-direction:column;}
 .actu-card-body{padding:1.6rem;display:flex;flex-direction:column;flex:1;}
 .actu-card-meta{font-size:.78rem;font-weight:500;letter-spacing:.12em;text-transform:uppercase;color:var(--terra-dark);margin-bottom:.6rem;}
@@ -109,6 +112,21 @@ $related = array_slice(array_values($related), 0, 3);
         <p class="actu-chapo reveal"><?= e($a['excerpt']) ?></p>
       <?php endif; ?>
       <div class="actu-body reveal"><?= $a['body'] ?? '' ?></div>
+
+      <?php
+      /* Fiche de poste complète en PDF, si elle a été jointe. Le chemin est
+         revalidé à l'affichage : un fichier supprimé du disque ne laisse pas
+         un lien mort. */
+      $fiche = doc_valid_src($a['fiche'] ?? '');
+      if ($fiche !== ''):
+        $poids = doc_filesize_label($fiche);
+      ?>
+        <p class="emploi-fiche reveal">
+          <a class="btn btn-ghost" href="<?= e($fiche) ?>" target="_blank" rel="noopener">
+            Télécharger la fiche de poste complète (PDF<?= $poids !== '' ? ', ' . e($poids) : '' ?>)
+          </a>
+        </p>
+      <?php endif; ?>
     </div>
 
     <div class="prose-callout emploi-apply reveal">

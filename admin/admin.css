@@ -188,6 +188,11 @@ a{color:var(--terra-dark);text-decoration:none;}
 @keyframes coverKenburns{from{background-size:114% 114%;background-position:10% 18%;}to{background-size:134% 134%;background-position:90% 80%;}}
 @keyframes coverZoom{from{background-size:108% 108%;background-position:center;}to{background-size:130% 130%;background-position:center;}}
 @keyframes coverPano{from{background-size:132% 132%;background-position:0% 50%;}to{background-size:132% 132%;background-position:100% 50%;}}
+/* Pièce jointe PDF (fiche de poste d'une offre d'emploi) */
+.doc-row{display:flex;align-items:center;gap:12px;margin:4px 0 8px;}
+.doc-chip{display:inline-flex;align-items:center;gap:6px;background:var(--bg-soft);
+  border:1px solid var(--line);border-radius:var(--radius-sm);padding:.4rem .7rem;font-size:.9rem;}
+
 .cover-align{display:flex;align-items:center;gap:8px;margin:4px 0 8px;cursor:pointer;font-size:.9rem;}
 .cover-align input[type=checkbox]{width:auto;margin:0;accent-color:var(--terra);cursor:pointer;}
 .cover-w-field input[type=range]{display:block;width:100%;max-width:520px;margin-top:2px;accent-color:var(--terra);cursor:pointer;}
