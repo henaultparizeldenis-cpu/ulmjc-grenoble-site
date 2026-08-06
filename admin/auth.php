@@ -264,12 +264,34 @@ function admin_footer() {
   // optimize_image côté serveur), avec une progression « n/total ».
   if(up) up.addEventListener('change',function(){
     var files=up.files?Array.prototype.slice.call(up.files):[]; if(!files.length)return;
-    var total=files.length, errors=0;
+    var total=files.length, errors=0, motifs=[];
     (function step(i){
-      if(i>=total){ up.value=''; if(errors)alert(errors+' image(s) sur '+total+' n\'ont pas pu être importées.'); load(); return; }
+      if(i>=total){
+        up.value='';
+        if(errors){
+          var uniq=motifs.filter(function(m,k){return motifs.indexOf(m)===k;});
+          alert(errors+' image(s) sur '+total+' n\'ont pas pu être importées.\n\nMotif : '+uniq.join('\n'));
+        }
+        load(); return;
+      }
       grid.innerHTML='<p class="mp-empty">Import en cours… '+(i+1)+'/'+total+'</p>';
       var fd=new FormData(); fd.append('csrf',window.__CSRF); fd.append('file',files[i]);
-      fetch('upload.php',{method:'POST',body:fd}).then(function(r){return r.json();}).then(function(j){ if(j&&j.error)errors++; step(i+1); }).catch(function(){ errors++; step(i+1); });
+      /* On lit la réponse en TEXTE puis on tente le JSON : si le serveur (ou un
+         pare-feu) renvoie une page HTML d'erreur, r.json() échouerait et on
+         perdrait la cause réelle. Ici on la remonte à l'utilisateur. */
+      fetch('upload.php',{method:'POST',body:fd})
+        .then(function(r){ return r.text().then(function(t){ return {status:r.status, text:t}; }); })
+        .then(function(res){
+          var j=null; try{ j=JSON.parse(res.text); }catch(e){}
+          if(j && j.url){ /* import réussi */ }
+          else if(j && j.error){ errors++; motifs.push(j.error+' (HTTP '+res.status+')'); }
+          else {
+            var brut=(res.text||'').replace(/<[^>]*>/g,' ').replace(/\s+/g,' ').trim().slice(0,140);
+            errors++; motifs.push('Réponse inattendue du serveur — HTTP '+res.status+(brut?' : '+brut:''));
+          }
+          step(i+1);
+        })
+        .catch(function(){ errors++; motifs.push('Requête bloquée avant d\'atteindre le serveur (réseau, extension ou pare-feu).'); step(i+1); });
     })(0);
   });
   Array.prototype.forEach.call(modal.querySelectorAll('[data-mp-close]'),function(el){ el.addEventListener('click',closeMp); });

@@ -278,8 +278,8 @@ admin_header($isNew ? 'Nouvelle activitÃ©' : 'Modifier l\'activitÃ©');
   }
   function applyCoverWidth(){
     if(!cp) return;
-    // Fidèle à la vraie page : bandeau CENTRÉ, à l'échelle réelle du conteneur (1092px).
-    // Aligné = 720px (largeur de la colonne de texte) ; sinon 960·cw%.
+    // FidÃ¨le Ã  la vraie page : bandeau CENTRÃ‰, Ã  l'Ã©chelle rÃ©elle du conteneur (1092px).
+    // AlignÃ© = 720px (largeur de la colonne de texte) ; sinon 960Â·cw%.
     if(coverAlign&&coverAlign.checked){ cp.style.width='720px'; if(coverWVal) coverWVal.textContent='largeur du texte'; }
     else if(coverW){ cp.style.width=Math.round(960*coverW.value/100)+'px'; if(coverWVal) coverWVal.textContent=coverW.value+'%'; }
     fitStage();
