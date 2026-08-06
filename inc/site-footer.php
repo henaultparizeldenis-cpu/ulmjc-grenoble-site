@@ -31,7 +31,10 @@
         <h4>Pratique</h4>
         <ul>
           <li><a href="contact.php">Contact</a></li>
-          <li><a href="blog-rss.php">Flux RSS du blog</a></li>
+          <?php /* Le lien vers le flux RSS a été retiré du pied de page : fonction
+                   incomprise de la quasi-totalité des visiteurs. Le flux reste
+                   accessible à /blog-rss.php pour l'automatisation (diffusion
+                   auto vers Facebook, reprise par un site partenaire). */ ?>
         </ul>
       </div>
       <div>
