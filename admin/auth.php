@@ -293,6 +293,33 @@ HTML;
         if(!cb) b.style.cursor='default';
         cell.appendChild(b);
         if(multi){ var n=document.createElement('span'); n.className='mp-num'; n.hidden=true; cell.appendChild(n); }
+        /* Rotation : uniquement pour les photos importées (it.del = fichier de
+           uploads/). Une photo de images/ est versionnée et serait de toute
+           façon écrasée au prochain déploiement. */
+        if(it.del){
+          var rots=document.createElement('div'); rots.className='mp-rot';
+          [['gauche','↺','Pivoter à gauche'],['droite','↻','Pivoter à droite']].forEach(function(r){
+            var rb=document.createElement('button'); rb.type='button'; rb.className='mp-rot-btn';
+            rb.textContent=r[1]; rb.title=r[2];
+            rb.addEventListener('click',function(e){ e.stopPropagation();
+              rb.disabled=true;
+              var fd=new FormData(); fd.append('csrf',window.__CSRF);
+              fd.append('src',it.src); fd.append('sens',r[0]);
+              fetch('media-rotate.php',{method:'POST',body:fd})
+                .then(function(x){return x.json();})
+                .then(function(res){
+                  rb.disabled=false;
+                  if(res.error){ alert(res.error); return; }
+                  /* Le navigateur a l'ancienne version en cache : on force le
+                     rechargement de la vignette avec un paramètre changeant. */
+                  b.style.backgroundImage="url('"+rel(it.src)+"?v="+res.v+"')";
+                })
+                .catch(function(){ rb.disabled=false; alert("La rotation n'a pas abouti."); });
+            });
+            rots.appendChild(rb);
+          });
+          cell.appendChild(rots);
+        }
         if(it.del){
           var d=document.createElement('button'); d.type='button'; d.className='mp-del'; d.textContent='×';
           d.addEventListener('click',function(e){ e.stopPropagation();
