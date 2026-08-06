@@ -8,18 +8,18 @@
         "published": true
     },
     {
-        "id": "departement-isere",
-        "nom": "Département de l'Isère",
+        "id": "codase",
+        "nom": "CODASE",
         "logo": "",
-        "url": "https://www.isere.fr",
+        "url": "https://www.codase.org/",
         "ordre": 2,
         "published": true
     },
     {
-        "id": "region-auvergne-rhone-alpes",
-        "nom": "Région Auvergne-Rhône-Alpes",
+        "id": "udhec38",
+        "nom": "UDHEC 38",
         "logo": "",
-        "url": "https://www.auvergnerhonealpes.fr",
+        "url": "https://udhec38.com/",
         "ordre": 3,
         "published": true
     }
