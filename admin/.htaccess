@@ -11,3 +11,8 @@
 <FilesMatch "^\.">
   Require all denied
 </FilesMatch>
+
+# Application installable : le serveur renvoyait le manifeste en text/plain,
+# ce que certains navigateurs refusent (l'installation échoue alors sans
+# message). Le type correct est application/manifest+json.
+AddType application/manifest+json .webmanifest
