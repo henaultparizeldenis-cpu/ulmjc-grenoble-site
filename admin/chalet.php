@@ -125,7 +125,9 @@ admin_header('Photos du chalet');
       (function step(i){
         if(i>=total){ upInput.value=''; busy(false); if(lbl)lbl.textContent=''; if(lastItems)render(grid,lastItems); if(errors)alert(errors+' photo(s) sur '+total+' n\'ont pas pu être importées.'); return; }
         if(lbl)lbl.textContent='Import… '+(i+1)+'/'+total;
-        var fd=new FormData(); fd.append('action','upload'); fd.append('cat',cat); fd.append('file',files[i]);
+        var fd=new FormData(); fd.append('action','upload'); fd.append('cat',cat);
+        /* Nom de fichier neutralisé : une apostrophe déclenche un 403 du pare-feu. */
+        fd.append('file',files[i],window.__safeUploadName?window.__safeUploadName(files[i].name):'photo.jpg');
         post(fd).then(function(j){ if(j&&j.error){errors++;} else if(j&&j.items){lastItems=j.items;} step(i+1); })
                 .catch(function(){ errors++; step(i+1); });
       })(0);

@@ -195,6 +195,36 @@ function admin_footer() {
   // Sélecteur de médiathèque réutilisable (openMediaPicker(callback[, {multiple:true}])).
   if (is_logged_in()) {
     echo '<script>window.__CSRF=' . json_encode(csrf_token()) . ';</script>';
+    /* Le pare-feu de l'hébergeur rejette (403) tout envoi dont le NOM de fichier
+       contient une apostrophe ou des caractères exotiques — cas typique des
+       « Capture d'écran ….png ». Le serveur renomme de toute façon chaque image
+       (img-timestamp-alea.jpg), donc le nom d'origine ne sert à rien : on le
+       neutralise avant l'envoi, pour les imports AJAX comme pour les formulaires. */
+    echo <<<'HTML'
+<script>
+window.__safeUploadName = function (name) {
+  var ext = (String(name).match(/\.([a-zA-Z0-9]{1,5})$/) || [,'jpg'])[1].toLowerCase();
+  return 'photo-' + Date.now() + '-' + Math.floor(Math.random() * 9000 + 1000) + '.' + ext;
+};
+/* Formulaires classiques : on remplace le fichier par une copie au nom neutre. */
+document.addEventListener('submit', function (e) {
+  var form = e.target;
+  if (!form || !form.querySelectorAll) return;
+  if (typeof DataTransfer === 'undefined' || typeof File === 'undefined') return;
+  Array.prototype.forEach.call(form.querySelectorAll('input[type=file]'), function (inp) {
+    if (!inp.files || !inp.files.length) return;
+    if (!/['"\\]/.test(Array.prototype.map.call(inp.files, function (f) { return f.name; }).join(''))) return;
+    try {
+      var dt = new DataTransfer();
+      Array.prototype.forEach.call(inp.files, function (f) {
+        dt.items.add(new File([f], window.__safeUploadName(f.name), { type: f.type }));
+      });
+      inp.files = dt.files;
+    } catch (err) { /* navigateur trop ancien : on laisse passer tel quel */ }
+  });
+}, true);
+</script>
+HTML;
     echo <<<'HTML'
 <div class="mp-modal" id="mediaPickerModal" hidden>
   <div class="mp-backdrop" data-mp-close></div>
@@ -275,7 +305,9 @@ function admin_footer() {
         load(); return;
       }
       grid.innerHTML='<p class="mp-empty">Import en cours… '+(i+1)+'/'+total+'</p>';
-      var fd=new FormData(); fd.append('csrf',window.__CSRF); fd.append('file',files[i]);
+      var fd=new FormData(); fd.append('csrf',window.__CSRF);
+      /* 3e argument = nom transmis : neutralisé (voir __safeUploadName). */
+      fd.append('file',files[i],window.__safeUploadName?window.__safeUploadName(files[i].name):'photo.jpg');
       /* On lit la réponse en TEXTE puis on tente le JSON : si le serveur (ou un
          pare-feu) renvoie une page HTML d'erreur, r.json() échouerait et on
          perdrait la cause réelle. Ici on la remonte à l'utilisateur. */
