@@ -1,75 +1,100 @@
 <?php
 /* Diagnostic d'import d'images — OUTIL TEMPORAIRE.
-   Affiche l'état réel du serveur : dossiers, droits d'écriture, bibliothèque GD,
-   limites PHP, et effectue un vrai test d'écriture dans le dossier des images.
-   Protégé par la session admin (require_login) : rien n'est exposé publiquement.
-   À SUPPRIMER une fois le problème résolu. */
+   Étape 1 : état du serveur (dossiers, droits, GD, limites).
+   Étape 2 : test d'import RÉEL vers upload.php, avec affichage de la réponse
+             BRUTE (code HTTP + corps), ce que l'interface normale masque.
+   Protégé par require_login(). À SUPPRIMER une fois le problème résolu. */
 require_once __DIR__ . '/auth.php';
 require_login();
 
-header('Content-Type: text/plain; charset=utf-8');
+$csrf = csrf_token();
+?><!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Diagnostic import</title>
+<style>
+  body{font:14px/1.6 -apple-system,Segoe UI,Arial,sans-serif;background:#14171a;color:#dfe3e6;margin:0;padding:22px;}
+  h1{font-size:19px;margin:0 0 18px;} h2{font-size:15px;margin:26px 0 8px;color:#8fd39a;}
+  pre{background:#0d1013;border:1px solid #2a3138;border-radius:6px;padding:12px;white-space:pre-wrap;
+      word-break:break-word;font:12.5px/1.55 Consolas,monospace;color:#cfd6dc;max-height:340px;overflow:auto;}
+  .ok{color:#7ddc8f;} .ko{color:#ff8a7a;font-weight:700;}
+  input[type=file]{margin:8px 0;} button{background:#2f6f4f;color:#fff;border:0;border-radius:6px;
+      padding:9px 16px;font-size:14px;cursor:pointer;} button:hover{background:#3a8a62;}
+  table{border-collapse:collapse;} td{padding:2px 14px 2px 0;vertical-align:top;}
+</style>
+</head>
+<body>
+<h1>Diagnostic d'import d'images</h1>
 
-function ligne($cle, $valeur) { printf("%-34s %s\n", $cle, $valeur); }
-function ouinon($b) { return $b ? 'OUI' : 'NON  <-- PROBLEME'; }
+<h2>1. État du serveur</h2>
+<table>
+<?php
+function l($k, $v) { echo '<tr><td>' . htmlspecialchars($k) . '</td><td>' . $v . "</td></tr>\n"; }
+function b($x)     { return $x ? '<span class="ok">OUI</span>' : '<span class="ko">NON</span>'; }
+l('UPLOAD_DIR', '<code>' . htmlspecialchars(UPLOAD_DIR) . '</code>');
+l('existe / écriture', b(is_dir(UPLOAD_DIR)) . ' / ' . b(is_dir(UPLOAD_DIR) && is_writable(UPLOAD_DIR)));
+l('fichiers présents', (string)max(0, count(@scandir(UPLOAD_DIR) ?: array()) - 2));
+l('GD complet', b(function_exists('imagecreatetruecolor') && function_exists('imagejpeg')));
+l('upload_max_filesize / post_max_size', htmlspecialchars(ini_get('upload_max_filesize') . ' / ' . ini_get('post_max_size')));
+l('session active', b(session_status() === PHP_SESSION_ACTIVE));
+l('jeton CSRF en session', b(!empty($_SESSION['csrf'])) . ' <code>' . htmlspecialchars(substr($csrf, 0, 8)) . '…</code>');
+?>
+</table>
 
-echo "=== DIAGNOSTIC D'IMPORT D'IMAGES ===\n\n";
+<h2>2. Test d'import réel</h2>
+<p>Choisis une image (la même que celle qui échoue) puis clique sur Tester.
+   La réponse exacte du serveur s'affichera ci-dessous.</p>
+<input type="file" id="f" accept="image/*">
+<button id="go">Tester l'import</button>
+<pre id="out">En attente…</pre>
 
-echo "--- Dossiers ---\n";
-ligne('DATA_DIR',            DATA_DIR);
-ligne('  existe',            ouinon(is_dir(DATA_DIR)));
-ligne('  accessible en ecriture', ouinon(is_writable(DATA_DIR)));
-ligne('UPLOAD_DIR',          UPLOAD_DIR);
-ligne('  existe',            ouinon(is_dir(UPLOAD_DIR)));
-ligne('  accessible en ecriture', ouinon(is_dir(UPLOAD_DIR) && is_writable(UPLOAD_DIR)));
-if (is_dir(UPLOAD_DIR)) {
-  ligne('  droits (octal)',  substr(sprintf('%o', @fileperms(UPLOAD_DIR)), -4));
-  ligne('  proprietaire',    function_exists('posix_getpwuid') && @fileowner(UPLOAD_DIR) !== false
-                             ? (@posix_getpwuid(@fileowner(UPLOAD_DIR))['name'] ?? @fileowner(UPLOAD_DIR))
-                             : (string)@fileowner(UPLOAD_DIR));
-  ligne('  nb de fichiers',  (string)max(0, count(@scandir(UPLOAD_DIR) ?: array()) - 2));
+<script>
+var CSRF = <?= json_encode($csrf) ?>;
+document.getElementById('go').addEventListener('click', function () {
+  var f = document.getElementById('f').files[0];
+  var out = document.getElementById('out');
+  if (!f) { out.textContent = 'Choisis d\'abord une image.'; return; }
+
+  out.textContent = 'Envoi en cours…\n\nFichier : ' + f.name + '\nType : ' + (f.type || '(inconnu)') +
+                    '\nTaille : ' + Math.round(f.size / 1024) + ' Ko\n';
+
+  var fd = new FormData();
+  fd.append('csrf', CSRF);
+  fd.append('file', f);
+
+  fetch('upload.php', { method: 'POST', body: fd })
+    .then(function (r) {
+      return r.text().then(function (t) {
+        var h = [];
+        r.headers.forEach(function (v, k) { h.push('  ' + k + ': ' + v); });
+        return { status: r.status, statusText: r.statusText, headers: h.join('\n'), body: t };
+      });
+    })
+    .then(function (res) {
+      out.textContent =
+        'CODE HTTP : ' + res.status + ' ' + res.statusText + '\n\n' +
+        'EN-TÊTES :\n' + res.headers + '\n\n' +
+        'RÉPONSE BRUTE :\n' + (res.body || '(vide)') + '\n\n' +
+        '--- interprétation ---\n' + interprete(res);
+    })
+    .catch(function (e) {
+      out.textContent = 'LA REQUÊTE N\'EST MÊME PAS ARRIVÉE AU SERVEUR.\n\n' +
+        'Erreur : ' + e + '\n\n' +
+        'Cause probable : pare-feu, antivirus, extension de navigateur ou réseau ' +
+        'qui bloque l\'envoi de fichiers.';
+    });
+});
+
+function interprete(res) {
+  var j = null; try { j = JSON.parse(res.body); } catch (e) {}
+  if (j && j.url)   return 'IMPORT RÉUSSI : ' + j.url;
+  if (j && j.error) return 'upload.php a refusé, motif : « ' + j.error + ' »';
+  if (res.status === 403) return 'Refus 403 SANS réponse JSON : le blocage vient du serveur ou d\'un pare-feu, pas du CMS.';
+  if (res.status >= 500)  return 'Erreur serveur : PHP a planté pendant le traitement.';
+  return 'Réponse inattendue — copie ce bloc entier.';
 }
-ligne('utilisateur PHP',     function_exists('posix_geteuid') && function_exists('posix_getpwuid')
-                             ? (@posix_getpwuid(posix_geteuid())['name'] ?? '?') : get_current_user());
-
-echo "\n--- Bibliotheque images (GD) ---\n";
-ligne('imagecreatetruecolor', ouinon(function_exists('imagecreatetruecolor')));
-ligne('imagecreatefromjpeg',  ouinon(function_exists('imagecreatefromjpeg')));
-ligne('imagecreatefrompng',   ouinon(function_exists('imagecreatefrompng')));
-ligne('imagejpeg',            ouinon(function_exists('imagejpeg')));
-ligne('getimagesize',         ouinon(function_exists('getimagesize')));
-
-echo "\n--- Limites PHP ---\n";
-foreach (array('upload_max_filesize','post_max_size','memory_limit','max_execution_time','file_uploads') as $k) {
-  ligne($k, (string)ini_get($k));
-}
-ligne('dossier temporaire', (string)(ini_get('upload_tmp_dir') ?: sys_get_temp_dir()));
-ligne('  ecriture temporaire', ouinon(is_writable(ini_get('upload_tmp_dir') ?: sys_get_temp_dir())));
-
-echo "\n--- TEST REEL D'ECRITURE ---\n";
-if (!is_dir(UPLOAD_DIR)) {
-  echo "UPLOAD_DIR absent : tentative de creation...\n";
-  ligne('  creation', ouinon(@mkdir(UPLOAD_DIR, 0775, true)));
-}
-$test = rtrim(UPLOAD_DIR, '/\\') . '/_test-' . time() . '.txt';
-$ecrit = @file_put_contents($test, 'test');
-ligne('ecriture fichier texte', $ecrit !== false ? 'OUI (' . $ecrit . " octets)" : 'NON  <-- PROBLEME');
-if ($ecrit !== false) { @unlink($test); }
-
-if (function_exists('imagecreatetruecolor')) {
-  $img = @imagecreatetruecolor(40, 20);
-  $jpg = rtrim(UPLOAD_DIR, '/\\') . '/_test-' . time() . '.jpg';
-  $ok  = $img ? @imagejpeg($img, $jpg, 80) : false;
-  ligne('ecriture image JPEG', ouinon($ok));
-  if ($img) @imagedestroy($img);
-  if ($ok) { @unlink($jpg); }
-}
-
-echo "\n--- Dernieres erreurs PHP ---\n";
-$log = @ini_get('error_log');
-ligne('journal', (string)($log ?: '(non defini)'));
-if ($log && is_readable($log)) {
-  $lines = @file($log);
-  if ($lines) { echo implode('', array_slice($lines, -12)); }
-}
-
-echo "\n=== FIN ===\n";
+</script>
+</body>
+</html>
