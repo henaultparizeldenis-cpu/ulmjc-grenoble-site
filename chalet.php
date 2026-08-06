@@ -159,7 +159,7 @@ require __DIR__ . '/inc/head.php';
     <h2>Réservations</h2>
     <p>Pour vérifier les disponibilités et réserver, contactez-nous directement&nbsp;:</p>
     <ul>
-      <li>📞 <strong>06 81 71 97 99</strong> ou <strong>06 88 90 35 84</strong></li>
+      <li>📞 <strong>07 62 65 98 16</strong></li>
       <li>✉️ <a href="mailto:ulmjc.gre@free.fr"><strong>ulmjc.gre@free.fr</strong></a></li>
     </ul>
     <p style="margin-top: 1.5rem;">

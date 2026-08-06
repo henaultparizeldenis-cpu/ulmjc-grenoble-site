@@ -92,7 +92,7 @@
 
     <h2>Crédits</h2>
     <ul>
-      <li><strong>Conception et développement du site</strong>&nbsp;: Denis Hénault-Parizel.</li>
+      <li><strong>Conception et développement du site</strong>&nbsp;: Denis Hénault-Parizel — <a href="https://prazile.com" target="_blank" rel="noopener">prazile.com</a>.</li>
       <li><strong>Brochure et infographie du chalet</strong>&nbsp;: ULMJC Grenoble.</li>
       <li><strong>Typographies</strong>&nbsp;: Fraunces et Inter via Google Fonts (licence Open Font Licence).</li>
       <li><strong>Données météo</strong> (page d'accueil)&nbsp;: <a href="https://open-meteo.com" target="_blank" rel="noopener">Open-Meteo</a> — service gratuit, licence CC BY 4.0.</li>

@@ -44,7 +44,7 @@
     </div>
     <div class="footer-bottom">
       <span>© ULMJC Grenoble — depuis 1961</span>
-      <span><a href="mentions-legales.php">Mentions légales</a> · <a href="#">Statuts</a></span>
+      <span><a href="mentions-legales.php">Mentions légales</a> · <a href="#">Statuts</a> · Site conçu par <a href="https://prazile.com" target="_blank" rel="noopener">Denis Hénault-Parizel</a></span>
     </div>
   </div>
 </footer>

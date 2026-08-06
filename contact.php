@@ -47,8 +47,7 @@
         <p>Pour vérifier les disponibilités et réserver, le plus simple est de nous appeler ou de nous écrire&nbsp;:</p>
         <p>
           <strong>📞 Téléphone</strong><br>
-          <a href="tel:+33681719799">06 81 71 97 99</a><br>
-          <a href="tel:+33688903584">06 88 90 35 84</a>
+          <a href="tel:+33762659816">07 62 65 98 16</a>
         </p>
         <p>
           <strong>✉️ Email</strong><br>
