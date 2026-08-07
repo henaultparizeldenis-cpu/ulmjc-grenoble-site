@@ -195,6 +195,10 @@ function admin_footer() {
      dépendent de la session et changeraient sous les pieds du rédacteur. */
   echo '<script>if("serviceWorker" in navigator){window.addEventListener("load",function(){'
      . 'navigator.serviceWorker.register("sw.js",{scope:"./"}).catch(function(){});});}</script>';
+  /* Éditeur d'image (rogner / redimensionner), utilisé depuis la médiathèque. */
+  if (is_logged_in()) {
+    echo '<script src="media-editor.js?v=' . (@filemtime(__DIR__ . '/media-editor.js') ?: '1') . '" defer></script>';
+  }
   /* Panneau d'aperçu du site en direct (commun aux écrans d'administration connectés).
      _live_preview.php choisit lui-même s'il s'affiche selon la page (mapping interne :
      écrans d'édition = aperçu LIVE via preview.php ; listes = aperçu simple ; autres =
@@ -319,6 +323,19 @@ HTML;
             rots.appendChild(rb);
           });
           cell.appendChild(rots);
+
+          /* Rogner / redimensionner : ouvre l'éditeur. Au retour, on recharge la
+             vignette avec un paramètre changeant, sinon le navigateur réafficherait
+             l'ancienne version depuis son cache. */
+          var cr=document.createElement('button'); cr.type='button'; cr.className='mp-crop';
+          cr.textContent='✂'; cr.title='Rogner ou redimensionner';
+          cr.addEventListener('click',function(e){ e.stopPropagation();
+            if(!window.openImageEditor){ alert("L'éditeur d'image n'est pas disponible."); return; }
+            window.openImageEditor(it.src, rel(it.src), function(v){
+              b.style.backgroundImage="url('"+rel(it.src)+"?v="+v+"')";
+            });
+          });
+          cell.appendChild(cr);
         }
         if(it.del){
           var d=document.createElement('button'); d.type='button'; d.className='mp-del'; d.textContent='×';
