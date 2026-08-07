@@ -21,6 +21,7 @@ $d = array(
   'cover'     => $a['cover']     ?? '',
   'filter'    => $a['filter']    ?? 'naturel',
   'effect'    => $a['effect']    ?? 'kenburns',
+  'format'    => cover_format_key($a ?: array()),
   'cover_w'   => isset($a['cover_w']) ? max(40, min(100, (int)$a['cover_w'])) : 100,
   'cover_align' => !empty($a['cover_align']),
   'body'      => $a['body']      ?? '',
@@ -115,6 +116,13 @@ admin_header($isNew ? 'Nouveau billet' : 'Modifier le billet');
   </div>
 
   <div class="agrid2">
+    <label class="afield">Format de la couverture <span class="ahint">(forme du bandeau)</span>
+      <select name="format" id="formatSel">
+        <?php foreach (cover_formats() as $k => $f): ?>
+          <option value="<?= e($k) ?>" <?= $d['format'] === $k ? 'selected' : '' ?>><?= e($f['label']) ?></option>
+        <?php endforeach; ?>
+      </select>
+    </label>
     <label class="afield">Filtre photo
       <select name="filter" id="filterSel">
         <?php foreach (cover_filters() as $k => $f): ?>
@@ -307,10 +315,12 @@ admin_header($isNew ? 'Nouveau billet' : 'Modifier le billet');
     fitStage();
   }
   // Ratio du bandeau d'après la vraie photo : portrait → ratio naturel ; paysage → 16:9.
+  var formatSel=document.getElementById('formatSel');
+  var RATIOS={paysage:'3 / 2', portrait:'3 / 4', carre:'1 / 1'};
   function applyCoverRatio(){
     if(!cp) return;
-    // Bandeau paysage RÉGULIER 3:2 (recadrage centré) — même règle que la vraie page.
-    cp.style.aspectRatio='3 / 2';
+    // Forme choisie dans le menu « Format de la couverture » — même règle que la vraie page.
+    cp.style.aspectRatio=RATIOS[formatSel?formatSel.value:'paysage']||RATIOS.paysage;
     fitStage();
   }
   function renderCoverPrev(){
@@ -334,6 +344,7 @@ admin_header($isNew ? 'Nouveau billet' : 'Modifier le billet');
   if(coverAlign) coverAlign.addEventListener('change',function(){ if(coverWRow) coverWRow.hidden=this.checked; applyCoverWidth(); refreshPreview(); });
   if(filterSel) filterSel.addEventListener('change',function(){ renderCoverPrev(); refreshPreview(); });
   if(effectSel) effectSel.addEventListener('change',function(){ renderCoverPrev(); refreshPreview(); });
+  if(formatSel) formatSel.addEventListener('change',function(){ applyCoverRatio(); refreshPreview(); });
   if(coverW) coverW.addEventListener('input',applyCoverWidth);
   if(coverW) coverW.addEventListener('change',refreshPreview);
   window.addEventListener('resize',applyCoverWidth);

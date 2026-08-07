@@ -58,9 +58,9 @@ $pv_effect = in_array($_POST['effect'] ?? '', array('kenburns','zoom','pano','fi
 $pv_cover_w = max(40, min(100, (int)($_POST['cover_w'] ?? 100)));
 $pv_cover_align = !empty($_POST['cover_align']);
 
-/* Couverture : bandeau paysage RÉGULIER 3:2, identique à cover_hero_ratio()
-   sur la vraie page (recadrage centré assuré par background-size:cover). */
-$pv_aspect = round(3 / 2, 4);
+/* Forme de la couverture : paysage / portrait / carré, choisie dans l'éditeur.
+   Même source de vérité que la vraie page (cover_hero_ratio). */
+$pv_aspect = cover_hero_ratio(array('format' => $_POST['format'] ?? ''));
 
 /* Style inline de couverture pour l'aperçu, à partir d'une URL quelconque (data: OK). */
 function preview_cover_style($url, $filterKey) {

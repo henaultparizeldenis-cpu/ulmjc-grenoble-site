@@ -23,6 +23,7 @@ $pickedCover = media_valid_src($_POST['cover'] ?? '');
 // Filtre / effet / taille de la couverture (validés contre les listes autorisées).
 $filter     = array_key_exists($_POST['filter'] ?? '', cover_filters()) ? (string)$_POST['filter'] : 'naturel';
 $effect     = in_array($_POST['effect'] ?? '', array('kenburns','zoom','pano','fixe'), true) ? (string)$_POST['effect'] : 'kenburns';
+$format     = array_key_exists($_POST['format'] ?? '', cover_formats()) ? (string)$_POST['format'] : 'paysage';
 $coverW     = max(40, min(100, (int)($_POST['cover_w'] ?? 100)));
 $coverAlign = !empty($_POST['cover_align']);
 
@@ -86,6 +87,7 @@ $record = array(
   'cover'     => $cover,
   'filter'    => $filter,
   'effect'    => $effect,
+  'format'    => $format,
   'cover_w'   => $coverW,
   'cover_align' => $coverAlign,
   'body'      => $body,

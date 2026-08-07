@@ -314,10 +314,27 @@ function cover_aspect($a) {
   if (is_file($p)) { $info = @getimagesize($p); if ($info && $info[1] > 0) return round($info[0] / $info[1], 4); }
   return round(16 / 9, 4);
 }
+/* Formats d'affichage possibles pour une couverture (liste FERMÉE).
+   Le recadrage centré reste assuré par background-size:cover : on choisit la
+   FORME du bandeau, pas la façon de rogner (pour ça, voir l'éditeur d'image
+   de la médiathèque). */
+function cover_formats() {
+  return array(
+    'paysage' => array('label' => 'Paysage (3:2)', 'ratio' => round(3 / 2, 4)),
+    'portrait'=> array('label' => 'Portrait (3:4)', 'ratio' => round(3 / 4, 4)),
+    'carre'   => array('label' => 'Carré',          'ratio' => 1.0),
+  );
+}
+
+/* Clé de format validée (repli sur 'paysage' : le comportement historique). */
+function cover_format_key($a) {
+  $k = (string) ($a['format'] ?? '');
+  return array_key_exists($k, cover_formats()) ? $k : 'paysage';
+}
+
 function cover_hero_ratio($a) {
-  // Bandeau paysage RÉGULIER 3:2 pour toutes les couvertures : rendu homogène
-  // d'un billet à l'autre. Le recadrage centré est fait par background-size:cover.
-  return round(3 / 2, 4);
+  $f = cover_formats();
+  return $f[cover_format_key($a)]['ratio'];
 }
 
 /* Largeur (%) de la couverture, bornée 40–100 (100 par défaut). */
