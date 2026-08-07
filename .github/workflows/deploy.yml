@@ -7,7 +7,10 @@ name: Déploiement site ULMJC (FTP)
 
 on:
   push:
-    branches: [ claude/hungry-shirley-13a6fd ]
+    # « main » est redevenue la branche de référence (les deux dossiers du poste
+    # de Denis affichent enfin la même chose). L'ancienne branche de travail
+    # reste écoutée pour ne rien casser : les deux pointent sur le même commit.
+    branches: [ main, claude/hungry-shirley-13a6fd ]
   workflow_dispatch:      # permet aussi de lancer le déploiement à la main
 
 jobs:
