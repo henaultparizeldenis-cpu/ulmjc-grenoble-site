@@ -2067,20 +2067,35 @@ body.splash-active {
 
 /* (B) Couverture animée (fond). Le défaut (kenburns) anime background-size/position ;
    fx-fixe coupe l'animation ; fx-zoom / fx-pano changent le mouvement. */
-.actu-hero { animation: coverKenburns 26s ease-in-out infinite alternate; }
-.actu-hero.fx-fixe { animation: none; }
-.actu-hero.fx-zoom { animation: coverZoom 24s ease-in-out infinite alternate; }
-.actu-hero.fx-pano { animation: coverPano 28s ease-in-out infinite alternate; }
+/* IMPORTANT — pourquoi on n'anime plus « background-size » :
+   « background-size: 114% 114% » donne DEUX valeurs indépendantes (114 % de la
+   largeur du cadre, 114 % de sa hauteur). L'image était donc forcée au ratio du
+   cadre, c'est-à-dire ÉTIRÉE — d'autant plus que son ratio s'éloignait du 3:2.
+   On anime désormais un calque interne en transform:scale, avec
+   background-size:cover qui, lui, préserve les proportions. */
+.actu-hero, .act-card-cover { position: relative; }
+.actu-hero::after, .act-card-cover::after {
+  content: ''; position: absolute; inset: 0;
+  background-image: inherit;
+  background-size: cover;
+  background-position: center;
+  background-blend-mode: inherit;
+  animation: coverKenburns 26s ease-in-out infinite alternate;
+  will-change: transform;
+}
+.actu-hero.fx-fixe::after, .act-card-cover.fx-fixe::after { animation: none; }
+.actu-hero.fx-zoom::after, .act-card-cover.fx-zoom::after { animation: coverZoom 24s ease-in-out infinite alternate; }
+.actu-hero.fx-pano::after, .act-card-cover.fx-pano::after { animation: coverPano 28s ease-in-out infinite alternate; }
 
-.act-card-cover { animation: coverKenburns 26s ease-in-out infinite alternate; }
-.act-card-cover.fx-fixe { animation: none; }
-.act-card-cover.fx-zoom { animation: coverZoom 24s ease-in-out infinite alternate; }
-.act-card-cover.fx-pano { animation: coverPano 28s ease-in-out infinite alternate; }
-
-@keyframes coverKenburns { from { background-size: 114% 114%; background-position: 10% 18%; } to { background-size: 134% 134%; background-position: 90% 80%; } }
-@keyframes coverZoom     { from { background-size: 108% 108%; background-position: center; }    to { background-size: 130% 130%; background-position: center; } }
-@keyframes coverPano     { from { background-size: 132% 132%; background-position: 0% 50%; }    to { background-size: 132% 132%; background-position: 100% 50%; } }
+/* Mouvements uniformes : le facteur d'échelle est le même en X et en Y,
+   donc l'image ne peut plus se déformer. */
+@keyframes coverKenburns { from { transform: scale(1.06) translate(-1.5%, -1.5%); } to { transform: scale(1.18) translate(1.5%, 1.5%); } }
+@keyframes coverZoom     { from { transform: scale(1.04); }                        to { transform: scale(1.16); } }
+@keyframes coverPano     { from { transform: scale(1.16) translateX(-3.5%); }      to { transform: scale(1.16) translateX(3.5%); } }
 
 @media (prefers-reduced-motion: reduce) {
-  .actu-hero, .act-card-cover { animation: none !important; }
+  /* L'animation vit désormais sur le calque ::after : c'est lui qu'il faut
+     couper pour les personnes sensibles au mouvement. */
+  .actu-hero, .act-card-cover,
+  .actu-hero::after, .act-card-cover::after { animation: none !important; transform: none !important; }
 }
