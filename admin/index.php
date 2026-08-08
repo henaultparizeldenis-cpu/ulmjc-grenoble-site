@@ -129,6 +129,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['login'])) {
     $_SESSION['ulmjc_admin'] = true;
     session_regenerate_id(true);
     $_SESSION['ulmjc_admin'] = true;
+    // « Se souvenir de moi » : jeton persistant propre à cet appareil.
+    if (!empty($_POST['remember'])) { remember_issue(); }
     header('Location: index.php'); exit;
   }
   $error = 'Mot de passe incorrect.';
@@ -145,6 +147,10 @@ if (!is_logged_in()) {
     <form method="post">
       <label class="afield">Mot de passe
         <input type="password" name="pass" autofocus required />
+      </label>
+      <label class="aremember">
+        <input type="checkbox" name="remember" value="1" />
+        <span>Se souvenir de moi sur cet appareil <span class="ahint">(30 jours)</span></span>
       </label>
       <button class="abtn block" name="login" value="1">Se connecter</button>
     </form>

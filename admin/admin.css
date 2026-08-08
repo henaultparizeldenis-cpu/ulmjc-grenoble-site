@@ -122,6 +122,9 @@ a{color:var(--terra-dark);text-decoration:none;}
 .amark{display:inline-block;font-family:var(--display);color:var(--terra-dark);letter-spacing:.05em;}
 .amark.big{font-size:1.6rem;margin-bottom:.4rem;}
 .alogin .afield{text-align:left;margin-top:1rem;}
+.aremember{display:flex;align-items:flex-start;gap:.55rem;margin-top:.9rem;text-align:left;
+  font-size:.9rem;color:var(--ink);cursor:pointer;line-height:1.4;}
+.aremember input{width:auto;margin:.15rem 0 0;accent-color:var(--terra);cursor:pointer;flex:none;}
 
 /* ---------- Liste des actualités ---------- */
 .alist{display:flex;flex-direction:column;gap:.8rem;}

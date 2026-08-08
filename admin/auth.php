@@ -36,6 +36,10 @@ function set_admin_pass($plain) {
   if (!is_dir(DATA_DIR)) @mkdir(DATA_DIR, 0775, true);
   $hash = password_hash((string)$plain, PASSWORD_DEFAULT); // bcrypt
   if ($hash === false || $hash === null) return false;
+  /* On réécrit le fichier avec la SEULE empreinte : cela efface volontairement
+     les jetons « se souvenir de moi » et le jeton de réinitialisation. Changer
+     de mot de passe déconnecte donc TOUS les appareils mémorisés — c'est le
+     comportement attendu quand on soupçonne que le mot de passe a fuité. */
   return file_put_contents(ADMIN_FILE, json_encode(array('pass' => $hash)), LOCK_EX) !== false;
 }
 function check_admin_pass($plain) {
@@ -111,7 +115,94 @@ function send_reset_email($token) {
   return @mail(RESET_EMAIL, $encSubject, $body, $headers);
 }
 
-function is_logged_in() { return !empty($_SESSION['ulmjc_admin']); }
+/* ---------- « Se souvenir de moi » (connexion persistante) ----------
+   Un jeton aléatoire est déposé dans un cookie longue durée ; côté serveur on
+   ne conserve que son EMPREINTE (SHA-256), jamais le jeton lui-même : quelqu'un
+   qui lirait admin.json ne pourrait pas s'en servir pour se connecter.
+
+   Le jeton est RENOUVELÉ à chaque reconnexion automatique (rotation) : un jeton
+   volé cesse de fonctionner dès que la personne légitime revient sur le site.
+   Chaque appareil a le sien, et « Déconnexion » ne révoque que celui-là. */
+
+define('REMEMBER_COOKIE', 'ulmjc_rm');
+define('REMEMBER_DAYS', 30);
+
+function remember_tokens() {
+  $d = is_file(ADMIN_FILE) ? json_decode(file_get_contents(ADMIN_FILE), true) : array();
+  return (is_array($d) && !empty($d['remember']) && is_array($d['remember'])) ? $d['remember'] : array();
+}
+
+function remember_save_tokens($list) {
+  $d = is_file(ADMIN_FILE) ? json_decode(file_get_contents(ADMIN_FILE), true) : array();
+  if (!is_array($d)) $d = array();
+  // Purge des jetons expirés à chaque écriture : le fichier ne gonfle pas.
+  $now = time();
+  $d['remember'] = array_values(array_filter($list, function ($t) use ($now) {
+    return !empty($t['exp']) && $t['exp'] > $now;
+  }));
+  return file_put_contents(ADMIN_FILE, json_encode($d), LOCK_EX) !== false;
+}
+
+function remember_cookie_params($maxAge) {
+  return array(
+    'expires'  => $maxAge > 0 ? time() + $maxAge : 1,
+    'path'     => '/admin/',                       // jamais envoyé au site public
+    'secure'   => !empty($_SERVER['HTTPS']),
+    'httponly' => true,                            // inaccessible au JavaScript
+    'samesite' => 'Lax',
+  );
+}
+
+/* Dépose un nouveau jeton pour CET appareil. */
+function remember_issue() {
+  $tok = bin2hex(random_bytes(32));
+  $list = remember_tokens();
+  $list[] = array('h' => hash('sha256', $tok), 'exp' => time() + REMEMBER_DAYS * 86400);
+  remember_save_tokens($list);
+  setcookie(REMEMBER_COOKIE, $tok, remember_cookie_params(REMEMBER_DAYS * 86400));
+}
+
+/* Oublie le jeton de cet appareil (les autres restent valides). */
+function remember_forget() {
+  $tok = $_COOKIE[REMEMBER_COOKIE] ?? '';
+  if ($tok !== '') {
+    $h = hash('sha256', $tok);
+    $list = array_filter(remember_tokens(), function ($t) use ($h) {
+      return !hash_equals((string)($t['h'] ?? ''), $h);
+    });
+    remember_save_tokens($list);
+  }
+  setcookie(REMEMBER_COOKIE, '', remember_cookie_params(0));
+  unset($_COOKIE[REMEMBER_COOKIE]);
+}
+
+/* Tente une reconnexion automatique depuis le cookie. */
+function remember_try_login() {
+  if (!empty($_SESSION['ulmjc_admin'])) return true;
+  $tok = $_COOKIE[REMEMBER_COOKIE] ?? '';
+  if ($tok === '' || !preg_match('/^[a-f0-9]{64}$/', $tok)) return false;
+  if (needs_setup()) return false;              // aucun mot de passe défini : rien à restaurer
+
+  $h = hash('sha256', $tok);
+  $now = time();
+  foreach (remember_tokens() as $t) {
+    if (!empty($t['h']) && !empty($t['exp']) && $t['exp'] > $now && hash_equals((string)$t['h'], $h)) {
+      session_regenerate_id(true);
+      $_SESSION['ulmjc_admin'] = true;
+      remember_forget();   // rotation : l'ancien jeton est révoqué…
+      remember_issue();    // …et remplacé par un neuf
+      return true;
+    }
+  }
+  // Cookie présent mais inconnu (expiré ou révoqué) : on le nettoie.
+  remember_forget();
+  return false;
+}
+
+function is_logged_in() {
+  if (!empty($_SESSION['ulmjc_admin'])) return true;
+  return remember_try_login();
+}
 function require_login() { if (!is_logged_in()) { header('Location: index.php'); exit; } }
 
 /* ---------- CSRF ---------- */
