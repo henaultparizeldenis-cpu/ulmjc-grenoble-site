@@ -12,6 +12,19 @@
 
   var ov, img, box, srcPath, natW, natH, ratio = null, onDone = null;
 
+  /* Géométrie de l'image dans la scène, mise en cache.
+     Sans ça, chaque déplacement de souris forçait deux recalculs de mise en page
+     par image affichée : le cadre « sautait ». On la rafraîchit seulement quand
+     elle peut avoir changé (chargement, redimensionnement, début de geste). */
+  var geom = { l: 0, t: 0, w: 0, h: 0 };
+  function refreshGeom() {
+    if (!img || !ov) return;
+    var r = img.getBoundingClientRect();
+    var s = ov.querySelector('.ie-stage').getBoundingClientRect();
+    geom = { l: r.left - s.left, t: r.top - s.top, w: r.width, h: r.height };
+  }
+  window.addEventListener('resize', function () { if (ov && !ov.hidden) { refreshGeom(); resetBox(); } });
+
   function el(tag, cls, txt) {
     var e = document.createElement(tag);
     if (cls) e.className = cls;
@@ -88,24 +101,24 @@
   /* Sélection initiale : toute l'image, ou le plus grand rectangle au format
      demandé, centré. */
   function resetBox() {
-    var r = img.getBoundingClientRect(), s = ov.querySelector('.ie-stage').getBoundingClientRect();
-    var w = r.width, h = r.height;
+    refreshGeom();
+    if (!geom.w) return;
+    var w = geom.w, h = geom.h;
     if (ratio) {
       if (w / h > ratio) w = h * ratio; else h = w / ratio;
     }
-    place((r.left - s.left) + (r.width - w) / 2, (r.top - s.top) + (r.height - h) / 2, w, h);
+    place(geom.l + (geom.w - w) / 2, geom.t + (geom.h - h) / 2, w, h);
   }
 
   function place(l, t, w, h) {
-    var r = img.getBoundingClientRect(), s = ov.querySelector('.ie-stage').getBoundingClientRect();
-    var minL = r.left - s.left, minT = r.top - s.top;
-    w = Math.max(24, Math.min(w, r.width));
-    h = Math.max(24, Math.min(h, r.height));
-    l = Math.max(minL, Math.min(l, minL + r.width - w));
-    t = Math.max(minT, Math.min(t, minT + r.height - h));
+    if (!geom.w) return;
+    w = Math.max(24, Math.min(w, geom.w));
+    h = Math.max(24, Math.min(h, geom.h));
+    l = Math.max(geom.l, Math.min(l, geom.l + geom.w - w));
+    t = Math.max(geom.t, Math.min(t, geom.t + geom.h - h));
     box.style.left = l + 'px'; box.style.top = t + 'px';
     box.style.width = w + 'px'; box.style.height = h + 'px';
-    var f = natW / r.width;
+    var f = natW / geom.w;
     ov.querySelector('.ie-info').textContent =
       Math.round(w * f) + ' × ' + Math.round(h * f) + ' px  (original ' + natW + ' × ' + natH + ')';
   }
@@ -121,6 +134,7 @@
     function start(e) {
       var h = e.target.getAttribute && e.target.getAttribute('data-h');
       mode = h || 'move';
+      refreshGeom();            // une seule mesure, au début du geste
       var p = pt(e); sx = p.x; sy = p.y;
       st = { l: parseFloat(box.style.left), t: parseFloat(box.style.top), w: box.offsetWidth, h: box.offsetHeight };
       e.preventDefault();
@@ -155,10 +169,10 @@
   }
 
   function send(btn, info, reduce) {
-    var r = img.getBoundingClientRect(), s = ov.querySelector('.ie-stage').getBoundingClientRect();
-    var f = natW / r.width;                      // écran -> pixels réels
-    var x = Math.round((parseFloat(box.style.left) - (r.left - s.left)) * f);
-    var y = Math.round((parseFloat(box.style.top) - (r.top - s.top)) * f);
+    refreshGeom();
+    var f = natW / geom.w;                       // écran -> pixels réels
+    var x = Math.round((parseFloat(box.style.left) - geom.l) * f);
+    var y = Math.round((parseFloat(box.style.top) - geom.t) * f);
     var w = Math.round(box.offsetWidth * f);
     var h = Math.round(box.offsetHeight * f);
 
