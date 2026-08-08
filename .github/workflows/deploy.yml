@@ -7,10 +7,12 @@ name: Déploiement site ULMJC (FTP)
 
 on:
   push:
-    # « main » est redevenue la branche de référence (les deux dossiers du poste
-    # de Denis affichent enfin la même chose). L'ancienne branche de travail
-    # reste écoutée pour ne rien casser : les deux pointent sur le même commit.
-    branches: [ main, claude/hungry-shirley-13a6fd ]
+    # « main » UNIQUEMENT. Les deux branches étaient écoutées, mais comme on les
+    # pousse ensemble, chaque envoi déclenchait DEUX déploiements : Hostinger
+    # refusait la seconde connexion FTP (« Timeout (control socket) ») et le
+    # tableau de bord affichait un échec trompeur alors que le site était à jour.
+    # Les deux branches restent synchronisées ; seul main déclenche l'envoi.
+    branches: [ main ]
   workflow_dispatch:      # permet aussi de lancer le déploiement à la main
 
 jobs:
