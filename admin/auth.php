@@ -270,6 +270,14 @@ function admin_header($title) {
        . $navlink('partenaires.php', 'Partenaires')
        . $navlink('emplois.php', 'Offres d\'emploi')
        . $navlink('chalet.php', 'Photos chalet')
+       /* Application de GESTION du chalet (réservations, devis, factures) : elle
+          vit sur l'autre domaine et possède ses propres comptes individuels. On
+          ne fait que pointer vers elle — elle refuse d'ailleurs, à raison, d'être
+          affichée dans un cadre (X-Frame-Options: DENY). Ouverture dans un nouvel
+          onglet pour ne pas perdre le travail en cours côté site. */
+       . '<a class="anav-ext" href="https://ulmjcgrenoble.org/" target="ulmjc_gestion" rel="noopener"'
+       . ' title="Réservations, devis, factures — application séparée, connexion propre">'
+       . 'Gestion du chalet <span aria-hidden="true">↗</span></a>'
        . '<a href="#" onclick="if(window.openMediaPicker){openMediaPicker();}return false;">Médiathèque</a>'
        . $corbeilleLink
        . $navlink('password.php', 'Mot de passe')

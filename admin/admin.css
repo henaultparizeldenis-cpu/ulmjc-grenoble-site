@@ -39,6 +39,13 @@ a{color:var(--terra-dark);text-decoration:none;}
 .anav a{display:inline-block;padding:.45rem .8rem;color:rgba(251,247,241,.85);font-size:.92rem;border-radius:var(--radius-sm);}
 .anav a:hover{background:rgba(255,255,255,.1);color:#fff;}
 .anav a.anav-active{background:var(--terra);color:#fff;font-weight:500;}
+/* Lien vers l'application de gestion : c'est une AUTRE application, sur un autre
+   domaine, avec sa propre connexion. Signalé visuellement (liseré + flèche) pour
+   qu'on ne le confonde pas avec les onglets du site. */
+.anav-ext{border:1px solid rgba(255,255,255,.28);margin-left:.35rem;}
+.anav-ext:hover{background:rgba(255,255,255,.14);border-color:rgba(255,255,255,.45);}
+.anav-ext span{opacity:.7;font-size:.85em;}
+
 .alogout{color:rgba(251,247,241,.7)!important;}
 .alogout:hover{color:#fff!important;}
 .anav-toggle{display:none;background:transparent;border:1px solid rgba(255,255,255,.3);border-radius:var(--radius-sm);padding:.4rem .6rem;cursor:pointer;flex-direction:column;gap:4px;}
