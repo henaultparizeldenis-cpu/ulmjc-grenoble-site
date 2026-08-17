@@ -3,7 +3,7 @@
 # pour ne PAS être effacées à chaque déploiement. Elles ne sont donc plus présentes
 # physiquement dans /uploads : on route alors la demande vers media.php, qui les sert
 # depuis leur vrai dossier. Si le fichier existe bien ici (cas local/dev), il est
-# servi directement — la règle ne s'applique QUE quand le fichier est absent (!-f).
+# servi directement, la règle ne s'applique QUE quand le fichier est absent (!-f).
 # Minimal et sûr pour un hébergement statique + PHP sur Hostinger (LiteSpeed).
 
 # Le site est désormais entièrement en PHP : index.php est la page d'accueil.

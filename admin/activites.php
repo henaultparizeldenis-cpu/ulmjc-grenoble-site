@@ -19,7 +19,7 @@ admin_header('Activités');
     <?php if ($sv && !empty($sv['published'])): ?>
       <a class="aflash-link" href="../activites.php" target="ulmjc_site">Voir la page Activités ↗</a>
     <?php elseif ($sv): ?>
-      <span class="aflash-note">— brouillon, non visible sur le site</span>
+      <span class="aflash-note">(brouillon, non visible sur le site)</span>
     <?php endif; ?>
   </div>
 <?php elseif ($flash === 'trashed'): ?><div class="aflash">Activité déplacée vers la corbeille. <a class="aflash-link" href="corbeille.php">Voir la corbeille ↗</a></div>

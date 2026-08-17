@@ -5,7 +5,7 @@
    La description est du HTML déjà nettoyé côté serveur (sanitize_body à l'enregistrement). */
 require_once __DIR__ . '/inc/lib.php';
 
-$page_title  = 'Activités — ULMJC Grenoble';
+$page_title  = 'Activités | ULMJC Grenoble';
 $page_desc   = "Les activités autour du chalet de l'Alpe du Grand Serre : ski, raquettes, randos, lacs, baignade, VTT, patrimoine local en Isère.";
 $page_active = 'activites';
 $activites   = published_activites();
@@ -89,7 +89,7 @@ require __DIR__ . '/inc/head.php';
   <div class="container center reveal">
     <h2>Envie de venir&nbsp;?</h2>
     <p style="max-width: 580px; margin: 0 auto 2rem; color: var(--ink-soft);">
-      Que ce soit pour un week-end, une semaine, un camp ou un séminaire associatif — le chalet est ouvert toute l'année.
+      Que ce soit pour un week-end, une semaine, un camp ou un séminaire associatif, le chalet est ouvert toute l'année.
       Contactez-nous pour vérifier les disponibilités.
     </p>
     <a href="contact.php" class="btn">Nous écrire</a>

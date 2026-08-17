@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="description" content="Les MJC et Maison Pour Tous membres de l'Union Locale des MJC de Grenoble : Parmentier, Eaux Claires, Lucie Aubrac, Abbaye, Mutualité, Anatole France et MPT Saint-Laurent.">
-<title>Les MJC/MPT — ULMJC Grenoble</title>
+<title>Les MJC/MPT | ULMJC Grenoble</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Lora:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -49,7 +49,7 @@
         </div>
         <div class="mjc-info">
           <h2>MJC Parmentier</h2>
-          <p class="mjc-quartier">Berriat – Saint-Bruno · Secteur 1</p>
+          <p class="mjc-quartier">Berriat / Saint-Bruno · Secteur 1</p>
           <p class="mjc-address">
             3 rue Parmentier, 38000 Grenoble<br>
             <span class="muted">Antennes&nbsp;: Waldeck-Rousseau, École Simone Lagrange, EVS Hareux</span>
@@ -70,7 +70,7 @@
         </div>
         <div class="mjc-info">
           <h2>MJC des Eaux Claires</h2>
-          <p class="mjc-quartier">Eaux-Claires – Mistral · Secteur 3</p>
+          <p class="mjc-quartier">Eaux-Claires / Mistral · Secteur 3</p>
           <p class="mjc-address">
             33 rue Joseph Bouchayer, 38100 Grenoble
           </p>
@@ -111,7 +111,7 @@
         </div>
         <div class="mjc-info">
           <h2>MJC Abbaye</h2>
-          <p class="mjc-quartier">Abbaye – Jouhaux – Châtelet · Secteur 5</p>
+          <p class="mjc-quartier">Abbaye / Jouhaux / Châtelet · Secteur 5</p>
           <p class="mjc-address">
             1 place de la Commune de 1871, 38100 Grenoble
           </p>
@@ -130,7 +130,7 @@
         </div>
         <div class="mjc-info">
           <h2>MJC Mutualité</h2>
-          <p class="mjc-quartier">Mutualité – Préfecture · Secteur 2</p>
+          <p class="mjc-quartier">Mutualité / Préfecture · Secteur 2</p>
           <p class="mjc-address">
             5 place Jean Moulin, 38000 Grenoble<br>
             <span class="muted">Courrier&nbsp;: 10 rue Joseph Chanrion, 38000 Grenoble</span>
@@ -151,7 +151,7 @@
         </div>
         <div class="mjc-info">
           <h2>MJC Anatole France</h2>
-          <p class="mjc-quartier">Teisseire – Malherbe · Secteur 3</p>
+          <p class="mjc-quartier">Teisseire / Malherbe · Secteur 3</p>
           <p class="mjc-address">
             2 rue Anatole France, 38100 Grenoble
           </p>
@@ -198,7 +198,7 @@
     <span class="section-eyebrow">Rejoindre l'union</span>
     <h2>Poussez la porte de la MJC de votre quartier.</h2>
     <p style="max-width: 620px; margin: 0 auto 2rem; color: var(--ink-soft);">
-      Chaque MJC accueille tout au long de l'année — pour s'inscrire à une activité,
+      Chaque MJC accueille tout au long de l'année, pour s'inscrire à une activité,
       proposer un projet, ou simplement passer dire bonjour. L'adhésion est solidaire
       et donne accès à toute la programmation locale.
     </p>

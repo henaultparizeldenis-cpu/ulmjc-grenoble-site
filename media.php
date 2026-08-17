@@ -1,10 +1,10 @@
 <?php
 /* Sert une image importée depuis le dossier des uploads.
    Ce dossier peut vivre HORS du dépôt (ulmjc-data/uploads) pour survivre aux
-   déploiements — il n'est donc pas servable directement, d'où ce relais.
+   déploiements, il n'est donc pas servable directement, d'où ce relais.
    Public (les médias s'affichent sur le site) mais verrouillé :
    nom de fichier seul (pas de « ../ »), extensions en liste blanche, aucune
-   exécution — on ne fait que renvoyer des octets avec le bon type MIME.
+   exécution, on ne fait que renvoyer des octets avec le bon type MIME.
    Basé sur mohamed-cms/site/media.php (inchangé hormis les chemins de config). */
 require_once __DIR__ . '/inc/config.php';
 

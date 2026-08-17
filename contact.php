@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="description" content="Contacter l'Union Locale des MJC de Grenoble : téléphones, email et formulaire pour réserver le chalet de l'Alpe du Grand Serre.">
-<title>Contact — ULMJC Grenoble</title>
+<title>Contact | ULMJC Grenoble</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Lora:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -54,7 +54,7 @@
           <a href="mailto:ulmjc.gre@free.fr">ulmjc.gre@free.fr</a>
         </p>
         <p class="muted" style="font-size: 0.95rem;">
-          Adhésion 10&nbsp;€ par groupe — 289&nbsp;€ la nuitée jusqu'à 17 personnes.
+          Adhésion 10&nbsp;€ par groupe, puis 289&nbsp;€ la nuitée jusqu'à 17 personnes.
           Voir la page <a href="chalet.php">Chalet</a> pour la grille tarifaire complète.
         </p>
 
@@ -79,17 +79,17 @@
         <p>
           <strong>Adresse</strong><br>
           1407 route du Désert<br>
-          38350 La Morte — Alpe du Grand Serre<br>
+          38350 La Morte, Alpe du Grand Serre<br>
           <span class="muted">À 45 min de Grenoble (Isère)</span>
         </p>
 
         <h3 style="margin-top: 2.5rem;">Traiteur partenaire</h3>
         <p>
-          <strong>Verveine Citron</strong> — sur réservation 10 j avant l'arrivée<br>
+          <strong>Verveine Citron</strong>&nbsp;: sur réservation 10 j avant l'arrivée<br>
           📞 <a href="tel:+33614586823">06 14 58 68 23</a> · ✉️ <a href="mailto:verv.citron@gmail.com">verv.citron@gmail.com</a>
         </p>
         <p class="muted" style="font-size: 0.88rem;">
-          <em>Prestataire extérieur indépendant — l'association ne gère pas la prestation.</em>
+          <em>Prestataire extérieur indépendant&nbsp;: l'association ne gère pas la prestation.</em>
         </p>
       </div>
 
@@ -117,7 +117,7 @@
           </div>
         </form>
         <p class="muted" style="font-size: 0.88rem; margin-top: 1rem;">
-          <em>Le formulaire est pour l'instant inactif — il faut créer un compte gratuit sur Formspree.io et coller l'identifiant dans le code.</em>
+          <em>Le formulaire est pour l'instant inactif&nbsp;: il faut créer un compte gratuit sur Formspree.io et coller l'identifiant dans le code.</em>
         </p>
 
       </div>

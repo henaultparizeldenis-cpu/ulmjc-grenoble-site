@@ -37,7 +37,7 @@ $excerpt = mb_substr($excerpt, 0, 200);
 $contact = mb_substr($contact, 0, 400);
 
 /* Fiche de poste PDF : on n'accepte qu'un chemin uploads/….pdf existant
-   (doc_valid_src) — jamais une valeur brute du formulaire. */
+   (doc_valid_src), jamais une valeur brute du formulaire. */
 $fiche = doc_valid_src($_POST['fiche'] ?? '');
 
 $offres = load_emplois();

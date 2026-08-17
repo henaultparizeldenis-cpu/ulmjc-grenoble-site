@@ -4,7 +4,7 @@
    Sur le modèle d'actus.php : seuls les éléments publiés, triés par « ordre ». */
 require_once __DIR__ . '/inc/lib.php';
 
-$page_title  = 'Partenaires — ULMJC Grenoble';
+$page_title  = 'Partenaires | ULMJC Grenoble';
 $page_desc   = "Les institutions, associations et structures partenaires de l'Union Locale des MJC de Grenoble.";
 $page_active = 'partenaires';
 $partenaires = published_partenaires();

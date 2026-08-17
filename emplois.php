@@ -1,11 +1,11 @@
 <?php
 /* Page publique : liste des offres d'emploi publiées. Calquée sur blog.php /
-   actus.php (mêmes classes .actu-* et .page-header — aucune charte nouvelle).
+   actus.php (mêmes classes .actu-* et .page-header, aucune charte nouvelle).
    published_emplois() ne renvoie QUE les offres publiées, hors corbeille, dont
    la date limite de candidature n'est pas dépassée. */
 require_once __DIR__ . '/inc/lib.php';
 
-$page_title  = "Offres d'emploi — ULMJC Grenoble";
+$page_title  = "Offres d'emploi | ULMJC Grenoble";
 $page_desc   = "Les offres d'emploi, de stage, d'apprentissage et de service civique de l'Union Locale des MJC de Grenoble.";
 $page_active = 'emplois';
 $offres = published_emplois();
@@ -49,7 +49,7 @@ require __DIR__ . '/inc/head.php';
         <div class="icon">💼</div>
         <h2>Aucune offre en ce moment.</h2>
         <p style="color:var(--ink-soft);font-size:1.05rem;">
-          Nous n'avons pas de poste à pourvoir pour l'instant — revenez bientôt, cette page est mise à jour
+          Nous n'avons pas de poste à pourvoir pour l'instant. Revenez bientôt, cette page est mise à jour
           dès qu'une offre s'ouvre. Vous pouvez aussi nous écrire : les candidatures spontanées et les
           propositions de bénévolat sont toujours les bienvenues.
         </p>

@@ -4,7 +4,7 @@
    et affiche chaque actu publiée avec inc/card.php. */
 require_once __DIR__ . '/inc/lib.php';
 
-$page_title  = 'Actualités — ULMJC Grenoble';
+$page_title  = 'Actualités | ULMJC Grenoble';
 $page_desc   = "Actualités de l'Union Locale des MJC de Grenoble : événements à venir, comptes rendus, communications du bureau.";
 $page_active = 'actus';
 $actus = published_actus();

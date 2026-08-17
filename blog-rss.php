@@ -48,7 +48,7 @@ echo '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
 ?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Blog — ULMJC Grenoble</title>
+    <title>Blog | ULMJC Grenoble</title>
     <link><?= e($base . 'blog.php') ?></link>
     <atom:link href="<?= e($base . 'blog-rss.php') ?>" rel="self" type="application/rss+xml" />
     <description>Le blog de l'Union Locale des MJC de Grenoble : éducation populaire, sorties &amp; séjours, vie de l'association, portraits.</description>

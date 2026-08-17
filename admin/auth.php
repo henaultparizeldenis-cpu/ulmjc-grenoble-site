@@ -38,7 +38,7 @@ function set_admin_pass($plain) {
   if ($hash === false || $hash === null) return false;
   /* On réécrit le fichier avec la SEULE empreinte : cela efface volontairement
      les jetons « se souvenir de moi » et le jeton de réinitialisation. Changer
-     de mot de passe déconnecte donc TOUS les appareils mémorisés — c'est le
+     de mot de passe déconnecte donc TOUS les appareils mémorisés, c'est le
      comportement attendu quand on soupçonne que le mot de passe a fuité. */
   return file_put_contents(ADMIN_FILE, json_encode(array('pass' => $hash)), LOCK_EX) !== false;
 }
@@ -99,14 +99,14 @@ function consume_reset_and_set_pass($token, $newplain) {
 }
 function send_reset_email($token) {
   $link = RESET_ADMIN_URL . '?reset=' . urlencode($token);
-  $subject = 'Réinitialisation du mot de passe — Espace de publication ULMJC';
+  $subject = 'Réinitialisation du mot de passe (Espace de publication ULMJC)';
   $body =
       "Bonjour,\r\n\r\n"
     . "Une réinitialisation du mot de passe de l'espace de publication du site ULMJC a été demandée.\r\n\r\n"
     . "Pour choisir un nouveau mot de passe, ouvrez ce lien (valable 1 heure) :\r\n"
     . $link . "\r\n\r\n"
     . "Si vous n'êtes pas à l'origine de cette demande, ignorez cet email : le mot de passe actuel reste inchangé.\r\n\r\n"
-    . "— Site de l'Union Locale des MJC de Grenoble";
+    . "Site de l'Union Locale des MJC de Grenoble";
   $headers = "From: ULMJC Grenoble <" . RESET_FROM . ">\r\n"
            . "Reply-To: " . RESET_EMAIL . "\r\n"
            . "Content-Type: text/plain; charset=UTF-8\r\n"
@@ -218,14 +218,14 @@ function admin_header($title) {
   $t = htmlspecialchars($title, ENT_QUOTES, 'UTF-8');
   echo '<!DOCTYPE html><html lang="fr"><head><meta charset="UTF-8">'
      . '<meta name="viewport" content="width=device-width,initial-scale=1">'
-     . '<title>' . $t . ' — Administration ULMJC</title>'
+     . '<title>' . $t . ' | Administration ULMJC</title>'
      . '<link rel="preconnect" href="https://fonts.googleapis.com">'
      . '<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>'
      . '<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Lora:wght@400;500;600;700&display=swap" rel="stylesheet">'
      . '<link rel="stylesheet" href="admin.css?v=' . (@filemtime(__DIR__ . '/admin.css') ?: '1') . '">'
      /* Application installable (PWA) : le back-office peut être ajouté à l'écran
         d'accueil d'un téléphone et s'ouvre alors en plein écran, sans navigateur.
-        Portée limitée à /admin/ — le site public n'est pas concerné. */
+        Portée limitée à /admin/, le site public n'est pas concerné. */
      . '<link rel="manifest" href="manifest.webmanifest">'
      . '<meta name="theme-color" content="#16302A">'
      . '<meta name="mobile-web-app-capable" content="yes">'
@@ -272,11 +272,11 @@ function admin_header($title) {
        . $navlink('chalet.php', 'Photos chalet')
        /* Application de GESTION du chalet (réservations, devis, factures) : elle
           vit sur l'autre domaine et possède ses propres comptes individuels. On
-          ne fait que pointer vers elle — elle refuse d'ailleurs, à raison, d'être
+          ne fait que pointer vers elle, elle refuse d'ailleurs, à raison, d'être
           affichée dans un cadre (X-Frame-Options: DENY). Ouverture dans un nouvel
           onglet pour ne pas perdre le travail en cours côté site. */
        . '<a class="anav-ext" href="https://ulmjcgrenoble.org/" target="ulmjc_gestion" rel="noopener"'
-       . ' title="Réservations, devis, factures — application séparée, connexion propre">'
+       . ' title="Réservations, devis, factures (application séparée, connexion propre)">'
        . 'Gestion du chalet <span aria-hidden="true">↗</span></a>'
        . '<a href="#" onclick="if(window.openMediaPicker){openMediaPicker();}return false;">Médiathèque</a>'
        . $corbeilleLink
@@ -290,7 +290,7 @@ function admin_header($title) {
 function admin_footer() {
   echo '</main>';
   /* Enregistrement du service worker : condition de l'installation sur mobile.
-     Il ne met en cache QUE le statique (voir sw.js) — jamais les pages, qui
+     Il ne met en cache QUE le statique (voir sw.js), jamais les pages, qui
      dépendent de la session et changeraient sous les pieds du rédacteur. */
   echo '<script>if("serviceWorker" in navigator){window.addEventListener("load",function(){'
      . 'navigator.serviceWorker.register("sw.js",{scope:"./"}).catch(function(){});});}</script>';
@@ -317,7 +317,7 @@ function admin_footer() {
   if (is_logged_in()) {
     echo '<script>window.__CSRF=' . json_encode(csrf_token()) . ';</script>';
     /* Le pare-feu de l'hébergeur rejette (403) tout envoi dont le NOM de fichier
-       contient une apostrophe ou des caractères exotiques — cas typique des
+       contient une apostrophe ou des caractères exotiques, cas typique des
        « Capture d'écran ….png ». Le serveur renomme de toute façon chaque image
        (img-timestamp-alea.jpg), donc le nom d'origine ne sert à rien : on le
        neutralise avant l'envoi, pour les imports AJAX comme pour les formulaires. */
@@ -370,7 +370,7 @@ HTML;
   window.openMediaPicker=function(onPick,opts){
     cb=onPick||null; multi=!!(opts&&opts.multiple); sel=[];
     if(validate) validate.hidden=!multi;
-    if(titleEl) titleEl.textContent=multi?'Médiathèque — choisissez plusieurs images':'Médiathèque';
+    if(titleEl) titleEl.textContent=multi?'Médiathèque : choisissez plusieurs images':'Médiathèque';
     syncValidate(); modal.hidden=false; load();
   };
   function syncValidate(){ if(validate){ validate.textContent='Valider la sélection ('+sel.length+')'; validate.disabled=sel.length===0; } }
@@ -480,7 +480,7 @@ HTML;
           else if(j && j.error){ errors++; motifs.push(j.error+' (HTTP '+res.status+')'); }
           else {
             var brut=(res.text||'').replace(/<[^>]*>/g,' ').replace(/\s+/g,' ').trim().slice(0,140);
-            errors++; motifs.push('Réponse inattendue du serveur — HTTP '+res.status+(brut?' : '+brut:''));
+            errors++; motifs.push('Réponse inattendue du serveur, HTTP '+res.status+(brut?' : '+brut:''));
           }
           step(i+1);
         })

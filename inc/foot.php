@@ -1,4 +1,4 @@
-<?php /* Pied de page public ULMJC — délègue au partiel unique inc/site-footer.php,
+<?php /* Pied de page public ULMJC. Délègue au partiel unique inc/site-footer.php,
    partagé avec les pages statiques converties en PHP. */ ?>
 <?php include __DIR__ . '/site-footer.php'; ?>
 

@@ -1,5 +1,5 @@
 <?php
-/* Éditeur de billet de blog — basé sur admin/edit.php (éditeur d'actualité).
+/* Éditeur de billet de blog, basé sur admin/edit.php (éditeur d'actualité).
    Identique à l'éditeur d'actu (couverture filtre/effet/taille, corps avec
    alignement, chapô, accroche, publié) + deux champs propres au blog :
    AUTEUR (texte libre) et CATÉGORIE (thème, choisi dans blog_categories()). */
@@ -65,7 +65,7 @@ admin_header($isNew ? 'Nouveau billet' : 'Modifier le billet');
     </label>
     <label class="afield">Thème
       <select name="category" id="categorySel">
-        <option value="">— Sans thème —</option>
+        <option value="">Sans thème</option>
         <?php foreach (blog_categories() as $k => $label): ?>
           <option value="<?= e($k) ?>" <?= $d['category'] === $k ? 'selected' : '' ?>><?= e($label) ?></option>
         <?php endforeach; ?>
@@ -73,11 +73,11 @@ admin_header($isNew ? 'Nouveau billet' : 'Modifier le billet');
     </label>
   </div>
 
-  <label class="afield">Accroche courte <span class="ahint">(résumé affiché dans la liste — 1 phrase)</span>
+  <label class="afield">Accroche courte <span class="ahint">(résumé affiché dans la liste, 1 phrase)</span>
     <input type="text" name="excerpt" value="<?= e($d['excerpt']) ?>" maxlength="200" placeholder="Une phrase qui donne envie de lire." />
   </label>
 
-  <label class="afield">Chapô <span class="ahint">(introduction en italique en haut du billet — facultatif)</span>
+  <label class="afield">Chapô <span class="ahint">(introduction en italique en haut du billet, facultatif)</span>
     <textarea name="chapo" rows="2" placeholder="L'idée forte du billet, en une ou deux phrases."><?= e($d['chapo']) ?></textarea>
   </label>
 
@@ -319,7 +319,7 @@ admin_header($isNew ? 'Nouveau billet' : 'Modifier le billet');
   var RATIOS={paysage:'3 / 2', portrait:'3 / 4', carre:'1 / 1'};
   function applyCoverRatio(){
     if(!cp) return;
-    // Forme choisie dans le menu « Format de la couverture » — même règle que la vraie page.
+    // Forme choisie dans le menu « Format de la couverture », même règle que la vraie page.
     cp.style.aspectRatio=RATIOS[formatSel?formatSel.value:'paysage']||RATIOS.paysage;
     fitStage();
   }

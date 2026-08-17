@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="description" content="Mentions légales du site de l'Union Locale des MJC de Grenoble : éditeur, hébergeur, propriété intellectuelle, données personnelles, crédits.">
-<title>Mentions légales — ULMJC Grenoble</title>
+<title>Mentions légales | ULMJC Grenoble</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Lora:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -92,11 +92,11 @@
 
     <h2>Crédits</h2>
     <ul>
-      <li><strong>Conception et développement du site</strong>&nbsp;: Denis Hénault-Parizel — <a href="https://prazile.com" target="_blank" rel="noopener">prazile.com</a>.</li>
+      <li><strong>Conception et développement du site</strong>&nbsp;: Denis Hénault-Parizel, <a href="https://prazile.com" target="_blank" rel="noopener">prazile.com</a>.</li>
       <li><strong>Brochure et infographie du chalet</strong>&nbsp;: ULMJC Grenoble.</li>
       <li><strong>Typographies</strong>&nbsp;: Fraunces et Inter via Google Fonts (licence Open Font Licence).</li>
-      <li><strong>Données météo</strong> (page d'accueil)&nbsp;: <a href="https://open-meteo.com" target="_blank" rel="noopener">Open-Meteo</a> — service gratuit, licence CC BY 4.0.</li>
-      <li><strong>Photos de la galerie et des sorties</strong>&nbsp;: bénévoles, adhérents et groupes accueillis au chalet — un grand merci à eux.</li>
+      <li><strong>Données météo</strong> (page d'accueil)&nbsp;: <a href="https://open-meteo.com" target="_blank" rel="noopener">Open-Meteo</a>, service gratuit, licence CC BY 4.0.</li>
+      <li><strong>Photos de la galerie et des sorties</strong>&nbsp;: bénévoles, adhérents et groupes accueillis au chalet. Un grand merci à eux.</li>
     </ul>
 
     <h2>Données personnelles</h2>

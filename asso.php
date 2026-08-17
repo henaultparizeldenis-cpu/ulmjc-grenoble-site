@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="description" content="L'Union Locale des MJC de Grenoble : association d'éducation populaire, gérée par des bénévoles, qui fait vivre le chalet de l'Alpe du Grand Serre depuis 1963.">
-<title>L'asso — ULMJC Grenoble</title>
+<title>L'asso | ULMJC Grenoble</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Lora:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -35,7 +35,7 @@
   <div class="container">
     <span class="section-eyebrow">L'association</span>
     <h1>Union Locale des MJC de Grenoble.</h1>
-    <p class="lede">Une association d'éducation populaire qui fait vivre des projets collectifs, solidaires et accessibles à tous — portée entièrement par des bénévoles.</p>
+    <p class="lede">Une association d'éducation populaire qui fait vivre des projets collectifs, solidaires et accessibles à tous, portée entièrement par des bénévoles.</p>
   </div>
 </div>
 
@@ -62,7 +62,7 @@
       L'Union Locale des MJC de Grenoble a été fondée le <strong>27 septembre 1961</strong>. Deux ans plus tard, en
       <strong>1963</strong>, elle acquiert le chalet de l'Alpe du Grand Serre, né d'une volonté simple&nbsp;:
       permettre aux enfants et aux jeunes de découvrir la montagne, de partir en séjour et de vivre des moments collectifs
-      accessibles à tous. Le chalet est la propriété de l'union locale en tant qu'association — et non des MJC qui en sont membres.
+      accessibles à tous. Le chalet est la propriété de l'union locale en tant qu'association, et non des MJC qui en sont membres.
     </p>
     <p>
       Depuis plus de 60 ans, des générations s'y retrouvent pour partager des souvenirs, des veillées, des repas collectifs
@@ -73,7 +73,7 @@
     <h2>Une longue histoire d'émancipation</h2>
     <p>
       L'éducation populaire ne date pas d'hier. Petit voyage dans le temps, de la Ligue de
-      l'enseignement à notre union locale — cliquez sur une étape pour en savoir plus.
+      l'enseignement à notre union locale. Cliquez sur une étape pour en savoir plus.
     </p>
   </div>
 </section>
@@ -185,7 +185,7 @@
           <h3>Création de l'Union Locale à Grenoble</h3>
           <p>Le 27 septembre 1961, les MJC de Grenoble se fédèrent en une union locale pour mutualiser leurs moyens, leurs projets et leurs combats.</p>
           <div class="timeline-detail" hidden>
-            <p>L'ULMJC réunit aujourd'hui sept maisons réparties dans les quartiers de Grenoble. Une voix commune, des outils partagés et un esprit de solidarité concrète — dont le chalet de l'Alpe du Grand Serre est l'incarnation la plus connue.</p>
+            <p>L'ULMJC réunit aujourd'hui sept maisons réparties dans les quartiers de Grenoble. Une voix commune, des outils partagés et un esprit de solidarité concrète, dont le chalet de l'Alpe du Grand Serre est l'incarnation la plus connue.</p>
           </div>
         </button>
       </li>
@@ -209,7 +209,7 @@
           <h3>Mai 68 et l'éducation populaire</h3>
           <p>Le mouvement de mai-juin 1968 réinterroge l'éducation populaire, son rapport au pouvoir, à l'institution et à l'autogestion. Les MJC s'inscrivent au cœur de ces débats.</p>
           <div class="timeline-detail" hidden>
-            <p>L'animation socio-culturelle, théorisée notamment par <strong>Joffre Dumazedier</strong> (1915-2002) et les penseurs de l'éduc pop, prend un nouvel essor. Les pratiques se renouvellent&nbsp;: ateliers participatifs, théâtre populaire, radios libres, mouvements écologistes naissants — tous puisent dans l'héritage des MJC.</p>
+            <p>L'animation socio-culturelle, théorisée notamment par <strong>Joffre Dumazedier</strong> (1915-2002) et les penseurs de l'éduc pop, prend un nouvel essor. Les pratiques se renouvellent&nbsp;: ateliers participatifs, théâtre populaire, radios libres, mouvements écologistes naissants. Tous puisent dans l'héritage des MJC.</p>
           </div>
         </button>
       </li>
@@ -219,7 +219,7 @@
         <button type="button" class="timeline-content" aria-expanded="false">
           <span class="timeline-year">Aujourd'hui</span>
           <h3>Un mouvement bien vivant</h3>
-          <p>Sept MJC et une Maison Pour Tous à Grenoble, un chalet en montagne, des milliers d'adhérents — l'éducation populaire reste plus que jamais d'actualité.</p>
+          <p>Sept MJC et une Maison Pour Tous à Grenoble, un chalet en montagne, des milliers d'adhérents&nbsp;: l'éducation populaire reste plus que jamais d'actualité.</p>
           <div class="timeline-detail" hidden>
             <p>Au-delà des activités, l'union locale défend une certaine idée du vivre-ensemble&nbsp;: solidarité, émancipation, coopération, proximité. Quatre valeurs qui guident chaque projet.</p>
           </div>
@@ -234,10 +234,10 @@
   <div class="container prose reveal">
     <h2>Nos valeurs</h2>
     <ul>
-      <li><strong>Éducation populaire</strong> — Permettre à chacun de se former, d'agir et de découvrir, en dehors des circuits institutionnels.</li>
-      <li><strong>Solidarité</strong> — Un accès aux loisirs et à la montagne pour tous, indépendamment des moyens.</li>
-      <li><strong>Lien social</strong> — Le chalet comme espace de rencontre entre générations, entre publics, entre projets.</li>
-      <li><strong>Bénévolat</strong> — Tout est porté par les bénévoles : gestion, entretien, accueil, projets collectifs.</li>
+      <li><strong>Éducation populaire</strong>&nbsp;: permettre à chacun de se former, d'agir et de découvrir, en dehors des circuits institutionnels.</li>
+      <li><strong>Solidarité</strong>&nbsp;: un accès aux loisirs et à la montagne pour tous, indépendamment des moyens.</li>
+      <li><strong>Lien social</strong>&nbsp;: le chalet comme espace de rencontre entre générations, entre publics, entre projets.</li>
+      <li><strong>Bénévolat</strong>&nbsp;: tout est porté par les bénévoles, de la gestion à l'entretien, de l'accueil aux projets collectifs.</li>
     </ul>
 
     <h2>Le fonctionnement</h2>
@@ -246,7 +246,7 @@
       générale et assure la gestion courante : réservations, entretien du chalet, suivi des projets, relations avec les
       partenaires locaux.
     </p>
-    <p class="muted"><em>Composition du bureau à compléter — voir la page Contact pour joindre les responsables.</em></p>
+    <p class="muted"><em>Composition du bureau à compléter. Voir la page Contact pour joindre les responsables.</em></p>
 
     <h2>Réserver le chalet</h2>
     <p>

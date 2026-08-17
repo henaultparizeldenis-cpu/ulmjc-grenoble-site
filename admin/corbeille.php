@@ -2,7 +2,7 @@
 /* Corbeille du back-office ULMJC : éléments supprimés (soft-delete) des 5 types
    « liste » (Actualités / Blog / Activités / Partenaires / Offres d'emploi),
    regroupés par type.
-   Pour chacun : vignette + titre + date de suppression, et deux actions —
+   Pour chacun : vignette + titre + date de suppression, et deux actions :
    RESTAURER (revient dans la liste) et SUPPRIMER DÉFINITIVEMENT (irréversible).
    Les actions passent par corbeille-action.php (POST + CSRF). Calqué sur les
    listes admin (mêmes classes .alist/.arow…). */
@@ -28,7 +28,7 @@ admin_header('Corbeille');
     <h1 class="atitle">Corbeille</h1>
     <p class="asub">
       <?php if ($total > 0): ?>
-        <?= $total ?> élément<?= $total > 1 ? 's' : '' ?> supprimé<?= $total > 1 ? 's' : '' ?> — récupérable<?= $total > 1 ? 's' : '' ?> tant que vous ne le<?= $total > 1 ? 's' : '' ?> supprimez pas définitivement.
+        <?= $total ?> élément<?= $total > 1 ? 's' : '' ?> supprimé<?= $total > 1 ? 's' : '' ?>, récupérable<?= $total > 1 ? 's' : '' ?> tant que vous ne le<?= $total > 1 ? 's' : '' ?> supprimez pas définitivement.
       <?php else: ?>
         La corbeille est vide.
       <?php endif; ?>

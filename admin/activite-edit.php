@@ -1,5 +1,5 @@
 <?php
-/* Éditeur d'activité — calqué sur admin/edit.php (actualités).
+/* Éditeur d'activité, calqué sur admin/edit.php (actualités).
    Champs adaptés : titre, image (upload OU médiathèque, même moule que la couverture
    d'actu), jour, horaire, public, ordre, publié/brouillon, description (éditeur
    visuel simple + insertion d'images, re-nettoyée côté serveur par sanitize_body). */
@@ -286,7 +286,7 @@ admin_header($isNew ? 'Nouvelle activité' : 'Modifier l\'activité');
   }
   function applyCoverRatio(){
     if(!cp) return;
-    // Bandeau paysage RÉGULIER 3:2 (recadrage centré) — même règle que la vraie page.
+    // Bandeau paysage RÉGULIER 3:2 (recadrage centré), même règle que la vraie page.
     cp.style.aspectRatio='3 / 2';
     fitStage();
   }

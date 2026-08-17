@@ -3,13 +3,13 @@
    SEULE différence de fond : les 5 cartes « catégorie » et leurs listes de photos
    sont générées DEPUIS chalet.json (helper load_gallery()) au lieu d'être codées en
    dur. Chaque bouton expose la liste des CHEMINS d'images dans data-photos
-   (ex. « images/chalet/chalet-01.jpg,uploads/ab.jpg ») — le handler lightbox de
+   (ex. « images/chalet/chalet-01.jpg,uploads/ab.jpg »), le handler lightbox de
    js/main.js lit directement ces chemins (voir la modif dans main.js).
    Le reste (présentation, météo, tarifs, accès…) est repris tel quel de chalet.html,
    avec head.php/foot.php pour l'en-tête/pied communs. */
 require_once __DIR__ . '/inc/lib.php';
 
-$page_title  = 'Le chalet — ULMJC Grenoble';
+$page_title  = 'Le chalet | ULMJC Grenoble';
 $page_desc   = "Le chalet de l'ULMJC Grenoble, à l'Alpe du Grand Serre (1368 m) : 25 places en gestion libre, ouvert aux associations, collectivités, familles et groupes. Tarifs 2026/2027.";
 $page_active = 'chalet';
 
@@ -35,7 +35,7 @@ require __DIR__ . '/inc/head.php';
   <div class="container">
     <span class="section-eyebrow">Le chalet · Alpe du Grand Serre</span>
     <h1>Notre chalet, depuis 1963.</h1>
-    <p class="lede">Un chalet atypique à 1368 m, à 45 min de Grenoble, aux portes de l'Oisans. En gestion libre, ouvert aux associations, collectivités, familles, jeunes et camps — toute l'année.</p>
+    <p class="lede">Un chalet atypique à 1368 m, à 45 min de Grenoble, aux portes de l'Oisans. En gestion libre, ouvert toute l'année aux associations, collectivités, familles, jeunes et camps.</p>
   </div>
 </div>
 
@@ -56,7 +56,7 @@ require __DIR__ . '/inc/head.php';
           de familles et de camps dans le même esprit.
         </p>
         <p class="muted">
-          📍 1407 route du Désert, 38350 La Morte — Alpe du Grand Serre
+          📍 1407 route du Désert, 38350 La Morte, Alpe du Grand Serre
         </p>
       </div>
     </div>
@@ -76,26 +76,26 @@ require __DIR__ . '/inc/head.php';
           <div class="weather-main">
             <span class="weather-emoji" data-emoji>☀️</span>
             <div>
-              <div class="weather-temp"><span data-temp>—</span><span class="weather-unit">°C</span></div>
-              <div class="weather-condition" data-condition>—</div>
+              <div class="weather-temp"><span data-temp>…</span><span class="weather-unit">°C</span></div>
+              <div class="weather-condition" data-condition>…</div>
             </div>
           </div>
           <div class="weather-details">
             <div class="weather-detail">
               <span class="weather-detail-label">Ressenti</span>
-              <span class="weather-detail-value"><span data-feels>—</span>°C</span>
+              <span class="weather-detail-value"><span data-feels>…</span>°C</span>
             </div>
             <div class="weather-detail">
               <span class="weather-detail-label">Min · Max</span>
-              <span class="weather-detail-value"><span data-tmin>—</span>° / <span data-tmax>—</span>°C</span>
+              <span class="weather-detail-value"><span data-tmin>…</span>° / <span data-tmax>…</span>°C</span>
             </div>
             <div class="weather-detail">
               <span class="weather-detail-label">Vent</span>
-              <span class="weather-detail-value"><span data-wind>—</span>&nbsp;km/h</span>
+              <span class="weather-detail-value"><span data-wind>…</span>&nbsp;km/h</span>
             </div>
             <div class="weather-detail" data-snow-block hidden>
               <span class="weather-detail-label">Neige du jour</span>
-              <span class="weather-detail-value"><span data-snow>—</span>&nbsp;cm</span>
+              <span class="weather-detail-value"><span data-snow>…</span>&nbsp;cm</span>
             </div>
           </div>
           <p class="weather-meta">À l'Alpe du Grand Serre · 1368&nbsp;m · données <a href="https://open-meteo.com" target="_blank" rel="noopener">Open-Meteo</a></p>
@@ -129,7 +129,7 @@ require __DIR__ . '/inc/head.php';
       <?php endforeach; ?>
     </div>
     <p class="muted center" style="margin-top: 2rem; font-size: 0.95rem;">
-      <strong>Capacité&nbsp;:</strong> 25 personnes adultes maximum — ou 20 mineurs de + de 6 ans accompagnés d'adultes (agrément SDJES).<br>
+      <strong>Capacité&nbsp;:</strong> 25 personnes adultes maximum, ou 20 mineurs de + de 6 ans accompagnés d'adultes (agrément SDJES).<br>
       ⚠️ Le chalet n'est pas adapté aux personnes à mobilité réduite.
     </p>
   </div>
@@ -181,7 +181,7 @@ require __DIR__ . '/inc/head.php';
     </p>
 
     <h2>Accès et services à proximité</h2>
-    <p><strong>Office du tourisme</strong> Alpe du Grand Serre&nbsp;: 04&nbsp;76&nbsp;56&nbsp;24&nbsp;72 — <em>navettes disponibles pendant la saison de ski.</em></p>
+    <p><strong>Office du tourisme</strong> Alpe du Grand Serre&nbsp;: 04&nbsp;76&nbsp;56&nbsp;24&nbsp;72. <em>Navettes disponibles pendant la saison de ski.</em></p>
     <p><strong>Commerces en station</strong> : Vincent Sports Intersports, Sherpa Alimentation (Relais La Poste, distributeur, gaz), La Case à Skis,
       La Ferme du Grand Rif, Les Petits Soins de Marie, Les Typotes Vagabondes de La Morte. Restaurants et bar en station.</p>
     <p>Voir aussi la page <a href="activites.php">Activités</a> pour les loisirs autour du chalet.</p>

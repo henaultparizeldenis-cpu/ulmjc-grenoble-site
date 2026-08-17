@@ -3,7 +3,7 @@
    Différences : pas de vignette (une offre n'a pas d'image), méta = contrat /
    temps / lieu, et une pastille « Date limite dépassée » quand la date limite
    de candidature est passée (l'offre reste en base mais n'est plus visible
-   sur le site public — voir published_emplois() dans inc/lib.php). */
+   sur le site public, voir published_emplois() dans inc/lib.php). */
 require_once __DIR__ . '/auth.php';
 require_login();
 
@@ -24,9 +24,9 @@ admin_header("Offres d'emploi");
     <?php if ($sv && !empty($sv['published']) && !emploi_expired($sv)): ?>
       <a class="aflash-link" href="../offre.php?slug=<?= e($sv['slug']) ?>" target="ulmjc_site">Voir l'offre ↗</a>
     <?php elseif ($sv && !empty($sv['published']) && emploi_expired($sv)): ?>
-      <span class="aflash-note">— date limite dépassée, l'offre n'est plus affichée sur le site</span>
+      <span class="aflash-note">(date limite dépassée, l'offre n'est plus affichée sur le site)</span>
     <?php elseif ($sv): ?>
-      <span class="aflash-note">— brouillon, non visible sur le site</span>
+      <span class="aflash-note">(brouillon, non visible sur le site)</span>
     <?php endif; ?>
   </div>
 <?php elseif ($flash === 'trashed'): ?><div class="aflash">Offre déplacée vers la corbeille. <a class="aflash-link" href="corbeille.php">Voir la corbeille ↗</a></div>

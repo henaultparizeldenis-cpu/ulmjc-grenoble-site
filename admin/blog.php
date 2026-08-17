@@ -22,7 +22,7 @@ admin_header('Blog');
     <?php if ($sv && !empty($sv['published'])): ?>
       <a class="aflash-link" href="../billet.php?slug=<?= e($sv['slug']) ?>" target="ulmjc_site">Voir le billet ↗</a>
     <?php elseif ($sv): ?>
-      <span class="aflash-note">— brouillon, non visible sur le site</span>
+      <span class="aflash-note">(brouillon, non visible sur le site)</span>
     <?php endif; ?>
   </div>
 <?php elseif ($flash === 'trashed'): ?><div class="aflash">Billet déplacé vers la corbeille. <a class="aflash-link" href="corbeille.php">Voir la corbeille ↗</a></div>

@@ -118,7 +118,7 @@
 
   // Synchronise l'éditeur de corps (editorArea) dans le champ posté (bodyField),
   // en ramenant les chemins d'image « ../uploads/ » / « ../images/ » à « uploads/ »
-  // / « images/ » — EXACTEMENT comme le fait le handler de soumission du formulaire.
+  // / « images/ », EXACTEMENT comme le fait le handler de soumission du formulaire.
   function syncEditor() {
     if (isArticle && artField && artEditor) {
       artField.value = artEditor.innerHTML.replace(/src="\.\.\/(uploads|images)\//g, 'src="$1/');
@@ -126,7 +126,7 @@
   }
 
   // Soumet le formulaire (avec les modifs non enregistrées) vers une cible nommée
-  // — un iframe du panneau, OU la fenêtre détachée — puis restaure action/target.
+  // iframe du panneau ou fenêtre détachée, puis restaure action/target.
   function submitTo(targetName) {
     var oa = form.getAttribute('action'), ot = form.getAttribute('target');
     form.setAttribute('action', ENDPOINT); form.setAttribute('target', targetName);
@@ -232,7 +232,7 @@
   window.ulmjcPreviewRefresh = schedule;
 
   // Scroll-sync : en défilant l'éditeur (article / activité), l'aperçu suit
-  // proportionnellement — la même fraction de défilement.
+  // proportionnellement, la même fraction de défilement.
   if (_cfg.scroll) {
     var _sst;
     window.addEventListener('scroll', function () {
@@ -320,7 +320,7 @@
   var devBtn = document.getElementById('lpDevice'), devBtn2 = document.getElementById('lpDevice2');
   function setDeviceIcon() {
     var ico = device === 'mobile' ? PHONE_SVG : LAPTOP_SVG;
-    var ttl = device === 'mobile' ? 'Aperçu mobile — cliquer pour ordinateur' : 'Aperçu ordinateur — cliquer pour mobile';
+    var ttl = device === 'mobile' ? 'Aperçu mobile (cliquer pour ordinateur)' : 'Aperçu ordinateur (cliquer pour mobile)';
     [devBtn, devBtn2].forEach(function (b) { if (b) { b.innerHTML = ico; b.title = ttl; } });
     lp.classList.toggle('lp-mobileview', device === 'mobile');
   }

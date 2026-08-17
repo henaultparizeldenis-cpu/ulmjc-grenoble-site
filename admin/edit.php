@@ -1,5 +1,5 @@
 <?php
-/* Éditeur d'actualité — VERSION SIMPLE pour bénévoles.
+/* Éditeur d'actualité, VERSION SIMPLE pour bénévoles.
    Basé sur mohamed-cms/site/admin/edit.php, fortement simplifié :
    titre, date, image de couverture (upload OU médiathèque), accroche (excerpt),
    chapô, corps (texte enrichi simple avec insertion d'images depuis la
@@ -59,11 +59,11 @@ admin_header($isNew ? 'Nouvelle actualité' : 'Modifier l\'actualité');
     </label>
   </div>
 
-  <label class="afield">Accroche courte <span class="ahint">(résumé affiché dans la liste — 1 phrase)</span>
+  <label class="afield">Accroche courte <span class="ahint">(résumé affiché dans la liste, 1 phrase)</span>
     <input type="text" name="excerpt" value="<?= e($d['excerpt']) ?>" maxlength="200" placeholder="Une phrase qui donne envie de lire." />
   </label>
 
-  <label class="afield">Chapô <span class="ahint">(introduction en italique en haut de l'article — facultatif)</span>
+  <label class="afield">Chapô <span class="ahint">(introduction en italique en haut de l'article, facultatif)</span>
     <textarea name="chapo" rows="2" placeholder="L'idée forte de l'actualité, en une ou deux phrases."><?= e($d['chapo']) ?></textarea>
   </label>
 
@@ -305,7 +305,7 @@ admin_header($isNew ? 'Nouvelle actualité' : 'Modifier l\'actualité');
   var RATIOS={paysage:'3 / 2', portrait:'3 / 4', carre:'1 / 1'};
   function applyCoverRatio(){
     if(!cp) return;
-    // Forme choisie dans le menu « Format de la couverture » — même règle que la vraie page.
+    // Forme choisie dans le menu « Format de la couverture », même règle que la vraie page.
     cp.style.aspectRatio=RATIOS[formatSel?formatSel.value:'paysage']||RATIOS.paysage;
     fitStage();
   }

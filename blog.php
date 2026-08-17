@@ -5,7 +5,7 @@
    (qui montre catégorie + auteur). */
 require_once __DIR__ . '/inc/lib.php';
 
-$page_title  = 'Blog — ULMJC Grenoble';
+$page_title  = 'Blog | ULMJC Grenoble';
 $page_desc   = "Le blog de l'Union Locale des MJC de Grenoble : éducation populaire, sorties & séjours, vie de l'association, portraits.";
 $page_active = 'blog';
 $billets = published_blog();
@@ -23,7 +23,7 @@ foreach (blog_categories() as $k => $label) {
 
 require __DIR__ . '/inc/head.php';
 ?>
-<link rel="alternate" type="application/rss+xml" title="Blog — ULMJC Grenoble" href="blog-rss.php">
+<link rel="alternate" type="application/rss+xml" title="Blog | ULMJC Grenoble" href="blog-rss.php">
 <style>
 /* Styles propres au blog (le reste vient de css/style.css et reprend .actu-card) */
 .actu-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:1.5rem;margin-top:2.5rem;}

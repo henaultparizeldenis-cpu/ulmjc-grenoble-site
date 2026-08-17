@@ -1,5 +1,5 @@
 <?php
-/* Menu public ULMJC — partiel unique partagé par TOUTES les pages du site
+/* Menu public ULMJC. Partiel unique partagé par TOUTES les pages du site
    (pages statiques converties en PHP + pages CMS via inc/head.php).
    Markup identique à l'ancien <header class="site-header"> des pages statiques.
 

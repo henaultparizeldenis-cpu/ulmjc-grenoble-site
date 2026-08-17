@@ -2,7 +2,7 @@
 /* Médiathèque : fait pivoter une image de 90° (quart de tour à gauche ou à droite).
    Cas typique : une photo prise au téléphone qui s'affiche couchée.
 
-   La rotation est DESTRUCTIVE — elle réécrit le fichier — et se répercute donc
+   La rotation est DESTRUCTIVE (elle réécrit le fichier) et se répercute donc
    partout où la photo est utilisée. C'est voulu : on redresse une fois, et
    l'image est correcte sur tout le site.
 

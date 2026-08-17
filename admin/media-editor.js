@@ -2,8 +2,8 @@
 
    Ouvert depuis la médiathèque (bouton ✂ sur une photo importée).
    Le cadre de sélection se déplace et se redimensionne à la souris ou au doigt.
-   Les formats proposés correspondent à ceux réellement utilisés par le site —
-   3:2 pour les bandeaux d'article, 16:10 pour les vignettes de cartes — afin
+   Les formats proposés correspondent à ceux réellement utilisés par le site,
+   3:2 pour les bandeaux d'article, 16:10 pour les vignettes de cartes, afin
    qu'on voie exactement ce qui restera visible.
 
    Rien n'est envoyé tant qu'on n'a pas cliqué sur « Appliquer ». */

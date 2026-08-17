@@ -1,4 +1,4 @@
-<?php /* Carte d'offre d'emploi — attend $a. Variante de inc/card-blog.php SANS photo
+<?php /* Carte d'offre d'emploi. Attend $a. Variante de inc/card-blog.php SANS photo
    (une offre n'a pas d'image) : le contrat, le temps de travail et le lieu sont
    affichés en étiquettes. Style visuel ULMJC (.card + .actu-card + .emploi-*).
    Les règles .emploi-* sont déclarées par les pages qui incluent cette carte

@@ -1,6 +1,6 @@
 <?php
 /* Fonctions communes du CMS ULMJC : données, formatage, images, sécurité.
-   Basé sur mohamed-cms/site/inc/lib.php — on a GARDÉ le socle éprouvé
+   Basé sur mohamed-cms/site/inc/lib.php, on a GARDÉ le socle éprouvé
    (load/save JSON avec amorçage .default.json, slugify/unique_slug,
    optimize_image, sanitize_body, media_list/upload_path/media_disk_path,
    media_valid_src, clean_utf8, e()) et RETIRÉ tout le spécifique avocat
@@ -172,7 +172,7 @@ function purge_item($type, $key) {
   return $found;
 }
 
-/* Nombre total d'éléments à la corbeille (tous types liste confondus) — badge de nav. */
+/* Nombre total d'éléments à la corbeille (tous types liste confondus), badge de nav. */
 function trashed_count() {
   $n = 0;
   foreach (array('actus', 'blog', 'activites', 'partenaires', 'emplois') as $type) {
@@ -203,7 +203,7 @@ function find_actu($slug)        { return find_item('actus', $slug); }
 function published_actus()       { return published_items('actus'); }
 
 /* ============================================================
-   Blog (billets) — même socle que les actus (helpers génériques),
+   Blog (billets) : même socle que les actus (helpers génériques),
    AVEC en plus un auteur (author) et une catégorie/thème (category).
    Un billet a la même forme qu'une actu : slug, title, date, excerpt,
    chapo, cover, filter, effect, cover_w, cover_align, body, published,
@@ -337,7 +337,7 @@ function cover_hero_ratio($a) {
   return $f[cover_format_key($a)]['ratio'];
 }
 
-/* Largeur (%) de la couverture, bornée 40–100 (100 par défaut). */
+/* Largeur (%) de la couverture, bornée de 40 à 100 (100 par défaut). */
 function cover_width($a) {
   return isset($a['cover_w']) ? max(40, min(100, (int)$a['cover_w'])) : 100;
 }
@@ -357,7 +357,7 @@ function effect_key($a) {
 }
 
 /* ============================================================
-   Tri par « ordre » (Activités, Partenaires) — croissant, puis titre/nom
+   Tri par « ordre » (Activités, Partenaires) : croissant, puis titre/nom
    ============================================================ */
 
 /* Éléments publiés d'un type, triés par le champ « ordre » (croissant).
@@ -403,7 +403,7 @@ function published_partenaires()  { return published_ordered('partenaires'); }
    (+ deleted / deleted_at quand elle est à la corbeille).
    Particularité : une offre dont la DATE LIMITE de candidature est passée
    n'apparaît plus côté public (elle reste en base et reste éditable en
-   administration) — voir emploi_expired() / published_emplois().
+   administration), voir emploi_expired() / published_emplois().
    ============================================================ */
 
 function load_emplois()        { return load_items('emplois'); }
@@ -456,7 +456,7 @@ function emploi_expired($o, $today = null) {
 }
 
 /* Offres visibles sur le site : publiées, hors corbeille, date limite non
-   dépassée — de la plus récente à la plus ancienne (published_items trie déjà). */
+   dépassée, de la plus récente à la plus ancienne (published_items trie déjà). */
 function published_emplois() {
   $today = date('Y-m-d');
   $list  = array_filter(published_items('emplois'), function ($o) use ($today) {
@@ -662,7 +662,7 @@ function doc_valid_src($src) {
   return '';
 }
 
-/* Poids lisible d'un document (« 375 Ko », « 1,2 Mo ») — affiché à côté du lien
+/* Poids lisible d'un document (« 375 Ko », « 1,2 Mo »), affiché à côté du lien
    de téléchargement, pour que le visiteur sache ce qu'il déclenche. */
 function doc_filesize_label($src) {
   $p = media_disk_path($src);
@@ -674,7 +674,7 @@ function doc_filesize_label($src) {
 }
 
 /* ============================================================
-   Nettoyage du corps d'actu (éditeur visuel) — liste blanche DOMDocument
+   Nettoyage du corps d'actu (éditeur visuel) : liste blanche DOMDocument
    ============================================================ */
 
 /* Normalise une couleur CSS (#rgb, #rrggbb, rgb(r,g,b)) en #rrggbb minuscule, ou null. */

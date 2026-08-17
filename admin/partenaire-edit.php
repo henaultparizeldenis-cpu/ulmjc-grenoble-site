@@ -1,5 +1,5 @@
 <?php
-/* Éditeur de partenaire — calqué sur admin/edit.php, très simplifié (pas de corps
+/* Éditeur de partenaire, calqué sur admin/edit.php, très simplifié (pas de corps
    HTML). Champs : nom, logo (upload OU médiathèque, même moule que la couverture
    d'actu), url, ordre, publié/masqué. */
 require_once __DIR__ . '/auth.php';
@@ -47,11 +47,11 @@ admin_header($isNew ? 'Nouveau partenaire' : 'Modifier le partenaire');
     </label>
   </div>
 
-  <label class="afield">Lien du site <span class="ahint">(https://… — facultatif)</span>
+  <label class="afield">Lien du site <span class="ahint">(https://…, facultatif)</span>
     <input type="text" name="url" value="<?= e($d['url']) ?>" placeholder="https://www.exemple.fr" />
   </label>
 
-  <div class="afield">Logo <span class="ahint">(facultatif — à défaut, le nom s'affiche)</span>
+  <div class="afield">Logo <span class="ahint">(facultatif, à défaut le nom s'affiche)</span>
     <input type="hidden" name="cover" id="coverField" value="<?= e($d['logo']) ?>" />
     <input type="hidden" name="cover_remove" id="coverRemoveFlag" value="" />
     <div class="cover-preview" id="coverPreview"<?= $d['logo'] ? '' : ' hidden' ?> style="max-width:220px;background:#fff;">
@@ -76,7 +76,7 @@ admin_header($isNew ? 'Nouveau partenaire' : 'Modifier le partenaire');
 
 <script>
 (function(){
-  // Logo : upload (fichier) OU médiathèque — même logique que la couverture d'actu.
+  // Logo : upload (fichier) OU médiathèque, même logique que la couverture d'actu.
   var coverField=document.getElementById('coverField');
   var coverInput=document.getElementById('coverInput');
   var coverPreview=document.getElementById('coverPreview');

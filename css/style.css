@@ -1,5 +1,5 @@
 /* =========================================================
-   ULMJC Grenoble — style nordique chaleureux
+   ULMJC Grenoble : style nordique chaleureux
    Palette : crème, pin foncé, terre cuite, charbon chaud
    Typo : Lora (titres) + Inter (texte)
    ========================================================= */
@@ -748,7 +748,7 @@ video.hero-bg {
 }
 
 /* ===========================================================
-   ANIMATIONS — discrètes, classe nordique
+   ANIMATIONS : discrètes, classe nordique
    =========================================================== */
 
 /* Apparition au scroll */
@@ -785,7 +785,7 @@ video.hero-bg {
 .reveal-stagger.in > * { opacity: 0; }
 .reveal-stagger.in > * { opacity: 1; transform: translateY(0); }
 
-/* Entrée du hero — déclenchée automatiquement */
+/* Entrée du hero, déclenchée automatiquement */
 @keyframes heroFadeUp {
   from { opacity: 0; transform: translateY(28px); }
   to   { opacity: 1; transform: translateY(0); }
@@ -844,7 +844,7 @@ video.hero-bg {
 }
 
 /* ===========================================================
-   TIMELINE INTERACTIVE — page asso.html
+   TIMELINE INTERACTIVE : page asso.html
    =========================================================== */
 
 .timeline {
@@ -1046,7 +1046,7 @@ video.hero-bg {
 }
 
 /* ===========================================================
-   QUIZZ — page asso.html
+   QUIZZ : page asso.html
    =========================================================== */
 
 .quiz {
@@ -1197,7 +1197,7 @@ video.hero-bg {
 }
 
 /* ===========================================================
-   WIDGET MÉTÉO — page chalet.html (Open-Meteo, Alpe du Grand Serre)
+   WIDGET MÉTÉO : page chalet.html (Open-Meteo, Alpe du Grand Serre)
    =========================================================== */
 
 .chalet-weather {
@@ -1366,7 +1366,7 @@ video.hero-bg {
 }
 
 /* ===========================================================
-   CARDS CLIQUABLES DU CHALET — buttons qui ouvrent le lightbox
+   CARDS CLIQUABLES DU CHALET : buttons qui ouvrent le lightbox
    =========================================================== */
 
 /* Reset du style natif du <button> pour qu'il ressemble aux .card <div> */
@@ -1387,7 +1387,7 @@ video.hero-bg {
 }
 
 /* ===========================================================
-   GALERIE DU CHALET — page chalet.html (grid + lightbox)
+   GALERIE DU CHALET : page chalet.html (grid + lightbox)
    =========================================================== */
 
 .chalet-gallery {
@@ -1538,7 +1538,7 @@ body.lightbox-active { overflow: hidden; }
 }
 
 /* ===========================================================
-   LISTE DES MJC / MPT — page les-mjc.html
+   LISTE DES MJC / MPT : page les-mjc.html
    =========================================================== */
 
 .mjc-list {
@@ -1653,7 +1653,7 @@ body.lightbox-active { overflow: hidden; }
 }
 
 /* ===========================================================
-   SPLASH D'INTRO — vidéo logo en overlay plein écran
+   SPLASH D'INTRO : vidéo logo en overlay plein écran
    =========================================================== */
 
 .splash {
@@ -1762,7 +1762,7 @@ body.splash-active {
    l'animation du logo est douce et reste skippable avec le bouton/clic/Échap. */
 
 /* ===========================================================
-   OPTIMISATIONS MOBILE — lisibilité + ergonomie tactile
+   OPTIMISATIONS MOBILE : lisibilité + ergonomie tactile
    =========================================================== */
 
 /* Tablette et petits écrans (≤ 820px) */
@@ -2060,17 +2060,17 @@ body.splash-active {
        mohamed-cms/site/styles.css (kbzoom/kbpano) et adaptés au bandeau ULMJC.
    ========================================================= */
 
-/* (A) Alignement du texte — s'applique dans le corps d'actu ET la description d'activité. */
+/* (A) Alignement du texte, s'applique dans le corps d'actu ET la description d'activité. */
 .al-center { text-align: center; }
 .al-right  { text-align: right; }
 .just      { text-align: justify; }
 
 /* (B) Couverture animée (fond). Le défaut (kenburns) anime background-size/position ;
    fx-fixe coupe l'animation ; fx-zoom / fx-pano changent le mouvement. */
-/* IMPORTANT — pourquoi on n'anime plus « background-size » :
+/* IMPORTANT : pourquoi on n'anime plus « background-size » :
    « background-size: 114% 114% » donne DEUX valeurs indépendantes (114 % de la
    largeur du cadre, 114 % de sa hauteur). L'image était donc forcée au ratio du
-   cadre, c'est-à-dire ÉTIRÉE — d'autant plus que son ratio s'éloignait du 3:2.
+   cadre, c'est-à-dire ÉTIRÉE, d'autant plus que son ratio s'éloignait du 3:2.
    On anime désormais un calque interne en transform:scale, avec
    background-size:cover qui, lui, préserve les proportions. */
 .actu-hero, .act-card-cover { position: relative; }

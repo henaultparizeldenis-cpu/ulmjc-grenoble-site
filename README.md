@@ -50,8 +50,8 @@ Upload manuel du contenu du dossier dans `public_html/site/` du site
 **`site.ulmjcgrenoble.org`** via le File Manager de Hostinger
 (zip + extract + déplacement si Hostinger ajoute un wrapper).
 
-L'auto-deploy Git n'est **pas** configuré côté Hostinger (à activer plus tard si besoin
-— attention à viser le bon site dans hPanel, pas le domaine principal qui héberge l'app
+L'auto-deploy Git n'est **pas** configuré côté Hostinger (à activer plus tard si besoin,
+en visant le bon site dans hPanel, pas le domaine principal qui héberge l'app
 de gestion adhérent).
 
 ## À faire pour la version définitive

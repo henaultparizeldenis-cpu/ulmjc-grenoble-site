@@ -1,7 +1,7 @@
 <?php
 /* Configuration du CMS ULMJC (pilote « Actualités »).
    Fichier central : chemins, réglages, mode production.
-   Basé sur mohamed-cms/site/inc/config.php — adapté pour ULMJC :
+   Basé sur mohamed-cms/site/inc/config.php, adapté pour ULMJC :
    - dossier voisin « ulmjc-data » (hors dépôt) au lieu de « mohamed-data » ;
    - DEV_MODE=false (production) ;
    - spécifique avocat retiré ;
@@ -12,7 +12,7 @@ date_default_timezone_set('Europe/Paris');
 /* --- Chemins (système de fichiers) --- */
 define('BASE_DIR', dirname(__DIR__));            // dossier racine déployé (.../public_html/site)
 
-/* Données PERSISTANTES — elles doivent vivre HORS du dossier déployé, sinon chaque
+/* Données PERSISTANTES : elles doivent vivre HORS du dossier déployé, sinon chaque
    déploiement (qui remet le dépôt à l'identique) les efface. Ordre de choix :
    1) variable d'environnement ULMJC_DATA_DIR si définie ;
    2) sinon le dossier voisin « ulmjc-data » (public_html/ulmjc-data), utilisé

@@ -178,7 +178,7 @@ admin_header('Actualités');
     <?php if ($sv && !empty($sv['published'])): ?>
       <a class="aflash-link" href="../actu.php?slug=<?= e($sv['slug']) ?>" target="ulmjc_site">Voir l'actualité ↗</a>
     <?php elseif ($sv): ?>
-      <span class="aflash-note">— brouillon, non visible sur le site</span>
+      <span class="aflash-note">(brouillon, non visible sur le site)</span>
     <?php endif; ?>
   </div>
 <?php elseif ($flash === 'trashed'): ?><div class="aflash">Actualité déplacée vers la corbeille. <a class="aflash-link" href="corbeille.php">Voir la corbeille ↗</a></div>

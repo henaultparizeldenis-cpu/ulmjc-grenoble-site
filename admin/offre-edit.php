@@ -1,5 +1,5 @@
 <?php
-/* Éditeur d'offre d'emploi — calqué sur admin/billet-edit.php (éditeur de billet).
+/* Éditeur d'offre d'emploi, calqué sur admin/billet-edit.php (éditeur de billet).
    Même mécanique (slug stable, publié/brouillon, éditeur de corps contenteditable
    synchronisé dans un champ caché, aperçu en direct via _live_preview.php), MAIS
    sans image de couverture : une offre n'a pas de photo. Champs propres à l'offre :
@@ -54,7 +54,7 @@ admin_header($isNew ? 'Nouvelle offre' : "Modifier l'offre");
   <div class="agrid2">
     <label class="afield">Type de contrat
       <select name="contrat" id="contratSel">
-        <option value="">— À préciser —</option>
+        <option value="">À préciser</option>
         <?php foreach (emploi_contrats() as $k => $label): ?>
           <option value="<?= e($k) ?>" <?= $d['contrat'] === $k ? 'selected' : '' ?>><?= e($label) ?></option>
         <?php endforeach; ?>
@@ -82,12 +82,12 @@ admin_header($isNew ? 'Nouvelle offre' : "Modifier l'offre");
     <label class="afield">Date de publication
       <input type="date" name="date" value="<?= e($d['date']) ?>" required />
     </label>
-    <label class="afield">Date limite de candidature <span class="ahint">(facultative — passée cette date, l'offre disparaît du site)</span>
+    <label class="afield">Date limite de candidature <span class="ahint">(facultative&nbsp;: passée cette date, l'offre disparaît du site)</span>
       <input type="date" name="date_limite" value="<?= e($d['date_limite']) ?>" />
     </label>
   </div>
 
-  <label class="afield">Accroche courte <span class="ahint">(résumé affiché dans la liste — 1 phrase)</span>
+  <label class="afield">Accroche courte <span class="ahint">(résumé affiché dans la liste, 1 phrase)</span>
     <input type="text" name="excerpt" value="<?= e($d['excerpt']) ?>" maxlength="200" placeholder="Une phrase qui résume le poste." />
   </label>
 
@@ -115,12 +115,12 @@ admin_header($isNew ? 'Nouvelle offre' : "Modifier l'offre");
     <span class="ahint">Missions, profil recherché, conditions… Sélectionnez du texte puis cliquez sur un bouton pour le mettre en forme.</span>
   </div>
 
-  <label class="afield">Comment postuler <span class="ahint">(email ou instructions — affiché dans un encart en bas de l'offre)</span>
+  <label class="afield">Comment postuler <span class="ahint">(email ou instructions, affiché dans un encart en bas de l'offre)</span>
     <textarea name="contact" rows="2" maxlength="400" placeholder="Ex. : CV et lettre de motivation à ulmjc.gre@free.fr avant le 30 septembre."><?= e($d['contact']) ?></textarea>
   </label>
 
   <div class="afield">
-    <span>Fiche de poste (PDF) <span class="ahint">(facultatif — proposée en téléchargement sur l'offre)</span></span>
+    <span>Fiche de poste (PDF) <span class="ahint">(facultatif, proposée en téléchargement sur l'offre)</span></span>
     <input type="hidden" name="fiche" id="ficheField" value="<?= e($d['fiche']) ?>" />
     <div class="doc-row" id="ficheRow"<?= $d['fiche'] ? '' : ' hidden' ?>>
       <span class="doc-chip">📄 <a id="ficheLink" href="../<?= e($d['fiche']) ?>" target="_blank" rel="noopener">Voir le PDF joint</a></span>
@@ -227,7 +227,7 @@ admin_header($isNew ? 'Nouvelle offre' : "Modifier l'offre");
     if(src){ link.href='../'+src; row.hidden=false; } else { row.hidden=true; }
   }
   btn.addEventListener('click',function(){ input.click(); });
-  rm.addEventListener('click',function(){ show(''); state.textContent='PDF retiré — pensez à enregistrer.'; });
+  rm.addEventListener('click',function(){ show(''); state.textContent='PDF retiré, pensez à enregistrer.'; });
 
   input.addEventListener('change',function(){
     var f=input.files&&input.files[0]; if(!f) return;
@@ -240,9 +240,9 @@ admin_header($isNew ? 'Nouvelle offre' : "Modifier l'offre");
       .then(function(r){ return r.text().then(function(t){ return {status:r.status,text:t}; }); })
       .then(function(res){
         var j=null; try{ j=JSON.parse(res.text); }catch(e){}
-        if(j&&j.url){ show(j.url); state.textContent='PDF joint — pensez à enregistrer.'; }
+        if(j&&j.url){ show(j.url); state.textContent='PDF joint, pensez à enregistrer.'; }
         else if(j&&j.error){ state.textContent='Échec : '+j.error; }
-        else { state.textContent='Échec (HTTP '+res.status+') — réponse inattendue du serveur.'; }
+        else { state.textContent='Échec (HTTP '+res.status+'). Réponse inattendue du serveur.'; }
         input.value='';
       })
       .catch(function(){ state.textContent='Échec : requête bloquée avant d\'atteindre le serveur.'; input.value=''; });

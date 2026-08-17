@@ -1,4 +1,4 @@
-<?php /* Carte de billet de blog — attend $a. Variante de inc/card.php qui montre
+<?php /* Carte de billet de blog. Attend $a. Variante de inc/card.php qui montre
    en plus la CATÉGORIE (thème) et l'AUTEUR. Style visuel ULMJC (.card + .actu-card).
    L'attribut data-cat porte la clé de catégorie pour le filtre client de blog.php.
    $card_prefix optionnel (ex. '../' en admin) pour préfixer les chemins d'image. */

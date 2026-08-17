@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="description" content="Galerie photos du chalet de l'ULMJC Grenoble à l'Alpe du Grand Serre : le lieu, les séjours, les moments de vie collective.">
-<title>Galerie — ULMJC Grenoble</title>
+<title>Galerie | ULMJC Grenoble</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Lora:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -35,7 +35,7 @@
   <div class="container">
     <span class="section-eyebrow">Galerie</span>
     <h1>Le chalet, les sorties, l'ambiance.</h1>
-    <p class="lede">Quelques photos pour donner une idée du chalet et des moments qui s'y vivent. Les images sont prises au fil des séjours par les bénévoles et les groupes accueillis — un grand merci à eux.</p>
+    <p class="lede">Quelques photos pour donner une idée du chalet et des moments qui s'y vivent. Les images sont prises au fil des séjours par les bénévoles et les groupes accueillis. Un grand merci à eux.</p>
   </div>
 </div>
 

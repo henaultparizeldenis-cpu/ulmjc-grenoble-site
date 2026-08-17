@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="description" content="L'Union Locale des MJC de Grenoble fédère 7 maisons de quartier qui font vivre l'éducation populaire depuis 1961. Et un chalet à l'Alpe du Grand Serre.">
-<title>ULMJC Grenoble — l'éducation populaire en mouvement</title>
+<title>ULMJC Grenoble | l'éducation populaire en mouvement</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Lora:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -100,7 +100,7 @@
   <div class="container">
     <div class="center reveal" style="max-width: 720px; margin: 0 auto;">
       <span class="section-eyebrow">L'éducation populaire</span>
-      <h2>Apprendre, créer, agir — ensemble.</h2>
+      <h2>Apprendre, créer, agir ensemble.</h2>
       <p style="color: var(--ink-soft); font-size: 1.1rem; margin-top: 1rem;">
         Un mouvement né au XIX<sup>e</sup> siècle qui considère que chacun a sa place pour apprendre,
         transmettre et agir, en dehors des circuits scolaires et institutionnels. Pas de cours magistraux&nbsp;:
@@ -191,7 +191,7 @@
     <span class="section-eyebrow">Rejoindre l'union</span>
     <h2>Poussez la porte d'une MJC.</h2>
     <p style="max-width: 620px; margin: 0 auto 2rem; color: var(--ink-soft);">
-      Pour s'inscrire à une activité, proposer un projet, rejoindre un collectif — ou simplement passer dire bonjour.
+      Pour s'inscrire à une activité, proposer un projet, rejoindre un collectif, ou simplement passer dire bonjour.
       L'adhésion est solidaire et donne accès à toute la programmation locale.
     </p>
     <a href="les-mjc.php" class="btn">Trouver ma MJC</a>

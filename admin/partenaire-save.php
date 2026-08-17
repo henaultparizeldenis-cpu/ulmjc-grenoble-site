@@ -31,7 +31,7 @@ $existing = null;
 if ($origId) { foreach ($partenaires as $it) { if (($it['id'] ?? '') === $origId) { $existing = $it; $prevLogo = $it['logo'] ?? ''; break; } } }
 
 /* Id : stable en édition, généré à la création (unicité par type via unique_slug
-   qui s'appuie sur le champ 'slug' — on aligne donc id/slug le temps du calcul). */
+   qui s'appuie sur le champ 'slug', on aligne donc id/slug le temps du calcul). */
 if ($existing) {
   $id = $origId;
 } else {

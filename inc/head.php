@@ -1,10 +1,10 @@
 <?php
-/* En-tête public ULMJC (head + header/nav) — extrait de index.html du site
+/* En-tête public ULMJC (head + header/nav), extrait de index.html du site
    ULMJC, transformé en include réutilisable pour les pages PHP du CMS.
    Chaque page définit $page_title / $page_desc / $page_active avant l'include. */
 require_once __DIR__ . '/lib.php';
 $page_title  = isset($page_title)  ? $page_title  : 'ULMJC Grenoble';
-$page_desc   = isset($page_desc)   ? $page_desc   : "Union Locale des MJC de Grenoble — éducation populaire depuis 1961.";
+$page_desc   = isset($page_desc)   ? $page_desc   : "Union Locale des MJC de Grenoble, éducation populaire depuis 1961.";
 $page_active = isset($page_active) ? $page_active : ''; // clé de nav active (ex. 'actus')
 $v = ASSET_V;
 

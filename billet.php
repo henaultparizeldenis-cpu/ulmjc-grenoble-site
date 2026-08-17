@@ -8,7 +8,7 @@ $a = $slug ? find_blog($slug) : null;
 
 if (!$a || empty($a['published'])) {
   http_response_code(404);
-  $page_title  = 'Billet introuvable — ULMJC Grenoble';
+  $page_title  = 'Billet introuvable | ULMJC Grenoble';
   $page_active = 'blog';
   require __DIR__ . '/inc/head.php';
   echo '<div class="page-header"><div class="container"><span class="section-eyebrow">Erreur 404</span>'
@@ -19,7 +19,7 @@ if (!$a || empty($a['published'])) {
   exit;
 }
 
-$page_title  = display_title($a) . ' — ULMJC Grenoble';
+$page_title  = display_title($a) . ' | ULMJC Grenoble';
 $page_desc   = $a['excerpt'] ?? $page_title;
 $page_active = 'blog';
 require __DIR__ . '/inc/head.php';

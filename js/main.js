@@ -1,11 +1,11 @@
 /* =========================================================
-   ULMJC Grenoble — JS principal
+   ULMJC Grenoble : JS principal
    1) Apparition au scroll (IntersectionObserver)
    2) Compteurs animés
    3) Toggle menu mobile (déjà inline mais on l'améliore)
    ========================================================= */
 
-/* Helper Matomo — pousse un event vers _paq si dispo, no-op sinon.
+/* Helper Matomo : pousse un event vers _paq si dispo, no-op sinon.
    Sécurise contre ad-blocker / Matomo non chargé / connexion offline. */
 window.trackEvent = function (category, action, name, value) {
   try {
@@ -327,13 +327,13 @@ window.trackEvent = function (category, action, name, value) {
     // Cards cliquables (page chalet : Extérieur, Couchage, etc.)
     // data-photos contient désormais une liste de CHEMINS d'images directement
     // (ex. "images/chalet/chalet-01.jpg,uploads/ab.jpg"), générée côté serveur
-    // depuis chalet.json — plus d'index numériques à reconstruire ici.
+    // depuis chalet.json, plus d'index numériques à reconstruire ici.
     photoCards.forEach((card) => {
       card.addEventListener('click', () => {
         const list = (card.dataset.photos || '').split(',').map((s) => s.trim()).filter(Boolean);
         if (!list.length) return;
         const cardTitle = card.querySelector('h3') ? card.querySelector('h3').textContent.trim() : 'Catégorie';
-        const items = list.map((src) => ({ src: src, alt: 'Chalet ULMJC — ' + cardTitle }));
+        const items = list.map((src) => ({ src: src, alt: 'Chalet ULMJC, ' + cardTitle }));
         window.trackEvent('Photos', 'Ouverture catégorie chalet', cardTitle);
         openLightbox(items, 0);
       });
@@ -366,7 +366,7 @@ window.trackEvent = function (category, action, name, value) {
           // On ne track QUE l'ouverture, pas la fermeture
           const yearEl = btn.querySelector('.timeline-year');
           const titleEl = btn.querySelector('h3');
-          const label = (yearEl ? yearEl.textContent.trim() + ' — ' : '') +
+          const label = (yearEl ? yearEl.textContent.trim() + ' : ' : '') +
                         (titleEl ? titleEl.textContent.trim() : 'Étape');
           window.trackEvent('Timeline', 'Étape ouverte', label);
         }
@@ -428,10 +428,10 @@ window.trackEvent = function (category, action, name, value) {
 
     function commentFor(n, total) {
       if (n === total) return 'Bravo, sans faute ! Vous connaissez votre éducation populaire sur le bout des doigts.';
-      if (n >= total - 1) return 'Excellent score — il vous manque un détail ou deux.';
+      if (n >= total - 1) return 'Excellent score, il vous manque un détail ou deux.';
       if (n >= Math.ceil(total / 2)) return 'Bon score, vous avez les bases. Reparcourez la timeline pour les pépites.';
       if (n >= 2) return 'Le quizz est l\'occasion de creuser la timeline. Ressayez après lecture !';
-      return 'Pas grave — la timeline ci-dessus est là pour ça. Bonne lecture.';
+      return 'Pas grave, la timeline ci-dessus est là pour ça. Bonne lecture.';
     }
 
     function handleClick(e) {
@@ -523,7 +523,7 @@ window.trackEvent = function (category, action, name, value) {
       if (code >= 80 && code <= 82)   return { emoji: '🌧️', label: 'Averses' };
       if (code >= 85 && code <= 86)   return { emoji: '🌨️', label: 'Averses de neige' };
       if (code >= 95)                 return { emoji: '⛈️', label: 'Orage' };
-      return isDay ? { emoji: '🌤️', label: '—' } : { emoji: '🌙', label: '—' };
+      return isDay ? { emoji: '🌤️', label: '…' } : { emoji: '🌙', label: '…' };
     }
 
     // Mappe le code météo vers une classe CSS pour l'animation contextuelle
@@ -675,7 +675,7 @@ window.trackEvent = function (category, action, name, value) {
         '<div class="volunteer-icon" aria-hidden="true">🤝</div>' +
         '<span class="section-eyebrow">Rejoindre l’aventure</span>' +
         '<h2 id="volunteer-title">Devenez bénévole.</h2>' +
-        '<p>L’union locale, c’est <strong>100&nbsp;% de bénévoles</strong>&nbsp;: des habitant·es des quartiers qui font vivre les MJC et le chalet. On accueille toutes les énergies — quelques heures par mois, un coup de main ponctuel, ou un engagement plus régulier.</p>' +
+        '<p>L’union locale, c’est <strong>100&nbsp;% de bénévoles</strong>&nbsp;: des habitant·es des quartiers qui font vivre les MJC et le chalet. On accueille toutes les énergies&nbsp;: quelques heures par mois, un coup de main ponctuel, ou un engagement plus régulier.</p>' +
         '<p class="muted">Aucun pré-requis, juste l’envie de partager.</p>' +
         '<div class="volunteer-actions">' +
           '<a href="contact.php" class="btn btn-accent">Je veux en savoir plus</a>' +
@@ -725,7 +725,7 @@ window.trackEvent = function (category, action, name, value) {
     const closeTrigger = e.target.closest('[data-volunteer-close]');
     const cta = e.target.closest('a.btn-accent');
     if (cta && !modal.hidden) {
-      // Clic sur "Je veux en savoir plus" — on track puis on laisse la nav se faire
+      // Clic sur "Je veux en savoir plus", on track puis on laisse la nav se faire
       window.trackEvent('Popup bénévolat', 'Clic CTA', 'Je veux en savoir plus');
       try { sessionStorage.setItem(STORAGE_KEY, '1'); } catch (e) {}
     } else if (closeTrigger) {

@@ -1,4 +1,4 @@
-<?php /* Carte d'actualité — attend $a. Style visuel ULMJC (classe .card + .actu-card).
+<?php /* Carte d'actualité. Attend $a. Style visuel ULMJC (classe .card + .actu-card).
    $card_prefix optionnel (ex. '../' en admin) pour préfixer les chemins d'image. */
 $prefix = isset($card_prefix) ? $card_prefix : '';
 $title  = display_title($a);

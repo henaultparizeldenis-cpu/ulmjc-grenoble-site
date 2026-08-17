@@ -83,7 +83,7 @@ $hasPost = ($_SERVER['REQUEST_METHOD'] === 'POST');
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Aperçu — <?= e($type) ?></title>
+  <title>Aperçu : <?= e($type) ?></title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Lora:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="../css/style.css?v=<?= e(ASSET_V) ?>" />
   <style>
@@ -102,7 +102,7 @@ $hasPost = ($_SERVER['REQUEST_METHOD'] === 'POST');
   </style>
 </head>
 <body>
-<div class="lp-note">Aperçu en direct — modifications non enregistrées</div>
+<div class="lp-note">Aperçu en direct, modifications non enregistrées</div>
 <?php
 if (!$hasPost) {
   echo '<div class="lp-empty"><span class="lp-emoji">👁️</span>'
@@ -112,7 +112,7 @@ if (!$hasPost) {
 }
 
 /* ==================================================================
-   Rendu par type — reprend le markup EXACT des pages publiques.
+   Rendu par type : reprend le markup EXACT des pages publiques.
    ================================================================== */
 if ($type === 'actus') {
   /* Reprend actu.php (détail d'une actualité). */
@@ -123,7 +123,7 @@ if ($type === 'actus') {
   $body    = preview_body_html();
   ?>
   <style>
-  /* Styles repris de actu.php (détail) — nécessaires hors de la page publique. */
+  /* Styles repris de actu.php (détail), nécessaires hors de la page publique. */
   .actu-article-head{padding:3rem 0 0;background:transparent;border-bottom:none;text-align:center;}
   .actu-article-head+section{padding-top:0;}
   .actu-article-head .container>*{display:block;max-width:720px;margin-left:auto;margin-right:auto;}
@@ -184,7 +184,7 @@ if ($type === 'actus') {
   $body    = preview_body_html();
   ?>
   <style>
-  /* Styles repris de billet.php (détail) — nécessaires hors de la page publique. */
+  /* Styles repris de billet.php (détail), nécessaires hors de la page publique. */
   .actu-article-head{padding:3rem 0 0;background:transparent;border-bottom:none;text-align:center;}
   .actu-article-head+section{padding-top:0;}
   .actu-article-head .container>*{display:block;max-width:720px;margin-left:auto;margin-right:auto;}
@@ -315,7 +315,7 @@ if ($type === 'actus') {
                               '<a href="mailto:$1" onclick="return false;">$1</a>', $contactHtml);
   ?>
   <style>
-  /* Styles repris de offre.php (détail) — nécessaires hors de la page publique. */
+  /* Styles repris de offre.php (détail), nécessaires hors de la page publique. */
   .actu-article-head{padding:3rem 0 0;background:transparent;border-bottom:none;text-align:center;}
   .actu-article-head+section{padding-top:0;}
   .actu-article-head .container>*{display:block;max-width:720px;margin-left:auto;margin-right:auto;}

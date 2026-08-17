@@ -1,5 +1,5 @@
 /* =========================================================
-   Back-office ULMJC — reskin de l'identité du site public.
+   Back-office ULMJC : reskin de l'identité du site public.
    Reprend la palette et les polices de css/style.css (worktree ULMJC) :
    Lora (titres) + Inter (texte) ; crème / pin foncé / terre cuite.
    Le back-office doit ressembler à un prolongement du site public.
@@ -265,7 +265,7 @@ a{color:var(--terra-dark);text-decoration:none;}
   overflow:hidden;padding:1rem;min-height:0;}
 .ie-img{max-width:100%;max-height:100%;display:block;user-select:none;-webkit-user-drag:none;}
 /* L'assombrissement du pourtour se faisait avec une ombre de 100vmax : à chaque
-   image du déplacement, le navigateur repeignait toute la fenêtre — d'où les
+   image du déplacement, le navigateur repeignait toute la fenêtre, d'où les
    saccades. Une ombre bornée suffit visuellement et reste fluide. */
 .ie-box{position:absolute;border:2px solid var(--terra);cursor:move;
   box-shadow:0 0 0 1600px rgba(18,17,14,.55);touch-action:none;

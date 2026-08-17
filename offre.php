@@ -10,7 +10,7 @@ $a = $slug ? find_emploi($slug) : null;
 
 if (!$a || empty($a['published']) || emploi_expired($a)) {
   http_response_code(404);
-  $page_title  = 'Offre introuvable — ULMJC Grenoble';
+  $page_title  = 'Offre introuvable | ULMJC Grenoble';
   $page_active = 'emplois';
   require __DIR__ . '/inc/head.php';
   echo '<div class="page-header"><div class="container"><span class="section-eyebrow">Erreur 404</span>'
@@ -21,7 +21,7 @@ if (!$a || empty($a['published']) || emploi_expired($a)) {
   exit;
 }
 
-$page_title  = display_title($a) . " — Offre d'emploi — ULMJC Grenoble";
+$page_title  = display_title($a) . " | Offre d'emploi | ULMJC Grenoble";
 $page_desc   = $a['excerpt'] ?? $page_title;
 $page_active = 'emplois';
 require __DIR__ . '/inc/head.php';
@@ -45,7 +45,7 @@ $related = array_slice(array_values($related), 0, 3);
 ?>
 <style>
 /* En-tête d'offre : même moule que le détail d'un billet (billet.php), sans
-   bandeau photo — une offre n'a pas d'image. */
+   bandeau photo, une offre n'a pas d'image. */
 .actu-article-head{padding:3rem 0 0;background:transparent;border-bottom:none;text-align:center;}
 .actu-article-head+section{padding-top:0;}
 .actu-article-head .container>*{display:block;max-width:720px;margin-left:auto;margin-right:auto;}
