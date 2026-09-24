@@ -601,6 +601,104 @@ function media_disk_path($src) {
   return BASE_DIR . '/' . $src;
 }
 
+/* --- Orientation EXIF ---------------------------------------------------
+   Un telephone n'ecrit pas les pixels dans le sens ou la photo a ete prise :
+   il les laisse tels quels et note l'orientation dans une balise EXIF, que le
+   navigateur applique a l'affichage. Or GD ignore cette balise et le
+   re-encodage de optimize_image la supprime. Sans ce qui suit, une photo prise
+   en portrait etait donc enregistree couchee ET privee de l'information qui
+   permettait de la redresser : il fallait la pivoter a la main dans la
+   mediatheque.
+
+   On lit l'orientation AVANT le re-encodage, on tourne les pixels pour de bon,
+   et la balise devient inutile. L'extension exif n'etant pas garantie chez
+   l'hebergeur, on sait aussi lire la balise directement dans le fichier. */
+
+/* Orientation EXIF d'un JPEG : 1 (droite) a 8. Retourne 1 si on ne sait pas. */
+function exif_orientation($path) {
+  if (function_exists('exif_read_data')) {
+    $d = @exif_read_data($path);
+    if (is_array($d) && isset($d['Orientation'])) {
+      $o = (int) $d['Orientation'];
+      if ($o >= 1 && $o <= 8) return $o;
+    }
+  }
+  return exif_orientation_lue($path);
+}
+
+/* Repli sans l'extension exif : on parcourt les segments du JPEG jusqu'au bloc
+   APP1 qui porte le TIFF, et on y cherche la balise 0x0112. */
+function exif_orientation_lue($path) {
+  $f = @fopen($path, 'rb');
+  if (!$f) return 1;
+  $o = 1;
+  if (fread($f, 2) === chr(0xFF) . chr(0xD8)) {                 // SOI : c'est bien un JPEG
+    while (!feof($f)) {
+      $m = fread($f, 2);
+      if (strlen($m) < 2 || $m[0] !== chr(0xFF)) break;
+      $code = ord($m[1]);
+      if ($code === 0x01 || ($code >= 0xD0 && $code <= 0xD9)) continue;  // segments sans taille
+      if ($code === 0xDA) break;                      // debut de l'image : plus d'en-tete ensuite
+      $t = fread($f, 2);
+      if (strlen($t) < 2) break;
+      $n = unpack('n', $t);
+      $n = $n[1];
+      if ($n < 2) break;
+      $bloc = fread($f, $n - 2);
+      if ($code === 0xE1 && substr($bloc, 0, 6) === "Exif" . chr(0) . chr(0)) {
+        $o = exif_orientation_tiff(substr($bloc, 6));
+        break;
+      }
+    }
+  }
+  fclose($f);
+  return $o;
+}
+
+/* Balise 0x0112 dans un bloc TIFF (« II » petit-boutiste, « MM » gros-boutiste). */
+function exif_orientation_tiff($t) {
+  $taille = strlen($t);
+  if ($taille < 8) return 1;
+  $bo = substr($t, 0, 2);
+  if ($bo === 'II')      { $court = 'v'; $long = 'V'; }
+  elseif ($bo === 'MM')  { $court = 'n'; $long = 'N'; }
+  else return 1;
+
+  $d = unpack($long, substr($t, 4, 4)); $ifd = $d[1];
+  if ($ifd + 2 > $taille) return 1;
+  $d = unpack($court, substr($t, $ifd, 2)); $n = $d[1];
+
+  for ($i = 0; $i < $n; $i++) {
+    $e = $ifd + 2 + $i * 12;
+    if ($e + 12 > $taille) break;
+    $d = unpack($court, substr($t, $e, 2));
+    if ($d[1] === 0x0112) {
+      $d = unpack($court, substr($t, $e + 8, 2));
+      return ($d[1] >= 1 && $d[1] <= 8) ? $d[1] : 1;
+    }
+  }
+  return 1;
+}
+
+/* Redresse une image GD selon son orientation EXIF. Renvoie l'image a utiliser
+   (imagerotate en cree une nouvelle : l'ancienne est liberee au passage). */
+function apply_exif_orientation($im, $o) {
+  if ($o <= 1 || $o > 8) return $im;
+  if (($o === 2 || $o === 4 || $o === 5 || $o === 7) && function_exists('imageflip')) {
+    imageflip($im, $o === 4 ? IMG_FLIP_VERTICAL : IMG_FLIP_HORIZONTAL);
+  }
+  /* imagerotate tourne dans le sens antihoraire. */
+  $angle = 0;
+  if ($o === 3)                  $angle = 180;
+  elseif ($o === 6 || $o === 7)  $angle = -90;
+  elseif ($o === 5 || $o === 8)  $angle = 90;
+  if ($angle !== 0 && function_exists('imagerotate')) {
+    $r = @imagerotate($im, $angle, 0);
+    if ($r) { imagedestroy($im); $im = $r; }
+  }
+  return $im;
+}
+
 /* Redimensionne et ré-encode une image en JPEG optimisé (GD). */
 function optimize_image($srcPath, $destPath, $maxW = IMG_MAX_W, $quality = IMG_QUALITY) {
   if (!function_exists('imagecreatetruecolor')) return copy($srcPath, $destPath);
@@ -614,6 +712,11 @@ function optimize_image($srcPath, $destPath, $maxW = IMG_MAX_W, $quality = IMG_Q
     default: $src = false;
   }
   if (!$src) return false;
+
+  /* On redresse d'abord : la largeur maximale doit s'appliquer a la photo
+     telle qu'elle sera vue, pas telle qu'elle est stockee. */
+  if ($info[2] === IMAGETYPE_JPEG) $src = apply_exif_orientation($src, exif_orientation($srcPath));
+
   $w = imagesx($src); $h = imagesy($src);
   $nw = $w; $nh = $h;
   if ($w > $maxW) { $nw = $maxW; $nh = (int)round($h * $maxW / $w); }
