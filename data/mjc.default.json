@@ -14,7 +14,7 @@
     "lieu": "3 rue Parmentier",
     "ordre": 1,
     "published": true,
-    "batiment": ""
+    "batiment": "302520212"
   },
   {
     "slug": "mjc-des-eaux-claires",
@@ -31,7 +31,7 @@
     "lieu": "33 rue Joseph Bouchayer",
     "ordre": 2,
     "published": true,
-    "batiment": ""
+    "batiment": "302521173"
   },
   {
     "slug": "mjc-lucie-aubrac-capuche",
@@ -48,7 +48,7 @@
     "lieu": "",
     "ordre": 3,
     "published": true,
-    "batiment": ""
+    "batiment": "302515342"
   },
   {
     "slug": "mjc-lucie-aubrac-clos-d-or",
@@ -82,10 +82,10 @@
     "lieu": "1 place de la Commune de 1871",
     "ordre": 5,
     "published": true,
-    "batiment": ""
+    "batiment": "302527202"
   },
   {
-    "slug": "mjc-mutualit",
+    "slug": "mjc-mutualite",
     "nom": "MJC Mutualité",
     "quartier": "Mutualité / Préfecture",
     "adresse": "5 place Jean Moulin, 38000 Grenoble",
@@ -99,7 +99,7 @@
     "lieu": "5 place Jean Moulin",
     "ordre": 6,
     "published": true,
-    "batiment": ""
+    "batiment": "7795956"
   },
   {
     "slug": "mjc-anatole-france",
@@ -116,7 +116,7 @@
     "lieu": "2 rue Anatole France",
     "ordre": 7,
     "published": true,
-    "batiment": ""
+    "batiment": "302515298"
   },
   {
     "slug": "maison-pour-tous-saint-laurent",
@@ -133,6 +133,6 @@
     "lieu": "1 place Saint-Laurent",
     "ordre": 8,
     "published": true,
-    "batiment": ""
+    "batiment": "302531215"
   }
 ]
