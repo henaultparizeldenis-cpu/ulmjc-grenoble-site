@@ -278,6 +278,98 @@
     return [ax, ay, (bx - ax) / l, (by - ay) / l];
   }
 
+  /* ---------------------------------------------------------- photo ---
+     Superposition de la photo aerienne de l'IGN, pour reconnaitre un
+     batiment a son toit. Reservee a l'ecran de designation : sur la page
+     publique elle ruinerait le dessin et alourdirait le chargement.
+
+     Google est exclu, ses tuiles ne pouvant pas sortir de leur conteneur et
+     son API demandant une cle facturee. La BD ORTHO de l'IGN est libre, sans
+     cle, a vingt centimetres par pixel, et surtout elle vient du meme
+     producteur que les emprises de batiments : la photo et les contours
+     s'alignent.
+
+     Le calage est exact et non approche : a une altitude donnee, la
+     projection du plan du sol est AFFINE, donc exprimable par le seul
+     setTransform du canevas. On dessine la tuile a sa place en metres et le
+     canevas s'occupe du reste. */
+  var PHOTO = false, TUILES = {}, TUILES_EN_COURS = 0;
+  var ORTHO = 'https://data.geopf.fr/wmts?SERVICE=WMTS&REQUEST=GetTile&VERSION=1.0.0'
+            + '&LAYER=ORTHOIMAGERY.ORTHOPHOTOS&STYLE=normal&TILEMATRIXSET=PM'
+            + '&FORMAT=image/jpeg';
+
+  function lonDeTuile(x, z) { return x / Math.pow(2, z) * 360 - 180; }
+  function latDeTuile(y, z) {
+    var m = Math.PI * (1 - 2 * y / Math.pow(2, z));
+    return Math.atan(Math.sinh(m)) * 180 / Math.PI;
+  }
+  function metreDe(lon, lat) {
+    var K = Math.cos(PLAN.o[1] * Math.PI / 180);
+    return [(lon - PLAN.o[0]) * 111320 * K, (lat - PLAN.o[1]) * 111320];
+  }
+
+  function tracePhoto(zSol) {
+    if (!PHOTO || !PLAN) return;
+    var K = Math.cos(PLAN.o[1] * Math.PI / 180);
+    /* Le niveau de tuile est choisi pour que la photo soit a peu pres aussi
+       fine que l'ecran : plus, on telecharge pour rien ; moins, ca bave. */
+    var z = Math.round(Math.log2(40075016.686 * K * VUE.s / 256)) + 1;
+    z = Math.max(14, Math.min(19, z));
+    var n2 = Math.pow(2, z);
+
+    /* L'emprise visible, obtenue en inversant l'affine aux quatre coins. */
+    var det = VUE.ca * (-VUE.ca * PENTE) - VUE.sa * (VUE.sa * PENTE);
+    if (!det) return;
+    var dec = (zSol - PLAN.z0) * RELIEF * VUE.s;
+    var e0 = 1e9, e1 = -1e9, n0 = 1e9, n1 = -1e9;
+    [[0, 0], [CR.w, 0], [0, CR.h], [CR.w, CR.h]].forEach(function (c) {
+      var X = (c[0] - VUE.dx) / VUE.s, Y = (c[1] - VUE.dy + dec) / VUE.s;
+      var e = (X * (-VUE.ca * PENTE) - VUE.sa * Y) / det;
+      var n = (VUE.ca * Y - X * (VUE.sa * PENTE)) / det;
+      if (e < e0) e0 = e; if (e > e1) e1 = e;
+      if (n < n0) n0 = n; if (n > n1) n1 = n;
+    });
+    var lo0 = PLAN.o[0] + e0 / (111320 * K), lo1 = PLAN.o[0] + e1 / (111320 * K);
+    var la0 = PLAN.o[1] + n0 / 111320, la1 = PLAN.o[1] + n1 / 111320;
+
+    function colonne(lon) { return Math.floor((lon + 180) / 360 * n2); }
+    function ligne(lat) {
+      var r = lat * Math.PI / 180;
+      return Math.floor((1 - Math.log(Math.tan(r) + 1 / Math.cos(r)) / Math.PI) / 2 * n2);
+    }
+    var cx0 = colonne(lo0), cx1 = colonne(lo1);
+    var cy0 = ligne(la1), cy1 = ligne(la0);
+    /* Garde-fou : au-dela on telechargerait des centaines de tuiles. */
+    if ((cx1 - cx0 + 1) * (cy1 - cy0 + 1) > 90) return;
+
+    XR.save();
+    XR.setTransform(CR.r, 0, 0, CR.r, 0, 0);
+    XR.transform(VUE.s * VUE.ca, VUE.s * VUE.sa * PENTE,
+                 VUE.s * VUE.sa, -VUE.s * VUE.ca * PENTE,
+                 VUE.dx, VUE.dy - dec);
+    XR.scale(1, -1);   /* le nord monte a l'ecran, l'image descend */
+    for (var cx = cx0; cx <= cx1; cx++) {
+      for (var cy = cy0; cy <= cy1; cy++) {
+        var cle = z + '/' + cx + '/' + cy, img = TUILES[cle];
+        if (img === undefined) {
+          if (TUILES_EN_COURS > 12) continue;   /* on ne sature pas le reseau */
+          TUILES_EN_COURS++;
+          img = new Image();
+          img.onload = function () { TUILES_EN_COURS--; rendu(HORLOGE); };
+          img.onerror = function () { TUILES_EN_COURS--; };
+          img.src = ORTHO + '&TILEMATRIX=' + z + '&TILEROW=' + cy + '&TILECOL=' + cx;
+          TUILES[cle] = img;
+          continue;
+        }
+        if (!img.complete || !img.naturalWidth) continue;
+        var a = metreDe(lonDeTuile(cx, z), latDeTuile(cy, z));
+        var b = metreDe(lonDeTuile(cx + 1, z), latDeTuile(cy + 1, z));
+        XR.drawImage(img, a[0], -a[1], b[0] - a[0], a[1] - b[1]);
+      }
+    }
+    XR.restore();
+  }
+
   /* --------------------------------------------------------- relief ---- */
   function traceCourbe(c, plein) {
     var p = c.p, k, r;
@@ -347,6 +439,12 @@
       i = j;
     }
 
+    /* La photo se pose APRES le relief et AVANT le bati : elle remplace le
+       sol, et les volumes se dressent dessus. */
+    if (PHOTO && MAISONS.length) {
+      var anc = (VISEE.i !== null && VISEE.u > .05) ? VISEE.i : ancreAuCentre();
+      if (MAISONS[anc]) tracePhoto(MAISONS[anc].z);
+    }
     traceBati(t);
 
     /* La toponymie s'efface a mesure qu'on plonge : a fort grossissement, ces
@@ -516,7 +614,8 @@
           XR.lineTo(w[q + 4], w[q + 5]); XR.lineTo(w[q + 6], w[q + 7]);
           XR.closePath();
         }
-        XR.fillStyle = gris(TON_MUR[m], al); XR.fill();
+        XR.fillStyle = PHOTO ? 'rgba(20,34,28,' + (.35 * al) + ')' : gris(TON_MUR[m], al);
+        XR.fill();
         murs[m].length = 0;
       }
       if (toits.length) {
@@ -529,9 +628,12 @@
         }
         /* Les toits prennent la couleur du fond, cernes d'un trait, comme les
            plaques de courbes : remplis d'un gris franc, le quartier tournait
-           au tapis uniforme. */
-        XR.fillStyle = gris(TON_TOIT, al); XR.fill();
-        XR.strokeStyle = gris(TON_ARETE, al); XR.lineWidth = .65; XR.stroke();
+           au tapis uniforme. Sur la photo, on ne remplit plus du tout : il
+           faut voir le vrai toit sous le contour. */
+        if (!PHOTO) { XR.fillStyle = gris(TON_TOIT, al); XR.fill(); }
+        XR.strokeStyle = PHOTO ? 'rgba(251,247,241,' + (.8 * al) + ')' : gris(TON_ARETE, al);
+        XR.lineWidth = PHOTO ? .9 : .65;
+        XR.stroke();
         toits.length = 0;
       }
     }
@@ -1017,6 +1119,8 @@
     /* Seule prise offerte a l'exterieur : plonger sur une maison par son rang
        dans la liste. Le back-office s'en sert pour l'ecran de designation. */
     window.viseParIndex = function (i, fort) { vise(i, fort); };
+    /* La photo aerienne ne s'allume que depuis le back-office. */
+    if (DESIGNE) window.montrePhoto = function (o) { PHOTO = !!o; rendu(HORLOGE); };
   }
 
   CR = document.createElement('canvas');

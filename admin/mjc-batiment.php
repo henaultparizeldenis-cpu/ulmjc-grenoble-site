@@ -47,6 +47,8 @@ admin_header('Désigner les bâtiments');
     Choisissez une maison, la carte descend dessus. Le bâtiment en terre cuite est
     celui que la carte suppose. <strong>Cliquez le bon</strong>, puis enregistrez.
     Tirez pour tourner, la molette grossit, double-clic pour descendre au ras des toits.
+    La photo aérienne aide à reconnaître le bon toit&nbsp;; elle vient de l'IGN,
+    comme les contours, donc les deux se superposent exactement.
   </p>
 
   <div class="agrid2" style="align-items:end;">
@@ -60,6 +62,13 @@ admin_header('Désigner les bâtiments');
       </select>
     </label>
     <div>
+      <label class="afield aswitch-field" style="margin-bottom:.5rem;">
+        <label class="aswitch">
+          <input type="checkbox" id="voirPhoto" />
+          <span class="aswitch-track"><span class="aswitch-thumb"></span></span>
+          <span class="aswitch-lbl">Photo aérienne (IGN)</span>
+        </label>
+      </label>
       <p class="ahint" id="etat" style="margin:0 0 .5rem;">Aucun bâtiment choisi.</p>
       <form method="post" action="mjc-batiment-save.php" id="formBat" style="display:flex;gap:.6rem;align-items:center;">
         <?= csrf_field() ?>
@@ -118,6 +127,13 @@ admin_header('Désigner les bâtiments');
     if (window.viseParIndex) window.viseParIndex(+choix.value, true);
   }
   choix.addEventListener('change', suit);
+
+  /* La photo aérienne de l'IGN, pour reconnaître le bâtiment à son toit.
+     Elle n'existe que sur cet écran : la page publique ne la charge jamais. */
+  var photo = document.getElementById('voirPhoto');
+  photo.addEventListener('change', function () {
+    if (window.montrePhoto) window.montrePhoto(photo.checked);
+  });
 
   window.onBatimentChoisi = function (id, hauteur) {
     cBat.value = id;
