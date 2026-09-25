@@ -41,15 +41,51 @@ require_once __DIR__ . '/inc/lib.php';
   <div class="container">
     <span class="section-eyebrow">Notre réseau</span>
     <h1>Les Maisons des Jeunes et de la Culture et Maison Pour Tous de Grenoble.</h1>
-    <p class="lede">Sept maisons de quartier, chacune avec son identité, ses adhérents, ses projets. Ensemble, elles forment l'Union Locale et font vivre l'éducation populaire à Grenoble.</p>
+    <?php
+    /* Le nombre de maisons suit les donnees : il etait ecrit en toutes lettres
+       dans la page, et se trompait des qu'on en ajoutait une. On compte les
+       noms distincts, une maison a deux adresses restant une maison. */
+    $noms = array();
+    foreach (array_filter(active_items('mjc'), function ($m) { return !empty($m['published']); }) as $m) {
+      $base = trim(preg_replace('/\s*\(.*$/u', '', $m['nom'] ?? ''));
+      if ($base !== '') $noms[$base] = true;
+    }
+    $n = count($noms);
+    $lettres = array(1 => 'Une', 'Deux', 'Trois', 'Quatre', 'Cinq', 'Six', 'Sept',
+                     'Huit', 'Neuf', 'Dix', 'Onze', 'Douze', 'Treize', 'Quatorze', 'Quinze');
+    $combien = isset($lettres[$n]) ? $lettres[$n] : $n;
+    ?>
+    <p class="lede"><?= e($combien) ?> maison<?= $n > 1 ? 's' : '' ?> de quartier, chacune avec son identité, ses adhérents, ses projets. Ensemble, elles forment l'Union Locale et font vivre l'éducation populaire à Grenoble.</p>
   </div>
 </div>
 
 <section>
   <div class="container">
-    <p class="muted center" style="max-width:640px;margin:0 auto 2.5rem;">
+    <p class="muted center" style="max-width:640px;margin:0 auto 2rem;">
       Toutes les maisons sont ouvertes à <em>tout le monde</em>, quel que soit
       le quartier où l'on habite.
+    </p>
+
+    <?php /* La carte se dessine dans ce cadre (js/carte-mjc.js). Elle lit les
+             maisons sur les attributs data-points des fiches ci-dessous : une
+             maison ajoutée dans le back-office y apparaît sans rien d'autre.
+             Sans JavaScript, le cadre reste vide et la liste suffit. */ ?>
+    <div id="mjc-carte" class="mjc-carte" role="img"
+         aria-label="Carte en relief de Grenoble situant les maisons de l'union">
+      <div class="mjc-fiche" id="mjc-fiche" aria-live="polite">
+        <div class="mjc-fiche-tete">
+          <h2 id="mjc-f-nom"></h2>
+          <button class="mjc-fiche-fermer" id="mjc-fiche-fermer" type="button">Revenir</button>
+        </div>
+        <p class="mjc-f-quartier" id="mjc-f-quartier"></p>
+        <p id="mjc-f-adresse"></p>
+        <p class="mjc-f-tel" id="mjc-f-tel"></p>
+      </div>
+    </div>
+    <p class="mjc-carte-aide muted center">
+      Cliquez une maison, sur la carte ou dans la liste, pour y descendre.
+      Tirez pour tourner autour de la vallée, la molette grossit.
+      La liste ci-dessous donne les mêmes informations, sous forme de texte.
     </p>
 
     <?php
@@ -129,6 +165,7 @@ require_once __DIR__ . '/inc/lib.php';
   </div>
 </section>
 
+<script src="js/carte-mjc.js?v=20260925-1"></script>
 <?php include __DIR__ . '/inc/site-footer.php'; ?>
 
 <script src="js/main.js?v=20260524-14"></script>
