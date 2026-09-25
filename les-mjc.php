@@ -109,7 +109,10 @@ require_once __DIR__ . '/inc/lib.php';
       $logo = mjc_logo_src($m['logo'] ?? '');
       $nom  = $m['nom'] ?? '';
 ?>
-      <li class="mjc-item" data-points='<?= e(json_encode($points, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES)) ?>'>
+      <li class="mjc-item" data-points='<?= e(json_encode($points, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES)) ?>'<?php
+        /* Le batiment designe a la main, s'il y en a un. Sans lui, la carte
+           surligne le plus proche de l'adresse, ce qui n'est qu'une deduction. */
+        if (!empty($m['batiment'])): ?> data-batiment="<?= e($m['batiment']) ?>"<?php endif; ?>>
         <div class="mjc-logo">
           <?php if ($logo !== ''): ?>
             <img src="<?= e($logo) ?>" alt="Logo <?= e($nom) ?>" onerror="this.parentNode.classList.add('mjc-logo-placeholder');this.parentNode.innerHTML='<span><?= e($nom) ?></span>'">

@@ -403,7 +403,7 @@
      batiment, pour garder des traces groupes. */
   var ANNEAUX = [[355, 430, .3], [250, 355, .68], [0, 250, 1]];
   var DALLE = 60, LUM_E = -.55, LUM_N = .84;
-  var LOT = null, LOT_I = null, LOT_AZ = 1e9, LOT_MAISON = null;
+  var LOT = null, LOT_I = null, LOT_AZ = 1e9, LOT_MAISON = null, MAISON_SURE = false;
 
   function chargeBati() {
     if (BATI || BATI_EN_COURS) return;
@@ -452,20 +452,33 @@
         for (var a = 0; a < ANNEAUX.length; a++)
           if (d >= ANNEAUX[a][0] && d < ANNEAUX[a][1]) { LOT[a].push(b); break; }
       }
-      /* Le batiment de la maison. Surtout pas celui qui CONTIENT le point :
-         les adresses sont geocodees sur la voie, aucune des maisons ne tombe
-         dans un batiment, le plus proche etant entre dix et quarante metres.
-         On prend donc le plus proche, mesure sur les sommets et non sur le
-         centre, un grand immeuble ayant son centre loin de sa facade. */
+      /* Le batiment de la maison. D'abord celui qui a ete DESIGNE a la main
+         depuis le back-office : c'est une donnee, elle fait foi.
+
+         A defaut, le plus proche de l'adresse, ce qui n'est qu'une deduction :
+         les adresses sont geocodees sur la voie, aucune maison ne tombe dans
+         une emprise batie, la plus proche etant entre dix et quarante metres,
+         et dans un quartier dense plusieurs se valent. On mesure sur les
+         sommets et non sur le centre, un grand immeuble ayant son centre loin
+         de sa facade. */
       LOT_MAISON = null;
-      var mieux = 1e18;
-      for (var q = 0; q < LOT[2].length; q++) {
-        var c = LOT[2][q], P = c.p, dd = 1e18;
-        for (var u = 0; u < P.length; u += 2) {
-          var ee = P[u] - vise.e, nn = P[u + 1] - vise.n, t2 = ee * ee + nn * nn;
-          if (t2 < dd) dd = t2;
+      MAISON_SURE = false;
+      var voulu = MAISONS[ancre] && MAISONS[ancre].batiment;
+      if (voulu) {
+        for (var v = 0; v < LOT.length && !LOT_MAISON; v++)
+          for (var w = 0; w < LOT[v].length; w++)
+            if (LOT[v][w].id === voulu) { LOT_MAISON = LOT[v][w]; MAISON_SURE = true; break; }
+      }
+      if (!LOT_MAISON) {
+        var mieux = 1e18;
+        for (var q = 0; q < LOT[2].length; q++) {
+          var c = LOT[2][q], P = c.p, dd = 1e18;
+          for (var u = 0; u < P.length; u += 2) {
+            var ee = P[u] - vise.e, nn = P[u + 1] - vise.n, t2 = ee * ee + nn * nn;
+            if (t2 < dd) dd = t2;
+          }
+          if (dd < mieux) { mieux = dd; LOT_MAISON = c; }
         }
-        if (dd < mieux) { mieux = dd; LOT_MAISON = c; }
       }
       LOT_AZ = 1e9;
     }
@@ -551,9 +564,17 @@
 
     /* La maison, repeinte par-dessus : c'est elle qu'on est venu voir. Elle
        respire lentement, la ou les jalons battent comme un coeur. */
-    if (LOT_MAISON) {
+    /* En designation, c'est le batiment cliqué qu'on montre, pas la
+       deduction : sinon on ne verrait pas ce qu'on vient de choisir. */
+    var montre = LOT_MAISON;
+    if (DESIGNE && CHOISI) {
+      for (var z1 = 0; z1 < LOT.length && montre === LOT_MAISON; z1++)
+        for (var z2 = 0; z2 < LOT[z1].length; z2++)
+          if (LOT[z1][z2].id === CHOISI) { montre = LOT[z1][z2]; break; }
+    }
+    if (montre) {
       var souffle = SOBRE ? .5 : .5 + .5 * Math.sin(t * 2.5);
-      var m = LOT_MAISON, Q = m.p, dm = m.h * RELIEF * VUE.s, hau = [];
+      var m = montre, Q = m.p, dm = m.h * RELIEF * VUE.s, hau = [];
       XR.beginPath();
       for (var g = 0; g < Q.length; g += 2) {
         var g2 = (g + 2) % Q.length;
@@ -752,6 +773,36 @@
     return best;
   }
 
+  /* ---------------------------------------------------- designation ---
+     Dans le back-office, la carte sert a DESIGNER le batiment d'une maison :
+     on clique dessus et son identifiant remonte. Le mode ne s'active que si
+     le conteneur le demande, la page publique ne l'a jamais. */
+  var DESIGNE = SC.getAttribute('data-mode') === 'designe';
+  var CHOISI = SC.getAttribute('data-batiment') || '';
+
+  /* Le toit d'un batiment, projete a l'ecran. Le test d'appartenance se fait
+     sur le toit et non sur l'emprise au sol : c'est le toit qu'on voit, et
+     c'est donc lui qu'on vise. */
+  function toitSousLeCurseur(x, y) {
+    if (!LOT) return null;
+    /* Du plus proche au plus lointain : le premier touche est celui qui est
+       devant, donc celui qu'on croit cliquer. */
+    for (var a = ANNEAUX.length - 1; a >= 0; a--) {
+      var lot = LOT[a];
+      for (var j = lot.length - 1; j >= 0; j--) {
+        var b = lot[j], P = b.p, dh = b.h * RELIEF * VUE.s, dedans = false;
+        for (var k = 0, l = P.length - 2; k < P.length; l = k, k += 2) {
+          var xk = px(P[k], P[k + 1]), yk = py(P[k], P[k + 1], b.z) - dh;
+          var xl = px(P[l], P[l + 1]), yl = py(P[l], P[l + 1], b.z) - dh;
+          if ((yk > y) !== (yl > y) && x < (xl - xk) * (y - yk) / (yl - yk) + xk)
+            dedans = !dedans;
+        }
+        if (dedans) return b;
+      }
+    }
+    return null;
+  }
+
   /* Tirer fait tourner, et rien d'autre : faire varier l'azimut et
      l'inclinaison du meme geste rend la vue impossible a poser. */
   var tire = null;
@@ -788,6 +839,22 @@
       tire = null; SC.classList.remove('mjc-carte-tire');
       if (!clic || !PLAN) return;
       var p = local(e), sur = maisonSous(p[0], p[1]);
+      if (DESIGNE) {
+        /* Un clic sur un batiment le designe ; un clic sur un jalon plonge
+           dessus, pour aller voir de pres avant de choisir. Et un clic dans le
+           vide ne fait RIEN : refermer le gros plan au premier essai manque
+           rendait la designation impraticable, on ressortait de la vue des
+           qu'on visait a cote d'un toit. */
+        var b = toitSousLeCurseur(p[0], p[1]);
+        if (b) {
+          CHOISI = b.id;
+          if (window.onBatimentChoisi) window.onBatimentChoisi(b.id, b.h);
+          rendu(HORLOGE);
+          return;
+        }
+        if (sur !== null) vise(sur, true);
+        return;
+      }
       if (sur !== null) vise(sur); else relache();
     });
     SC.addEventListener('pointercancel', function () { tire = null; SC.classList.remove('mjc-carte-tire'); });
@@ -907,7 +974,8 @@
         tel: tel ? tel.textContent.trim() : '',
         e: (p.lon - PLAN.o[0]) * 111320 * K,
         n: (p.lat - PLAN.o[1]) * 111320,
-        z: altitudeDe(p.lon, p.lat)
+        z: altitudeDe(p.lon, p.lat),
+        batiment: el.getAttribute('data-batiment') || ''
       });
     });
   }
@@ -946,6 +1014,9 @@
                                { threshold: .02 }).observe(SC);
     requestAnimationFrame(boucle);
     SC.classList.add('mjc-carte-prete');
+    /* Seule prise offerte a l'exterieur : plonger sur une maison par son rang
+       dans la liste. Le back-office s'en sert pour l'ecran de designation. */
+    window.viseParIndex = function (i, fort) { vise(i, fort); };
   }
 
   CR = document.createElement('canvas');

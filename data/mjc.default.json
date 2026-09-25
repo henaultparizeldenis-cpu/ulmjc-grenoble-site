@@ -13,7 +13,8 @@
     "lon": 5.71012,
     "lieu": "3 rue Parmentier",
     "ordre": 1,
-    "published": true
+    "published": true,
+    "batiment": ""
   },
   {
     "slug": "mjc-des-eaux-claires",
@@ -29,7 +30,8 @@
     "lon": 5.71092,
     "lieu": "33 rue Joseph Bouchayer",
     "ordre": 2,
-    "published": true
+    "published": true,
+    "batiment": ""
   },
   {
     "slug": "mjc-lucie-aubrac-capuche",
@@ -45,7 +47,8 @@
     "lon": 5.72449,
     "lieu": "",
     "ordre": 3,
-    "published": true
+    "published": true,
+    "batiment": ""
   },
   {
     "slug": "mjc-lucie-aubrac-clos-d-or",
@@ -61,7 +64,8 @@
     "lon": 5.72412,
     "lieu": "",
     "ordre": 4,
-    "published": true
+    "published": true,
+    "batiment": ""
   },
   {
     "slug": "mjc-abbaye",
@@ -77,7 +81,8 @@
     "lon": 5.74493,
     "lieu": "1 place de la Commune de 1871",
     "ordre": 5,
-    "published": true
+    "published": true,
+    "batiment": ""
   },
   {
     "slug": "mjc-mutualit",
@@ -93,7 +98,8 @@
     "lon": 5.73738,
     "lieu": "5 place Jean Moulin",
     "ordre": 6,
-    "published": true
+    "published": true,
+    "batiment": ""
   },
   {
     "slug": "mjc-anatole-france",
@@ -109,7 +115,8 @@
     "lon": 5.7139,
     "lieu": "2 rue Anatole France",
     "ordre": 7,
-    "published": true
+    "published": true,
+    "batiment": ""
   },
   {
     "slug": "maison-pour-tous-saint-laurent",
@@ -125,6 +132,7 @@
     "lon": 5.73216,
     "lieu": "1 place Saint-Laurent",
     "ordre": 8,
-    "published": true
+    "published": true,
+    "batiment": ""
   }
 ]

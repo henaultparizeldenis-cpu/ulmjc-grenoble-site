@@ -13,7 +13,13 @@ $flash = isset($_GET['ok']) ? $_GET['ok'] : '';
 /* Une maison sans coordonnées n'apparaîtra pas sur la carte : on le signale
    dans la liste plutôt que de laisser le point manquer en silence. */
 $sansPoint = 0;
-foreach ($maisons as $m) { if (empty($m['lat']) || empty($m['lon'])) $sansPoint++; }
+$sansBati = 0;
+foreach ($maisons as $m) {
+  if (empty($m['lat']) || empty($m['lon'])) $sansPoint++;
+  /* Sans bâtiment désigné, la carte surligne celui qu'elle suppose, ce qui
+     se trompe souvent : on le signale plutôt que de laisser croire. */
+  elseif (empty($m['batiment'])) $sansBati++;
+}
 
 admin_header('Les MJC');
 ?>
@@ -27,9 +33,12 @@ admin_header('Les MJC');
     <h1 class="atitle">Les MJC</h1>
     <p class="asub"><?= count($maisons) ?> maison<?= count($maisons) > 1 ? 's' : '' ?><?php
       if ($sansPoint): ?> &middot; <?= $sansPoint ?> sans coordonnées, absente<?= $sansPoint > 1 ? 's' : '' ?> de la carte<?php
+      endif;
+      if ($sansBati): ?> &middot; <?= $sansBati ?> sans bâtiment désigné<?php
       endif; ?></p>
   </div>
   <div class="ahead-actions">
+    <a class="alink" href="mjc-batiment.php">Désigner les bâtiments</a>
     <a class="abtn" href="mjc-edit.php">+ Nouvelle maison</a>
   </div>
 </div>
@@ -53,6 +62,8 @@ admin_header('Les MJC');
             <?php if (!empty($m['quartier'])): ?><span><?= e($m['quartier']) ?></span><?php endif; ?>
             <?php if (empty($m['lat']) || empty($m['lon'])): ?>
               <span class="abadge">Hors carte</span>
+            <?php elseif (empty($m['batiment'])): ?>
+              <a class="abadge" href="mjc-batiment.php?slug=<?= e($m['slug']) ?>">Bâtiment supposé</a>
             <?php endif; ?>
             <?php if (empty($m['published'])): ?>
               <span class="abadge">Masquée</span>

@@ -70,6 +70,12 @@ $lat = is_numeric($lat) ? (float)$lat : null;
 $lon = is_numeric($lon) ? (float)$lon : null;
 
 $memeAdresse = ($existing && $adresse !== '' && $adresse === $prevAdresse);
+
+/* Le batiment designe a la main. Il n'est pas dans le formulaire : il se
+   choisit sur la carte (admin/mjc-batiment.php). On le reconduit tel quel,
+   SAUF si l'adresse a change : la maison a demenage, le batiment d'avant
+   n'est plus le sien. */
+$batiment = ($existing && $memeAdresse) ? ($existing['batiment'] ?? '') : '';
 $saisieManuelle = ($lat !== null && $lon !== null);
 /* On regeocode si l'adresse a bougé, même si d'anciennes coordonnées traînent :
    sinon un déménagement laisserait le point à l'ancienne adresse. */
@@ -115,6 +121,7 @@ $record = array(
   'lat'       => $lat,
   'lon'       => $lon,
   'lieu'      => $lieu,
+  'batiment'  => $batiment,
   'ordre'     => $ordre,
   'published' => $published,
 );
