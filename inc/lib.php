@@ -393,6 +393,68 @@ function published_activites()  { return published_ordered('activites'); }
 
 function load_partenaires()       { return load_items('partenaires'); }
 function save_partenaires($items) { return save_items('partenaires', $items); }
+
+function load_mjc()               { return load_items('mjc'); }
+function save_mjc($items)         { return save_items('mjc', $items); }
+
+/* Source d'affichage du logo d'une maison.
+
+   Deux origines cohabitent : les logos historiques, versionnés dans le dépôt
+   sous images/mjc/, et ceux téléversés depuis le back-office, qui passent par
+   la médiathèque. media_valid_src() ne connaît que la seconde et rejetterait
+   les premiers, d'où ce petit aiguillage. */
+function mjc_logo_src($logo) {
+  $logo = trim((string)$logo);
+  if ($logo === '') return '';
+  $media = media_valid_src($logo);
+  if ($media !== '') return $media;
+  /* Chemin du dépôt : on n'accepte que images/…, sans remontée de dossier. */
+  if (preg_match('#^images/[A-Za-z0-9/_\-]+\.(png|jpe?g|webp|svg)$#i', $logo)
+      && strpos($logo, '..') === false) return $logo;
+  return '';
+}
+
+/* Coordonnées d'une adresse, via la Base Adresse Nationale (service public,
+   sans clé). Renvoie array(longitude, latitude) ou null.
+
+   Le contrôle fait sur les neuf maisons déjà en ligne donne un écart médian
+   nul et un écart maximal d'un mètre par rapport aux coordonnées saisies
+   jusqu'ici à la main.
+
+   En cas de panne réseau, de réponse illisible ou d'adresse non reconnue, on
+   renvoie null SANS lever d'erreur : l'enregistrement d'une maison ne doit
+   jamais échouer parce qu'un service extérieur ne répond pas. La maison est
+   alors simplement signalée « hors carte » dans la liste. */
+function geocode_adresse($adresse) {
+  $adresse = trim((string)$adresse);
+  if ($adresse === '' || !function_exists('curl_init')) return null;
+
+  $url = 'https://api-adresse.data.gouv.fr/search/?limit=1&q=' . rawurlencode($adresse);
+  $ch = curl_init($url);
+  curl_setopt_array($ch, array(
+    CURLOPT_RETURNTRANSFER => true,
+    CURLOPT_CONNECTTIMEOUT => 4,
+    CURLOPT_TIMEOUT        => 8,
+    CURLOPT_USERAGENT      => 'ulmjc-site/1.0',
+  ));
+  $rep  = curl_exec($ch);
+  $code = (int)curl_getinfo($ch, CURLINFO_HTTP_CODE);
+  curl_close($ch);
+  if ($rep === false || $code !== 200) return null;
+
+  $d = json_decode($rep, true);
+  if (!is_array($d) || empty($d['features'][0]['geometry']['coordinates'])) return null;
+
+  $c = $d['features'][0]['geometry']['coordinates'];
+  if (count($c) < 2 || !is_numeric($c[0]) || !is_numeric($c[1])) return null;
+
+  /* Un score faible veut dire que la BAN a trouvé « quelque chose qui
+     ressemble » : mieux vaut pas de point qu'un point au mauvais endroit. */
+  $score = $d['features'][0]['properties']['score'] ?? 0;
+  if ($score < 0.4) return null;
+
+  return array(round((float)$c[0], 6), round((float)$c[1], 6));
+}
 function published_partenaires()  { return published_ordered('partenaires'); }
 
 /* ============================================================

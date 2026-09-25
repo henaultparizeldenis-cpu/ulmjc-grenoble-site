@@ -1,4 +1,10 @@
-<!DOCTYPE html>
+<?php
+/* Page publique : Les MJC. La liste des maisons vient du back-office
+   (admin/mjc.php) via load_items('mjc') : en ajouter ou en retirer une se
+   fait dans l'outil, et se répercute ici comme sur la carte, qui lit le
+   même fichier. */
+require_once __DIR__ . '/inc/lib.php';
+?><!DOCTYPE html>
 <html lang="fr">
 <head>
 <meta charset="UTF-8">
@@ -9,7 +15,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Lora:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="canonical" href="https://site.ulmjcgrenoble.org/les-mjc.php">
-<link rel="stylesheet" href="css/style.css?v=20260524-14">
+<link rel="stylesheet" href="css/style.css?v=20260924-11">
 <!-- Matomo Analytics - mode anonyme (sans cookies, IP anonymisee) -->
 <script>
   var _paq = window._paq = window._paq || [];
@@ -41,150 +47,67 @@
 
 <section>
   <div class="container">
+    <p class="muted center" style="max-width:640px;margin:0 auto 2.5rem;">
+      Toutes les maisons sont ouvertes à <em>tout le monde</em>, quel que soit
+      le quartier où l'on habite.
+    </p>
+
+    <?php
+    /* Les maisons viennent désormais du back-office (admin/mjc.php) et non
+       plus du code : en ajouter ou en retirer une se fait dans l'outil, et se
+       répercute ici comme sur la carte, qui lit le même fichier.
+
+       data-points garde la forme d'un tableau : une maison peut avoir
+       plusieurs points, comme Lucie Aubrac qui tient deux adresses. */
+    $maisons = array_filter(active_items('mjc'), function ($m) { return !empty($m['published']); });
+    usort($maisons, 'cmp_ordre');
+    ?>
     <ul class="mjc-list reveal-stagger">
-
-      <li class="mjc-item">
+<?php foreach ($maisons as $m):
+      $points = array();
+      if (is_numeric($m['lat'] ?? null) && is_numeric($m['lon'] ?? null)) {
+        $pt = array('lat' => (float)$m['lat'], 'lon' => (float)$m['lon']);
+        if (!empty($m['lieu'])) $pt['lieu'] = $m['lieu'];
+        $points[] = $pt;
+      }
+      $logo = mjc_logo_src($m['logo'] ?? '');
+      $nom  = $m['nom'] ?? '';
+?>
+      <li class="mjc-item" data-points='<?= e(json_encode($points, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES)) ?>'>
         <div class="mjc-logo">
-          <img src="images/mjc/parmentier.png" alt="Logo MJC Parmentier">
+          <?php if ($logo !== ''): ?>
+            <img src="<?= e($logo) ?>" alt="Logo <?= e($nom) ?>" onerror="this.parentNode.classList.add('mjc-logo-placeholder');this.parentNode.innerHTML='<span><?= e($nom) ?></span>'">
+          <?php else: ?>
+            <span><?= e($nom) ?></span>
+          <?php endif; ?>
         </div>
         <div class="mjc-info">
-          <h2>MJC Parmentier</h2>
-          <p class="mjc-quartier">Berriat / Saint-Bruno · Secteur 1</p>
+          <h2><?= e($nom) ?></h2>
+          <?php if (!empty($m['quartier'])): ?><p class="mjc-quartier"><?= e($m['quartier']) ?></p><?php endif; ?>
+          <?php if (!empty($m['adresse'])): ?>
           <p class="mjc-address">
-            3 rue Parmentier, 38000 Grenoble<br>
-            <span class="muted">Antennes&nbsp;: Waldeck-Rousseau, École Simone Lagrange, EVS Hareux</span>
+            <?= e($m['adresse']) ?><?php if (!empty($m['antennes'])): ?><br>
+            <span class="muted">Antennes&nbsp;: <?= e($m['antennes']) ?></span><?php endif; ?>
           </p>
+          <?php endif; ?>
+          <?php if (!empty($m['tel']) || !empty($m['email'])): ?>
           <p class="mjc-contact">
-            📞 <a href="tel:+33438123033">04 38 12 30 33</a><br>
-            ✉️ <a href="mailto:mjcparmentier@orange.fr">mjcparmentier@orange.fr</a>
+            <?php if (!empty($m['tel'])): ?>
+            &#128222; <a href="tel:<?= e(preg_replace('/[^0-9+]/', '', $m['tel'])) ?>"><?= e($m['tel']) ?></a><?php if (!empty($m['email'])): ?><br><?php endif; ?>
+            <?php endif; ?>
+            <?php if (!empty($m['email'])): ?>
+            &#9993;&#65039; <a href="mailto:<?= e($m['email']) ?>"><?= e($m['email']) ?></a>
+            <?php endif; ?>
           </p>
+          <?php endif; ?>
+          <?php if (!empty($m['site'])): ?>
           <p class="mjc-link">
-            <a href="https://mjcparmentier.fr/" target="_blank" rel="noopener">Visiter le site ↗</a>
+            <a href="<?= e($m['site']) ?>" target="_blank" rel="noopener">Visiter le site &#8599;</a>
           </p>
+          <?php endif; ?>
         </div>
       </li>
-
-      <li class="mjc-item">
-        <div class="mjc-logo">
-          <img src="images/mjc/eauxclaires.png" alt="Logo MJC des Eaux Claires" onerror="this.parentNode.classList.add('mjc-logo-placeholder');this.parentNode.innerHTML='<span>MJC<br><strong>Eaux Claires</strong></span>'">
-        </div>
-        <div class="mjc-info">
-          <h2>MJC des Eaux Claires</h2>
-          <p class="mjc-quartier">Eaux-Claires / Mistral · Secteur 3</p>
-          <p class="mjc-address">
-            33 rue Joseph Bouchayer, 38100 Grenoble
-          </p>
-          <p class="mjc-contact">
-            📞 <a href="tel:+33476491501">04 76 49 15 01</a><br>
-            ✉️ <a href="mailto:contact@mjceauxclaires.fr">contact@mjceauxclaires.fr</a>
-          </p>
-          <p class="mjc-link">
-            <a href="https://www.mjceauxclaires.fr/" target="_blank" rel="noopener">Visiter le site ↗</a>
-          </p>
-        </div>
-      </li>
-
-      <li class="mjc-item">
-        <div class="mjc-logo">
-          <img src="images/mjc/lucie-aubrac.png" alt="Logo MJC Lucie Aubrac" onerror="this.parentNode.classList.add('mjc-logo-placeholder');this.parentNode.innerHTML='<span>MJC<br><strong>Lucie Aubrac</strong></span>'">
-        </div>
-        <div class="mjc-info">
-          <h2>MJC Lucie Aubrac</h2>
-          <p class="mjc-quartier">Capuche & Clos d'Or · Secteur 4</p>
-          <p class="mjc-address">
-            <strong>Espace Capuche</strong>&nbsp;: 56 rue du Général Ferrié, 38034 Grenoble<br>
-            <strong>Espace Clos d'Or</strong>&nbsp;: 111 rue de Stalingrad, 38100 Grenoble
-          </p>
-          <p class="mjc-contact">
-            📞 Capuche <a href="tel:+33476877759">04 76 87 77 59</a> · Clos d'Or <a href="tel:+33476225464">04 76 22 54 64</a><br>
-            ✉️ <a href="mailto:contact@mjclucieaubrac.org">contact@mjclucieaubrac.org</a>
-          </p>
-          <p class="mjc-link">
-            <a href="https://www.mjclucieaubrac.fr/" target="_blank" rel="noopener">Visiter le site ↗</a>
-          </p>
-        </div>
-      </li>
-
-      <li class="mjc-item">
-        <div class="mjc-logo">
-          <img src="images/mjc/abbaye.png" alt="Logo MJC Abbaye" onerror="this.parentNode.classList.add('mjc-logo-placeholder');this.parentNode.innerHTML='<span>MJC<br><strong>Abbaye</strong></span>'">
-        </div>
-        <div class="mjc-info">
-          <h2>MJC Abbaye</h2>
-          <p class="mjc-quartier">Abbaye / Jouhaux / Châtelet · Secteur 5</p>
-          <p class="mjc-address">
-            1 place de la Commune de 1871, 38100 Grenoble
-          </p>
-          <p class="mjc-contact">
-            📞 <a href="tel:+33476511251">04 76 51 12 51</a>
-          </p>
-          <p class="mjc-link">
-            <a href="https://www.mjcabbaye.fr/" target="_blank" rel="noopener">Visiter le site ↗</a>
-          </p>
-        </div>
-      </li>
-
-      <li class="mjc-item">
-        <div class="mjc-logo">
-          <img src="images/mjc/mutualite.jpg" alt="Logo MJC Mutualité">
-        </div>
-        <div class="mjc-info">
-          <h2>MJC Mutualité</h2>
-          <p class="mjc-quartier">Mutualité / Préfecture · Secteur 2</p>
-          <p class="mjc-address">
-            5 place Jean Moulin, 38000 Grenoble<br>
-            <span class="muted">Courrier&nbsp;: 10 rue Joseph Chanrion, 38000 Grenoble</span>
-          </p>
-          <p class="mjc-contact">
-            📞 <a href="tel:+33979047179">09 79 04 71 79</a><br>
-            ✉️ <a href="mailto:secretariat.mjcmutualite@gmail.com">secretariat.mjcmutualite@gmail.com</a>
-          </p>
-          <p class="mjc-link">
-            <a href="https://www.mjcmutualite.fr/" target="_blank" rel="noopener">Visiter le site ↗</a>
-          </p>
-        </div>
-      </li>
-
-      <li class="mjc-item">
-        <div class="mjc-logo">
-          <img src="images/mjc/anatolefrance.png" alt="Logo MJC Anatole France">
-        </div>
-        <div class="mjc-info">
-          <h2>MJC Anatole France</h2>
-          <p class="mjc-quartier">Teisseire / Malherbe · Secteur 3</p>
-          <p class="mjc-address">
-            2 rue Anatole France, 38100 Grenoble
-          </p>
-          <p class="mjc-contact">
-            📞 <a href="tel:+33476961998">04 76 96 19 98</a><br>
-            ✉️ <a href="mailto:mjcafaccueil@gmail.com">mjcafaccueil@gmail.com</a>
-          </p>
-          <p class="mjc-link">
-            <a href="https://www.mjcanatolefrance.com/" target="_blank" rel="noopener">Visiter le site ↗</a>
-          </p>
-        </div>
-      </li>
-
-      <li class="mjc-item">
-        <div class="mjc-logo">
-          <img src="images/mjc/mpt-saint-laurent.png" alt="Logo MPT Saint-Laurent" onerror="this.parentNode.classList.add('mjc-logo-placeholder');this.parentNode.innerHTML='<span>MPT<br><strong>Saint-Laurent</strong></span>'">
-        </div>
-        <div class="mjc-info">
-          <h2>Maison Pour Tous Saint-Laurent</h2>
-          <p class="mjc-quartier">Saint-Laurent · Secteur 2</p>
-          <p class="mjc-address">
-            1 place Saint-Laurent, 38000 Grenoble
-          </p>
-          <p class="mjc-contact">
-            📞 <a href="tel:+33476422297">04 76 42 22 97</a><br>
-            ✉️ <a href="mailto:inscriptions.mptstlo38@gmail.com">inscriptions.mptstlo38@gmail.com</a>
-          </p>
-          <p class="mjc-link">
-            <a href="https://mptstlaurent.jimdofree.com/" target="_blank" rel="noopener">Visiter le site ↗</a>
-          </p>
-        </div>
-      </li>
-
+<?php endforeach; ?>
     </ul>
 
     <p class="muted center" style="margin-top: 3rem; font-size: 0.95rem;">

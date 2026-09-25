@@ -70,6 +70,7 @@
     'blog.php':             { ep: '../blog.php',         live: false },
     'activites.php':        { ep: '../activites.php',    live: false },
     'partenaires.php':      { ep: '../partenariats.php', live: false },
+    'mjc.php':              { ep: '../les-mjc.php',      live: false },
     'emplois.php':          { ep: '../emplois.php',      live: false },
     'chalet.php':           { ep: '../chalet.php',       live: false }
   };

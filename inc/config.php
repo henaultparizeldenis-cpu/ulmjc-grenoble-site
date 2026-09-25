@@ -63,6 +63,13 @@ $GLOBALS['ITEM_TYPES'] = array(
     'seed'  => REPO_DATA . '/emplois.default.json',
     'label' => "Offres d'emploi",
   ),
+  /* Les maisons de l'union. Elles alimentent la page Les MJC et la carte :
+     ajouter ou retirer une maison ici se voit aux deux endroits. */
+  'mjc' => array(
+    'file'  => DATA_DIR  . '/mjc.json',
+    'seed'  => REPO_DATA . '/mjc.default.json',
+    'label' => 'Les MJC',
+  ),
 );
 
 /* Photos du chalet : galerie par catégories (structure DIFFÉRENTE d'une liste plate,

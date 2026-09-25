@@ -16,6 +16,7 @@ $TYPES = array(
   'blog'        => array('label' => 'Blog',         'key' => 'slug', 'title' => 'title', 'thumb' => 'cover', 'contain' => false),
   'activites'   => array('label' => 'Activités',    'key' => 'slug', 'title' => 'title', 'thumb' => 'image', 'contain' => false),
   'partenaires' => array('label' => 'Partenaires',  'key' => 'id',   'title' => 'nom',   'thumb' => 'logo',  'contain' => true),
+  'mjc'         => array('label' => 'Les MJC',      'key' => 'slug', 'title' => 'nom',   'thumb' => 'logo',  'contain' => true),
   'emplois'     => array('label' => "Offres d'emploi", 'key' => 'slug', 'title' => 'title', 'thumb' => '',   'contain' => false),
 );
 
